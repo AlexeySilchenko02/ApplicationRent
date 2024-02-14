@@ -20,6 +20,23 @@ namespace ApplicationRent.Controllers
             var places = await _context.Places.ToListAsync();
             return View(places);
         }
+        // TEST
+        [HttpPost]
+        public async Task<IActionResult> ToggleRentStatus(int id)
+        {
+            var place = await _context.Places.FindAsync(id);
+            if (place == null)
+            {
+                return NotFound();
+            }
+            place.InRent = !place.InRent; // Переключение статуса
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
+
+
+        //TEST
 
         public IActionResult Create()
         {

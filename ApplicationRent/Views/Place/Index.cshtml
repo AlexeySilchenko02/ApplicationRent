@@ -7,6 +7,84 @@
 @model IEnumerable<ApplicationRent.Data.Identity.Place>
 
 <h2>Помещения</h2>
+<!-- Тест -->
+<style>
+    .place {
+        width: 100px;
+        height: 100px;
+        margin: 10px;
+        display: inline-block;
+        color: white;
+        font-weight: bold;
+        text-align: center;
+        line-height: 100px;
+    }
+
+    .in-rent {
+        background-color: red;
+    }
+
+    .not-in-rent {
+        background-color: green;
+    }
+</style>
+
+@foreach (var place in Model)
+{
+    <div class="place @(place.InRent ? "in-rent" : "not-in-rent")" data-id="@place.Id">
+        @place.Name
+    </div>
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.place').click(function () {
+            var placeId = $(this).data('id');
+            $.ajax({
+                url: '/Place/ToggleRentStatus/' + placeId,
+                method: 'POST',
+                success: function (result) {
+                    location.reload(); // Перезагрузка страницы для отображения изменений
+                }
+            });
+        });
+    });
+</script>
+
+<!-- Тест -->
+
+
+<script>
+    $(document).ready(function () {
+        $('.rent-button').click(function () {
+            var placeId = $(this).data('id');
+            $('#saveChanges').data('id', placeId); // Передаем ID места кнопке в модальном окне
+            $('#editPlaceModal').modal('show');
+        });
+
+        $('#saveChanges').click(function () {
+            var placeId = $(this).data('id');
+            var newEndRent = $('#newEndRent').val();
+            var newInRentStatus = $('#newInRentStatus').is(':checked');
+
+            $.ajax({
+                url: '/Place/UpdateRentStatus', // Предполагается, что этот метод будет создан в контроллере
+                method: 'POST',
+                data: {
+                    id: placeId,
+                    endRent: newEndRent,
+                    inRent: newInRentStatus
+                },
+                success: function (result) {
+                    $('#editPlaceModal').modal('hide');
+                    location.reload(); // Перезагрузка страницы для отображения изменений
+                }
+            });
+        });
+    });
+</script>
+
 
 @if (SignInManager.IsSignedIn(User))
 {
