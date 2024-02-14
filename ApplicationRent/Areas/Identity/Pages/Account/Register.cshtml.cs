@@ -71,6 +71,13 @@ namespace ApplicationRent.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
+
+            [Required]
+            public string Name { get; set; }
+
+            [Required]
+            [Phone]
+            public string PhoneNumber { get; set; }
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -155,7 +162,7 @@ namespace ApplicationRent.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private ApplicationIdentityUser CreateUser()
+        /*private ApplicationIdentityUser CreateUser()
         {
             try
             {
@@ -167,7 +174,27 @@ namespace ApplicationRent.Areas.Identity.Pages.Account
                     $"Ensure that '{nameof(ApplicationIdentityUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
                     $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
             }
+        }*/
+
+        private ApplicationIdentityUser CreateUser()
+        {
+            try
+            {
+                var user = Activator.CreateInstance<ApplicationIdentityUser>();
+                // Установка дополнительных свойств
+                user.FullName = Input.Name;
+                user.PhoneNumber = Input.PhoneNumber; // Убедитесь, что класс ApplicationIdentityUser имеет свойство PhoneNumber.
+                return user;
+            }
+            catch
+            {
+                throw new InvalidOperationException($"Can't create an instance of '{nameof(ApplicationIdentityUser)}'. " +
+                    $"Ensure that '{nameof(ApplicationIdentityUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
+                    $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
+            }
         }
+
+
 
         private IUserEmailStore<ApplicationIdentityUser> GetEmailStore()
         {

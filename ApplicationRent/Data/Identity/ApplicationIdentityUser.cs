@@ -4,6 +4,7 @@ namespace ApplicationRent.Data.Identity
 {
     public class ApplicationIdentityUser : IdentityUser
     {
+        public string FullName { get; set; }
         public long ApplicationId { get; set; }
     }
 }

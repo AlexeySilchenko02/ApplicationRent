@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApplicationRent.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240214130938_User Changed")]
-    partial class UserChanged
+    [Migration("20240214224123_FullName")]
+    partial class FullName
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,6 +46,10 @@ namespace ApplicationRent.Data.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -91,6 +95,47 @@ namespace ApplicationRent.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("ApplicationRent.Data.Identity.Place", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("EndRent")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("InRent")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("StartRent")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Place", "data");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            EndRent = new DateTime(2024, 2, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            InRent = true,
+                            Name = "First",
+                            Price = 1500.500m,
+                            StartRent = new DateTime(2024, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
