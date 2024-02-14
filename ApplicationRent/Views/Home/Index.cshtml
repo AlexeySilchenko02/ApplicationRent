@@ -1,0 +1,16 @@
+﻿@using ApplicationRent.Data.Identity
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationIdentityUser> SignInManager
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <span>Зарегистрирован</span>
+}
+else
+{
+    <span>Не зарегистрирован</span>
+}
