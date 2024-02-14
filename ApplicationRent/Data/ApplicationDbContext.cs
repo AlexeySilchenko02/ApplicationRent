@@ -12,6 +12,27 @@ namespace ApplicationRent.Data
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<Place>().Property(z => z.Id).UseIdentityColumn();
+            builder.Entity<Place>().Property(z => z.Name).HasMaxLength(100);
+
+            builder.Entity<Place>().HasData(
+                new Place
+                {
+                    Id = 1,
+                    Name = "First",
+                    StartRent = new DateTime(2024, 02, 01),
+                    EndRent = new DateTime(2024, 02, 25),
+                    InRent = true,
+                    Price = 1500.500m,
+                });
+
+            base.OnModelCreating(builder);
+        }
+
+        public DbSet<Place> Places { get; set; }
+
 
     }
 }
