@@ -4,6 +4,7 @@ using ApplicationRent.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApplicationRent.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240215171406_DB1")]
+    partial class DB1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -117,8 +120,8 @@ namespace ApplicationRent.Data.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<double>("SizePlace")
-                        .HasColumnType("float");
+                    b.Property<decimal>("SizePlace")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("StartRent")
                         .HasColumnType("datetime2");
@@ -136,7 +139,7 @@ namespace ApplicationRent.Data.Migrations
                             InRent = true,
                             Name = "First",
                             Price = 1500.500m,
-                            SizePlace = 15.5,
+                            SizePlace = 15.5m,
                             StartRent = new DateTime(2024, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });

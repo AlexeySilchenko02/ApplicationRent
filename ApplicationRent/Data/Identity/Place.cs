@@ -12,5 +12,7 @@ namespace ApplicationRent.Data.Identity
         public DateTime EndRent { get; set; }
         public bool InRent { get; set; }
         public decimal Price { get; set; }
+        public double SizePlace { get; set; }
+        public string Description { get; set; }
     }
 }

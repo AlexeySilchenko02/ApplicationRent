@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApplicationRent.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240214224123_FullName")]
-    partial class FullName
+    [Migration("20240215171129_DB")]
+    partial class DB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,9 +32,6 @@ namespace ApplicationRent.Data.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
-
-                    b.Property<long>("ApplicationId")
-                        .HasColumnType("bigint");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()

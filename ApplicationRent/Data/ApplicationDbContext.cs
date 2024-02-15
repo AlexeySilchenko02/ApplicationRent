@@ -26,6 +26,8 @@ namespace ApplicationRent.Data
                     EndRent = new DateTime(2024, 02, 25),
                     InRent = true,
                     Price = 1500.500m,
+                    SizePlace = 15.5,
+                    Description = "Комната 15 метров",
                 });
 
             base.OnModelCreating(builder);

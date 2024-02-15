@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApplicationRent.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240215131921_DB")]
-    partial class DB
+    [Migration("20240215171801_DB2")]
+    partial class DB2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,9 +32,6 @@ namespace ApplicationRent.Data.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
-
-                    b.Property<long>("ApplicationId")
-                        .HasColumnType("bigint");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -105,6 +102,10 @@ namespace ApplicationRent.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("EndRent")
                         .HasColumnType("datetime2");
 
@@ -119,6 +120,9 @@ namespace ApplicationRent.Data.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<double>("SizePlace")
+                        .HasColumnType("float");
+
                     b.Property<DateTime>("StartRent")
                         .HasColumnType("datetime2");
 
@@ -130,10 +134,12 @@ namespace ApplicationRent.Data.Migrations
                         new
                         {
                             Id = 1,
+                            Description = "Комната 15 метров",
                             EndRent = new DateTime(2024, 2, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             InRent = true,
                             Name = "First",
                             Price = 1500.500m,
+                            SizePlace = 15.5,
                             StartRent = new DateTime(2024, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
