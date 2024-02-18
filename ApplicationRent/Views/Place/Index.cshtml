@@ -7,83 +7,83 @@
 @model IEnumerable<ApplicationRent.Data.Identity.Place>
 
 <h2>Помещения</h2>
-<!-- Тест -->
+
 <style>
-    .place {
-        width: 100px;
-        height: 100px;
+    .place-card {
+        width: 150px;
+        height: 150px;
         margin: 10px;
+        padding: 10px;
+        box-shadow: 0 0 5px #ccc;
         display: inline-block;
+        vertical-align: top;
+        position: relative;
+    }
+
+        .place-card.rented {
+            background-color: red;
+        }
+
+        .place-card .place-info {
+            margin-bottom: 20px;
+        }
+
+        .place-card .actions {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+        }
+
+    .action-btn {
+        text-decoration: none;
         color: white;
-        font-weight: bold;
-        text-align: center;
-        line-height: 100px;
+        background-color: #007bff;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 12px;
     }
 
-    .in-rent {
-        background-color: red;
-    }
+        .action-btn:not(:last-child) {
+            margin-right: 5px;
+        }
 
-    .not-in-rent {
+    .place-card.not-rented {
         background-color: green;
     }
+
 </style>
 
-@foreach (var place in Model)
+@if (SignInManager.IsSignedIn(User))
 {
-    <div class="place @(place.InRent ? "in-rent" : "not-in-rent")" data-id="@place.Id">
-        @place.Name
+    @if (ViewBag.IsAdmin)
+    {
+        <p>Пользователь админ</p>
+        <div>
+            <a asp-action="Create" class="action-btn">Create New</a>
+        </div>
+    }
+    <div>
+        @foreach (var item in Model)
+        {
+            <div class="place-card @(item.InRent ? "rented" : "not-rented")">
+                <div class="place-info">
+                    <strong>@Html.DisplayFor(modelItem => item.Name)</strong>
+                </div>
+                <div class="actions">
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="action-btn">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="action-btn">Details</a>
+                </div>
+            </div>
+        }
     </div>
 }
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $('.place').click(function () {
-            var placeId = $(this).data('id');
-            $.ajax({
-                url: '/Place/ToggleRentStatus/' + placeId,
-                method: 'POST',
-                success: function (result) {
-                    location.reload(); // Перезагрузка страницы для отображения изменений
-                }
-            });
-        });
-    });
-</script>
-
-<!-- Тест -->
+else
+{
+    <p>Для отображения мест аренды зарегистрируйтесь</p>
+}
 
 
-<script>
-    $(document).ready(function () {
-        $('.rent-button').click(function () {
-            var placeId = $(this).data('id');
-            $('#saveChanges').data('id', placeId); // Передаем ID места кнопке в модальном окне
-            $('#editPlaceModal').modal('show');
-        });
-
-        $('#saveChanges').click(function () {
-            var placeId = $(this).data('id');
-            var newEndRent = $('#newEndRent').val();
-            var newInRentStatus = $('#newInRentStatus').is(':checked');
-
-            $.ajax({
-                url: '/Place/UpdateRentStatus', // Предполагается, что этот метод будет создан в контроллере
-                method: 'POST',
-                data: {
-                    id: placeId,
-                    endRent: newEndRent,
-                    inRent: newInRentStatus
-                },
-                success: function (result) {
-                    $('#editPlaceModal').modal('hide');
-                    location.reload(); // Перезагрузка страницы для отображения изменений
-                }
-            });
-        });
-    });
-</script>
 
 
 @if (SignInManager.IsSignedIn(User))

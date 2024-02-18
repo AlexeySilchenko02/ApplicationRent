@@ -2,6 +2,7 @@
 using ApplicationRent.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 
 namespace ApplicationRent.Controllers
@@ -9,35 +10,28 @@ namespace ApplicationRent.Controllers
     public class PlaceController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationIdentityUser> _userManager; //для передачи статуса админа
 
-        public PlaceController(ApplicationDbContext context)
+        public PlaceController(ApplicationDbContext context, UserManager<ApplicationIdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
+        //Вызов страницы Index
         public async Task<IActionResult> Index()
         {
             var places = await _context.Places.ToListAsync();
+
+            //Передача статуса пользователя
+            var user = await _userManager.GetUserAsync(User);
+            var isAdmin = user?.Admin ?? false;
+            ViewBag.IsAdmin = isAdmin;
+
             return View(places);
         }
-        // TEST
-        [HttpPost]
-        public async Task<IActionResult> ToggleRentStatus(int id)
-        {
-            var place = await _context.Places.FindAsync(id);
-            if (place == null)
-            {
-                return NotFound();
-            }
-            place.InRent = !place.InRent; // Переключение статуса
-            await _context.SaveChangesAsync();
-            return Ok();
-        }
 
-
-
-        //TEST
-
+        //Вызов страницы создания записи
         public IActionResult Create()
         {
             return View();
@@ -56,6 +50,7 @@ namespace ApplicationRent.Controllers
             return View(place);
         }
 
+        //Вызов страницы редактирования
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -103,6 +98,7 @@ namespace ApplicationRent.Controllers
             return View(place);
         }
 
+        //Вызов страницы удаления
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -135,6 +131,7 @@ namespace ApplicationRent.Controllers
             return _context.Places.Any(e => e.Id == id);
         }
 
+        //Вызов страници для отображения детальной информации
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
