@@ -182,7 +182,7 @@ namespace ApplicationRent.Areas.Identity.Pages.Account
             {
                 var user = Activator.CreateInstance<ApplicationIdentityUser>();
                 // Установка дополнительных свойств
-                user.FullName = Input.Name;
+                user.FullNameUser = Input.Name;
                 user.PhoneNumber = Input.PhoneNumber; // Убедитесь, что класс ApplicationIdentityUser имеет свойство PhoneNumber.
                 return user;
             }

@@ -16,7 +16,7 @@ namespace ApplicationRent.Views.Shared.Components.Navigation
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
-            var fullName = user?.FullName ?? "Гость"; // Предполагая, что у вас есть свойство FullName
+            var fullName = user?.FullNameUser ?? "Гость"; // Предполагая, что у вас есть свойство FullName
             return View("Default", fullName);
         }
     }
