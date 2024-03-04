@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ApplicationRent.Views.Shared.Components.Navigation
 {
+    [ViewComponent(Name = "UserNavigation")]
     public class NavigationViewComponent : ViewComponent
     {
         private readonly UserManager<ApplicationIdentityUser> _userManager;

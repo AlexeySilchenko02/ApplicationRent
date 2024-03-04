@@ -1,0 +1,11 @@
+﻿@using ApplicationRent.Data.Identity
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationIdentityUser> SignInManager
+
+@{
+    ViewData["Title"] = "Админ панель";
+}
+
+<h2>Админ панель</h2>
+<p>Добро пожаловать в административную панель.</p>
+<a href="@Url.Action("Users", "Admin")" class="btn btn-primary">Просмотр пользователей</a>
