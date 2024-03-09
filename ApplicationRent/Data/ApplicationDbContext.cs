@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 namespace ApplicationRent.Data
 {
@@ -16,6 +17,7 @@ namespace ApplicationRent.Data
         {
             builder.Entity<Place>().Property(z => z.Id).UseIdentityColumn();
             builder.Entity<Place>().Property(z => z.Name).HasMaxLength(100);
+            builder.Entity<Place>().Property(p => p.Price).HasColumnType("decimal(18,2)");
 
             builder.Entity<Place>().HasData(
                 new Place
