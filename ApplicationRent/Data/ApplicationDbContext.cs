@@ -34,6 +34,7 @@ namespace ApplicationRent.Data
         }
 
         public DbSet<Place> Places { get; set; }
+        public DbSet<Rental> Rentals { get; set; }
 
 
     }

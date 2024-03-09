@@ -148,5 +148,59 @@ namespace ApplicationRent.Controllers
 
             return View(place);
         }
+
+        // Вызов страницы аренды
+        public async Task<IActionResult> Rent(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var place = await _context.Places.FindAsync(id);
+            if (place == null)
+            {
+                return NotFound();
+            }
+
+            // Предоставляем информацию о месте и диапазоне дат для аренды
+            var rentViewModel = new RentViewModel
+            {
+                PlaceId = place.Id,
+                StartRent = DateTime.Now,
+                EndRent = DateTime.Now.AddDays(1) // Пример начальных значений
+            };
+
+            return View(rentViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ConfirmRent(RentViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var rental = new Rental
+                {
+                    UserId = _userManager.GetUserId(User),
+                    PlaceId = model.PlaceId,
+                    StartRent = model.StartRent,
+                    EndRent = model.EndRent
+                };
+
+                _context.Add(rental);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+
+            // В случае ошибки возвращаем пользователя на страницу аренды для повторного ввода данных
+            return View("Rent", model);
+        }
+    }
+    public class RentViewModel
+    {
+        public int PlaceId { get; set; }
+        public DateTime StartRent { get; set; }
+        public DateTime EndRent { get; set; }
     }
 }
