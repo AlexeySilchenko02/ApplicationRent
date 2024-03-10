@@ -52,18 +52,30 @@
         background-color: green;
     }
 
+    .place-cards-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: start;
+    }
+
 </style>
+
+<div>
+    <button id="show-cards">Отображение в виде карт</button>
+    <button id="show-list">Отображение списком</button>
+</div>
+
+@if (ViewBag.IsAdmin)
+{
+    <p>Пользователь админ</p>
+    <div>
+        <a asp-action="Create" class="action-btn">Create New</a>
+    </div>
+}
 
 @if (SignInManager.IsSignedIn(User))
 {
-    @if (ViewBag.IsAdmin)
-    {
-        <p>Пользователь админ</p>
-        <div>
-            <a asp-action="Create" class="action-btn">Create New</a>
-        </div>
-    }
-    <div>
+    <div id="card-view" style="display:none;">
         @foreach (var item in Model)
         {
             <div class="place-card @(item.InRent ? "rented" : "not-rented")">
@@ -77,75 +89,89 @@
             </div>
         }
     </div>
-}
-else
-{
-    <p>Для отображения мест аренды зарегистрируйтесь</p>
-}
-
-
-
-
-@if (SignInManager.IsSignedIn(User))
-{
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.StartRent)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.EndRent)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.InRent)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Price)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+    <div id="list-view" style="display:none;">
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.StartRent)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.EndRent)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.InRent)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Price)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
-                        <a asp-action="Rent" asp-route-id="@item.Id">Арендовать</a> 
-                    </td>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Price)
+                    </th>
+                    <th>Статус</th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Price)
+                        </td>
+                        <td>
+                            @if (!item.InRent)
+                            {
+                                @:Свободно
+                            }
+                            else
+                            {
+                                @:Занято до: @item.EndRent.ToString("dd.MM.yyyy")
+                            }
+                        </td>
+                        <td>
+                            @if (ViewBag.IsAdmin)
+                            {
+                                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> 
+                            }
+                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> 
+                            @if (!item.InRent)
+                            {
+                                <a asp-action="Rent" asp-route-id="@item.Id" class="action-btn">Арендовать</a>
+                            }
+                            else
+                            {
+                                <button disabled class="action-btn disabled">Арендовать</button>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 }
 else
 {
     <p>Для отображения мест аренды зарегистрируйтесь</p>
 }
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const showCards = document.getElementById("show-cards");
+        const showList = document.getElementById("show-list");
+        const cardView = document.getElementById("card-view");
+        const listView = document.getElementById("list-view");
+
+        // Показать карточки по умолчанию
+        cardView.style.display = "block";
+        listView.style.display = "none";
+
+        showCards.addEventListener("click", function () {
+            cardView.style.display = "block";
+            listView.style.display = "none";
+        });
+
+        showList.addEventListener("click", function () {
+            cardView.style.display = "none";
+            listView.style.display = "block";
+        });
+    });
+</script>
 
 
 

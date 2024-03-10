@@ -22,8 +22,24 @@ namespace ApplicationRent.Controllers
         public async Task<IActionResult> Index()
         {
             var places = await _context.Places.ToListAsync();
+            var today = DateTime.Now;
 
-            //Передача статуса пользователя
+            foreach (var place in places)
+            {
+                // Проверка, истекла ли дата аренды, и обновление свойства InRent
+                if (place.EndRent < today)
+                {
+                    place.InRent = false;
+                }
+                else
+                {
+                    place.InRent = true;
+                }
+            }
+            // Сохранение изменений, если они есть
+            await _context.SaveChangesAsync();
+
+            // Передача статуса пользователя
             var user = await _userManager.GetUserAsync(User);
             var isAdmin = user?.Admin ?? false;
             ViewBag.IsAdmin = isAdmin;
@@ -180,6 +196,7 @@ namespace ApplicationRent.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Создаем новую аренду
                 var rental = new Rental
                 {
                     UserId = _userManager.GetUserId(User),
@@ -189,6 +206,17 @@ namespace ApplicationRent.Controllers
                 };
 
                 _context.Add(rental);
+
+                // Находим место, которое арендуется, и обновляем его данные
+                var place = await _context.Places.FirstOrDefaultAsync(p => p.Id == model.PlaceId);
+                if (place != null)
+                {
+                    place.StartRent = model.StartRent;
+                    place.EndRent = model.EndRent;
+                    place.InRent = true; // Обновляем статус места как занято
+                    _context.Update(place);
+                }
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
