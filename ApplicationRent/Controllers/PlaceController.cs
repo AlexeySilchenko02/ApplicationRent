@@ -50,6 +50,7 @@ namespace ApplicationRent.Controllers
         //Вызов страницы создания записи
         public IActionResult Create()
         {
+            ViewBag.Categories = new List<string> { "Фотостудия", "Склад", "Workspace", "Базовое место" };
             return View();
         }
 
@@ -63,6 +64,8 @@ namespace ApplicationRent.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            // Предполагаемые категории
+            ViewBag.Categories = new List<string> { "Фотостудия", "Склад", "Workspace", "Базовое место" };
             return View(place);
         }
 
@@ -79,6 +82,8 @@ namespace ApplicationRent.Controllers
             {
                 return NotFound();
             }
+            // Предполагаемые категории
+            ViewBag.Categories = new List<string> { "Фотостудия", "Склад", "Workspace", "Базовое место" };
             return View(place);
         }
 
@@ -111,6 +116,8 @@ namespace ApplicationRent.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            // Предполагаемые категории (передача снова в случае ошибки валидации)
+            ViewBag.Categories = new List<string> { "Фотостудия", "Склад", "Workspace", "Базовое место" };
             return View(place);
         }
 

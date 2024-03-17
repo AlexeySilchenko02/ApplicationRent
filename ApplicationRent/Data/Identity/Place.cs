@@ -14,5 +14,6 @@ namespace ApplicationRent.Data.Identity
         public decimal Price { get; set; }
         public double SizePlace { get; set; }
         public string Description { get; set; }
+        public string Category { get; set; }
     }
 }

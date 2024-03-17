@@ -30,6 +30,7 @@ namespace ApplicationRent.Data
                     Price = 1500.500m,
                     SizePlace = 15.5,
                     Description = "Комната 15 метров",
+                    Category = "Склад",
                 });
 
             base.OnModelCreating(builder);
