@@ -7,6 +7,7 @@
         public int PlaceId { get; set; }
         public DateTime StartRent { get; set; }
         public DateTime EndRent { get; set; }
+        public string UserEmail { get; set; }
 
         public ApplicationIdentityUser User { get; set; }
         public Place Place { get; set; }

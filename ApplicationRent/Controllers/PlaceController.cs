@@ -221,13 +221,21 @@ namespace ApplicationRent.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Создаем новую аренду
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null)
+                {
+                    // Не удалось получить пользователя, возможно, следует добавить обработку ошибок
+                    return Unauthorized();
+                }
+
+                // Создаем новую аренду с Email пользователя
                 var rental = new Rental
                 {
-                    UserId = _userManager.GetUserId(User),
+                    UserId = user.Id,
                     PlaceId = model.PlaceId,
                     StartRent = model.StartRent,
-                    EndRent = model.EndRent
+                    EndRent = model.EndRent,
+                    UserEmail = user.Email // Добавляем Email пользователя
                 };
 
                 _context.Add(rental);
