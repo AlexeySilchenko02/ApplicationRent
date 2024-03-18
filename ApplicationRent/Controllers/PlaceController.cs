@@ -3,6 +3,7 @@ using ApplicationRent.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using ApplicationRent.App_data;
 
 
 namespace ApplicationRent.Controllers
@@ -11,11 +12,13 @@ namespace ApplicationRent.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationIdentityUser> _userManager; //для передачи статуса админа
+        private readonly FirebaseService _firebaseService;
 
-        public PlaceController(ApplicationDbContext context, UserManager<ApplicationIdentityUser> userManager)
+        public PlaceController(ApplicationDbContext context, UserManager<ApplicationIdentityUser> userManager, FirebaseService firebaseService)
         {
             _context = context;
             _userManager = userManager;
+            _firebaseService = firebaseService;
         }
 
         //Вызов страницы Index
@@ -30,10 +33,14 @@ namespace ApplicationRent.Controllers
                 if (place.EndRent < today)
                 {
                     place.InRent = false;
+                    // Обновление в Firebase
+                    await _firebaseService.AddOrUpdatePlace(place);
                 }
                 else
                 {
                     place.InRent = true;
+                    // Обновление в Firebase
+                    await _firebaseService.AddOrUpdatePlace(place);
                 }
             }
             // Сохранение изменений, если они есть
@@ -62,6 +69,10 @@ namespace ApplicationRent.Controllers
             {
                 _context.Add(place);
                 await _context.SaveChangesAsync();
+
+                // Сохранение в Firebase
+                await _firebaseService.AddOrUpdatePlace(place);
+
                 return RedirectToAction(nameof(Index));
             }
             // Предполагаемые категории
@@ -102,6 +113,9 @@ namespace ApplicationRent.Controllers
                 {
                     _context.Update(place);
                     await _context.SaveChangesAsync();
+
+                    // Обновление в Firebase
+                    await _firebaseService.AddOrUpdatePlace(place);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -146,6 +160,10 @@ namespace ApplicationRent.Controllers
             var place = await _context.Places.FindAsync(id);
             _context.Places.Remove(place);
             await _context.SaveChangesAsync();
+
+            // Удаление из Firebase
+            await _firebaseService.DeletePlace(id);
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -225,6 +243,10 @@ namespace ApplicationRent.Controllers
                 }
 
                 await _context.SaveChangesAsync();
+
+                // Обновление в Firebase
+                await _firebaseService.AddOrUpdatePlace(place);
+
                 return RedirectToAction(nameof(Index));
             }
 

@@ -1,3 +1,4 @@
+using ApplicationRent.App_data;
 using ApplicationRent.Data;
 using ApplicationRent.Data.Identity;
 using ApplicationRent.Services.Email;
@@ -19,6 +20,8 @@ builder.Services.AddDefaultIdentity<ApplicationIdentityUser>(options => options.
 //builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddSingleton<FirebaseService>();
 
 var app = builder.Build();
 
