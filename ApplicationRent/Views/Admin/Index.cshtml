@@ -5,7 +5,70 @@
 @{
     ViewData["Title"] = "Админ панель";
 }
+@model IEnumerable<ApplicationRent.Data.Identity.Place>
 
 <h2>Админ панель</h2>
 <p>Добро пожаловать в административную панель.</p>
 <a href="@Url.Action("Users", "Admin")" class="btn btn-primary">Просмотр пользователей</a>
+
+<p>Редактирование мест аренды</p>
+<div>
+    <a asp-action="Create" class="action-btn">Create New</a>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>Категория</th>
+            <th>Статус</th>
+            <th>Кнопки</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category) 
+                </td>
+                <td>
+                    @if (!item.InRent)
+                    {
+                        @:Свободно
+                    }
+                    else
+                    {
+                        @:Занято до: @item.EndRent.ToString("dd.MM.yyyy")
+                    }
+                </td>
+                <td>
+                    @if (ViewBag.IsAdmin)
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    }
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    @if (!item.InRent)
+                    {
+                        <a asp-action="Rent" asp-route-id="@item.Id" class="btn btn-primary">Арендовать</a>
+                    }
+                    else
+                    {
+                        <button disabled class="btn btn-secondary btn-lg disabled">Арендовать</button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

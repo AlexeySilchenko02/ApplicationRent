@@ -19,7 +19,7 @@ namespace ApplicationRent.Data
             builder.Entity<Place>().Property(z => z.Name).HasMaxLength(100);
             builder.Entity<Place>().Property(p => p.Price).HasColumnType("decimal(18,2)");
 
-            builder.Entity<Place>().HasData(
+            /*builder.Entity<Place>().HasData(
                 new Place
                 {
                     Id = 1,
@@ -31,7 +31,7 @@ namespace ApplicationRent.Data
                     SizePlace = 15.5,
                     Description = "Комната 15 метров",
                     Category = "Склад",
-                });
+                });*/
 
             base.OnModelCreating(builder);
         }

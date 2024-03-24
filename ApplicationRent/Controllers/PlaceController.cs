@@ -262,10 +262,4 @@ namespace ApplicationRent.Controllers
             return View("Rent", model);
         }
     }
-    public class RentViewModel
-    {
-        public int PlaceId { get; set; }
-        public DateTime StartRent { get; set; }
-        public DateTime EndRent { get; set; }
-    }
 }
