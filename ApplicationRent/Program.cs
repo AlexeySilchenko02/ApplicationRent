@@ -19,7 +19,8 @@ builder.Services.AddDefaultIdentity<ApplicationIdentityUser>(options => options.
 
 //builder.Services.AddTransient<IEmailSender, EmailSender>();
 
-builder.Services.AddControllersWithViews();
+//AddRazorRuntimeCompilation - для динамического обновления страниц во время редактирования
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
 builder.Services.AddSingleton<FirebaseService>();
 
