@@ -59,14 +59,6 @@
                         <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                     }
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                    @if (!item.InRent)
-                    {
-                        <a asp-action="Rent" asp-route-id="@item.Id" class="btn btn-primary">Арендовать</a>
-                    }
-                    else
-                    {
-                        <button disabled class="btn btn-secondary btn-lg disabled">Арендовать</button>
-                    }
                 </td>
             </tr>
         }

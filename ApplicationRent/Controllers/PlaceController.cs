@@ -86,15 +86,24 @@ namespace ApplicationRent.Controllers
                 return NotFound();
             }
 
-            // Предоставляем информацию о месте и диапазоне дат для аренды
-            var rentViewModel = new RentViewModel
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            // Создаем модель представления с данными пользователя и места, устанавливаем начальные даты
+            var viewModel = new RequestsRentViewModel
             {
                 PlaceId = place.Id,
-                StartRent = DateTime.Now,
-                EndRent = DateTime.Now.AddDays(1) // Пример начальных значений
+                UserName = user.FullNameUser,
+                UserEmail = user.Email,
+                UserPhone = user.PhoneNumber,
+                StartRent = DateTime.Today, // Сегодняшняя дата для начала аренды
+                EndRent = DateTime.Today.AddDays(1) // Завтрашняя дата для окончания аренды по умолчанию
             };
 
-            return View(rentViewModel);
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -149,7 +158,7 @@ namespace ApplicationRent.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RequestRent(RequestsRentViewModel model)
+        public async Task<IActionResult> RequestRent(RequestsRentViewModel model, int RentDuration)
         {
             if (ModelState.IsValid)
             {
@@ -159,15 +168,18 @@ namespace ApplicationRent.Controllers
                     return Unauthorized();
                 }
 
+                // Вычисляем конечную дату аренды, используя выбранный срок аренды
+                var endRent = model.StartRent.AddMonths(RentDuration);
+
                 var requestRent = new RequestsRent
                 {
                     UserId = user.Id,
                     PlaceId = model.PlaceId,
                     StartRent = model.StartRent,
-                    EndRent = model.EndRent,
+                    EndRent = endRent, // Используем вычисленную конечную дату
                     UserEmail = model.UserEmail ?? user.Email,
                     UserName = model.UserName ?? user.UserName,
-                    UserPhone = model.UserPhone // Предполагаем, что у ApplicationIdentityUser есть поле UserPhone
+                    UserPhone = model.UserPhone
                 };
 
                 _context.Add(requestRent);
@@ -176,8 +188,8 @@ namespace ApplicationRent.Controllers
                 return RedirectToAction(nameof(Index)); // Или на другую страницу подтверждения
             }
 
-            // Вернуть пользователя на форму с заполненными данными при ошибке валидации
-            return View(model);
+            // В случае ошибки валидации, вернуть пользователя на форму
+            return View("Rent", model);
         }
     }
     public class RequestsRentViewModel
@@ -188,6 +200,12 @@ namespace ApplicationRent.Controllers
         public string UserName { get; set; }
         public string UserEmail { get; set; }
         public string UserPhone { get; set; }
+    }
+    public class RentViewModel
+    {
+        public int PlaceId { get; set; }
+        public DateTime StartRent { get; set; }
+        public DateTime EndRent { get; set; }
     }
 
 }

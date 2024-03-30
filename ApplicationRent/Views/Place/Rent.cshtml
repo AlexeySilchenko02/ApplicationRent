@@ -2,7 +2,7 @@
     ViewData["Title"] = "Аренда";
 }
 
-@model ApplicationRent.Controllers.RentViewModel
+@model ApplicationRent.Controllers.RequestsRentViewModel
 
 <h2>Аренда</h2>
 
@@ -27,29 +27,33 @@
     </form>
 </div>
 <div id="list-view" style="display:none;">
-    <p>Форма для заявки на офлайн аренду</p>
+    <p>Долгосрочная аренда</p>
     <form asp-action="RequestRent" method="post">
         <input type="hidden" asp-for="PlaceId" />
         <div class="form-group">
-            <label for="userName">Ваше имя</label>
-            <input id="userName" name="UserName" class="form-control" type="text"/>
+            <label asp-for="UserName">Имя</label>
+            <input asp-for="UserName" class="form-control" />
         </div>
         <div class="form-group">
-            <label for="userEmail">Email</label>
-            <input id="userEmail" name="UserEmail" class="form-control" type="email" />
+            <label asp-for="UserEmail">Email</label>
+            <input asp-for="UserEmail" class="form-control" />
         </div>
         <div class="form-group">
-            <label for="userPhone">Телефон</label>
-            <input id="userPhone" name="UserPhone" class="form-control" type="text"/>
+            <label asp-for="UserPhone">Телефон</label>
+            <input asp-for="UserPhone" class="form-control" />
         </div>
         <div class="form-group">
             <label asp-for="StartRent">Дата начала</label>
-            <input asp-for="StartRent" class="form-control" type="date" />
+            <input asp-for="StartRent" type="date" class="form-control" />
         </div>
         <div class="form-group">
-            <label asp-for="EndRent">Дата окончания</label>
-            <input asp-for="EndRent" class="form-control" type="date" />
-        </div>
+            <label for="rentDuration">Срок аренды (в месяцах)</label>
+            <select id="rentDuration" name="RentDuration" class="form-control">
+                <option value="1">1 месяц</option>
+                <option value="2">2 месяца</option>
+                <option value="3">3 месяца</option>
+                <option value="4">4 месяца</option>
+            </select>
         <button type="submit" class="btn btn-primary">Отправить заявку</button>
     </form>
 </div>
