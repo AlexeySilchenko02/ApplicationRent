@@ -54,124 +54,6 @@ namespace ApplicationRent.Controllers
             return View(places);
         }
 
-        //Вызов страницы создания записи
-        public IActionResult Create()
-        {
-            ViewBag.Categories = new List<string> { "Фотостудия", "Склад", "Workspace", "Базовое место" };
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Place place)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(place);
-                await _context.SaveChangesAsync();
-
-                // Сохранение в Firebase
-                await _firebaseService.AddOrUpdatePlace(place);
-
-                return RedirectToAction(nameof(Index));
-            }
-            // Предполагаемые категории
-            ViewBag.Categories = new List<string> { "Фотостудия", "Склад", "Workspace", "Базовое место" };
-            return View(place);
-        }
-
-        //Вызов страницы редактирования
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var place = await _context.Places.FindAsync(id);
-            if (place == null)
-            {
-                return NotFound();
-            }
-            // Предполагаемые категории
-            ViewBag.Categories = new List<string> { "Фотостудия", "Склад", "Workspace", "Базовое место" };
-            return View(place);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Place place)
-        {
-            if (id != place.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(place);
-                    await _context.SaveChangesAsync();
-
-                    // Обновление в Firebase
-                    await _firebaseService.AddOrUpdatePlace(place);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PlaceExists(place.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            // Предполагаемые категории (передача снова в случае ошибки валидации)
-            ViewBag.Categories = new List<string> { "Фотостудия", "Склад", "Workspace", "Базовое место" };
-            return View(place);
-        }
-
-        //Вызов страницы удаления
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var place = await _context.Places
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (place == null)
-            {
-                return NotFound();
-            }
-
-            return View(place);
-        }
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var place = await _context.Places.FindAsync(id);
-            _context.Places.Remove(place);
-            await _context.SaveChangesAsync();
-
-            // Удаление из Firebase
-            await _firebaseService.DeletePlace(id);
-
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool PlaceExists(int id)
-        {
-            return _context.Places.Any(e => e.Id == id);
-        }
-
         //Вызов страници для отображения детальной информации
         public async Task<IActionResult> Details(int? id)
         {
@@ -252,8 +134,11 @@ namespace ApplicationRent.Controllers
 
                 await _context.SaveChangesAsync();
 
-                // Обновление в Firebase
+                // Обновление в Firebase для места
                 await _firebaseService.AddOrUpdatePlace(place);
+
+                // Сохранение информации об аренде в Firebase
+                await _firebaseService.AddOrUpdateRental(rental);
 
                 return RedirectToAction(nameof(Index));
             }

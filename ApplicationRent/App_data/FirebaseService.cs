@@ -42,5 +42,14 @@ namespace ApplicationRent.App_data
                 .Child(id.ToString())
                 .DeleteAsync();
         }
+
+        public async Task AddOrUpdateRental(Rental rental)
+        {
+            // Добавление или обновление данных об аренде в Firebase
+            await _firebase
+                .Child("Rentals")
+                .Child(rental.Id.ToString())
+                .PutAsync(rental);
+        }
     }
 }
