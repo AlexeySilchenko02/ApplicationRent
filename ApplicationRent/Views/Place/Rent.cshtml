@@ -6,26 +6,74 @@
 
 <h2>Аренда</h2>
 
-<!--
-<form asp-action="ConfirmRent">
-    <input asp-for="PlaceId" type="hidden" />
-    <label asp-for="StartRent">Дата начала аренды:</label>
-    <input asp-for="StartRent" type="date" />
-    <label asp-for="EndRent">Дата окончания аренды:</label>
-    <input asp-for="EndRent" type="date" />
-    <button type="submit">Подтвердить аренду</button>
-</form>
--->
+<div>
+    <button id="show-cards">Онлайн аренда</button>
+    <button id="show-list">Заявка на аренду</button>
+</div>
 
-<form asp-action="ConfirmRent" method="post">
-    <input type="hidden" asp-for="PlaceId" />
-    <div class="form-group">
-        <label asp-for="StartRent">Дата начала</label>
-        <input asp-for="StartRent" class="form-control" type="date" />
-    </div>
-    <div class="form-group">
-        <label asp-for="EndRent">Дата окончания</label>
-        <input asp-for="EndRent" class="form-control" type="date" />
-    </div>
-    <button type="submit" class="btn btn-primary">Подтвердить аренду</button>
-</form>
+
+<div id="card-view" style="display:none;">
+    <form asp-action="ConfirmRent" method="post">
+        <input type="hidden" asp-for="PlaceId" />
+        <div class="form-group">
+            <label asp-for="StartRent">Дата начала</label>
+            <input asp-for="StartRent" class="form-control" type="date" />
+        </div>
+        <div class="form-group">
+            <label asp-for="EndRent">Дата окончания</label>
+            <input asp-for="EndRent" class="form-control" type="date" />
+        </div>
+        <button type="submit" class="btn btn-primary">Подтвердить аренду</button>
+    </form>
+</div>
+<div id="list-view" style="display:none;">
+    <p>Форма для заявки на офлайн аренду</p>
+    <form asp-action="RequestRent" method="post">
+        <input type="hidden" asp-for="PlaceId" />
+        <div class="form-group">
+            <label for="userName">Ваше имя</label>
+            <input id="userName" name="UserName" class="form-control" type="text"/>
+        </div>
+        <div class="form-group">
+            <label for="userEmail">Email</label>
+            <input id="userEmail" name="UserEmail" class="form-control" type="email" />
+        </div>
+        <div class="form-group">
+            <label for="userPhone">Телефон</label>
+            <input id="userPhone" name="UserPhone" class="form-control" type="text"/>
+        </div>
+        <div class="form-group">
+            <label asp-for="StartRent">Дата начала</label>
+            <input asp-for="StartRent" class="form-control" type="date" />
+        </div>
+        <div class="form-group">
+            <label asp-for="EndRent">Дата окончания</label>
+            <input asp-for="EndRent" class="form-control" type="date" />
+        </div>
+        <button type="submit" class="btn btn-primary">Отправить заявку</button>
+    </form>
+</div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const showCards = document.getElementById("show-cards");
+        const showList = document.getElementById("show-list");
+        const cardView = document.getElementById("card-view");
+        const listView = document.getElementById("list-view");
+
+        // Показать карточки по умолчанию
+        cardView.style.display = "block";
+        listView.style.display = "none";
+
+        showCards.addEventListener("click", function () {
+            cardView.style.display = "block";
+            listView.style.display = "none";
+        });
+
+        showList.addEventListener("click", function () {
+            cardView.style.display = "none";
+            listView.style.display = "block";
+        });
+    });
+</script>

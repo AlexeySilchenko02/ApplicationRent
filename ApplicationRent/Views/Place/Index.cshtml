@@ -65,14 +65,6 @@
     <button id="show-list">Отображение списком</button>
 </div>
 
-@if (ViewBag.IsAdmin)
-{
-    <p>Пользователь админ</p>
-    <div>
-        <a asp-action="Create" class="action-btn">Create New</a>
-    </div>
-}
-
 @if (SignInManager.IsSignedIn(User))
 {
     <div id="card-view" style="display:none;">

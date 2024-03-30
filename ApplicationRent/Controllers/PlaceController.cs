@@ -146,5 +146,48 @@ namespace ApplicationRent.Controllers
             // В случае ошибки возвращаем пользователя на страницу аренды для повторного ввода данных
             return View("Rent", model);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RequestRent(RequestsRentViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null)
+                {
+                    return Unauthorized();
+                }
+
+                var requestRent = new RequestsRent
+                {
+                    UserId = user.Id,
+                    PlaceId = model.PlaceId,
+                    StartRent = model.StartRent,
+                    EndRent = model.EndRent,
+                    UserEmail = model.UserEmail ?? user.Email,
+                    UserName = model.UserName ?? user.UserName,
+                    UserPhone = model.UserPhone // Предполагаем, что у ApplicationIdentityUser есть поле UserPhone
+                };
+
+                _context.Add(requestRent);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction(nameof(Index)); // Или на другую страницу подтверждения
+            }
+
+            // Вернуть пользователя на форму с заполненными данными при ошибке валидации
+            return View(model);
+        }
     }
+    public class RequestsRentViewModel
+    {
+        public int PlaceId { get; set; }
+        public DateTime StartRent { get; set; }
+        public DateTime EndRent { get; set; }
+        public string UserName { get; set; }
+        public string UserEmail { get; set; }
+        public string UserPhone { get; set; }
+    }
+
 }
