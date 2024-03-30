@@ -97,6 +97,39 @@ namespace ApplicationRent.Controllers
                 return View("Error"); 
             }
         }
+
+        public async Task<IActionResult> FeedbackList()
+        {
+            var feedbacks = await _context.Feedbacks.ToListAsync();
+            return View(feedbacks); // Возвращает представление с записями обратной связи
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeFeedbackStatus(int id)
+        {
+            var feedback = await _context.Feedbacks.FindAsync(id);
+            if (feedback != null)
+            {
+                feedback.Status = !feedback.Status; // Изменение статуса на противоположный
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("FeedbackList"); // Возвращаемся к списку обратной связи
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeleteFeedback(int id)
+        {
+            var feedback = await _context.Feedbacks.FindAsync(id);
+            if (feedback != null)
+            {
+                _context.Feedbacks.Remove(feedback);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("FeedbackList"); // Возвращаемся к списку обратной связи
+        }
+
+
         //Вызов страницы создания записи
         public IActionResult Create()
         {
