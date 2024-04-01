@@ -42,6 +42,21 @@ body {
     margin-bottom: 60px;
 }
 
+button {
+    background-color: transparent;
+    border: 0;
+
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+main {
+    width: 100%;
+}
+
 .container-a {
     max-width: 980px;
     margin: 0 auto;
@@ -110,7 +125,7 @@ body {
 
 
 .intro {
-    min-height: 480px;
+    min-height: 750px;
     background: url(../img/Home/intro_bg.jpg) no-repeat fixed;
     background-size: cover;
     padding-top: 273px;
@@ -149,7 +164,7 @@ body {
 .benefits_title {
     font-family: var(--font-family);
     font-weight: 600;
-    font-size: 29px;
+    font-size: 30px;
     letter-spacing: 0.05em;
     text-align: center;
     color: #fff;
@@ -168,8 +183,27 @@ body {
 .benefits_cards {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
     grid-column-gap: 31px;
+    padding-left: 67px;
+    padding-right: 67px;
+    padding-top: 0;
+    padding-bottom: 68px;
+}
+
+.benefits_card {
+    grid-column: span 1;
+}
+
+.benefits_card-pic {
+    max-width: 110px;
+    margin-bottom: 35px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.benefits_card-thumb {
+    display:block;
 }
 
 .benefits_card-title {
@@ -180,4 +214,112 @@ body {
     text-align: center;
     color: #fff;
 }
+
+
 /* Benefits styles end*/
+
+.carousel {
+    position: relative;
+    width: 1098px;
+    height: 669px;
+    /*padding: 10px 40px;*/
+    padding-top: 86px;
+    padding-bottom: 86px;
+    padding-left: 45px;
+    padding-right: 45px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.carousel-img {
+        
+    width: auto;
+    height: auto;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+/*.arrow {
+    position: absolute;
+    top: 60px;
+    padding: 0;
+    background: #ddd;
+    border-radius: 15px;
+    border: 1px solid gray;
+    font-size: 24px;
+    line-height: 24px;
+    color: #444;
+    display: block;
+}
+
+.arrow:focus {
+    outline: none;
+}
+
+.arrow:hover {
+    background: #ccc;
+    cursor: pointer;
+}
+
+.prev {
+    left: 7px;
+}
+
+.next {
+    right: 7px;
+}*/
+
+.arrow-prev {
+    margin-top: 226px;
+    margin-bottom: 226px;
+    height: 45px;
+    width: 45px;
+    position: absolute;
+    top: 60px;
+    padding: 0;
+    display: block;
+    left: 7px;
+}
+
+.arrow-next {
+    margin-top: 226px;
+    margin-bottom: 226px;
+    height: 45px;
+    width: 45px;
+    position: absolute;
+    top: 60px;
+    padding: 0;
+    display: block;
+    right: 7px;
+}
+
+
+.gallery {
+    width: 1008px;
+    height: 497px;
+    overflow: hidden;
+}
+
+.gallery ul {
+  height: 130px;
+  width: 9999px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  transition: margin-left 250ms;
+  font-size: 0;
+}
+
+.gallery li {
+  display: inline-block;
+}
+
+
+
+
+.footer-a {
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+}
