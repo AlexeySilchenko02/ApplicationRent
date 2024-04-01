@@ -14,11 +14,30 @@ namespace ApplicationRent.Views.Shared.Components.Navigation
             _userManager = userManager;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync()
+        /*public async Task<IViewComponentResult> InvokeAsync()
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
             var fullName = user?.FullNameUser ?? "Гость"; // Предполагая, что у вас есть свойство FullName
             return View("Default", fullName);
+        }*/
+
+        public async Task<IViewComponentResult> InvokeAsync()
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var fullName = user?.FullNameUser ?? "Гость";
+
+            var model = new UserNavigationViewModel
+            {
+                FullName = fullName,
+                ProfileUrl = Url.Action("Index", "UserProfile", new { userId = user?.Id }) 
+            };
+
+            return View("Default", model);
         }
+    }
+    public class UserNavigationViewModel
+    {
+        public string FullName { get; set; }
+        public string ProfileUrl { get; set; }
     }
 }
