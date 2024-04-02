@@ -10,6 +10,7 @@
         public string UserEmail { get; set; }
         public string UserName { get; set; }
         public string UserPhone { get; set; }
+        public bool Status { get; set; } = false;
 
         public ApplicationIdentityUser User { get; set; }
         public Place Place { get; set; }

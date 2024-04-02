@@ -129,6 +129,38 @@ namespace ApplicationRent.Controllers
             return RedirectToAction("FeedbackList"); // Возвращаемся к списку обратной связи
         }
 
+        public async Task<IActionResult> RentRequestsList()
+        {
+            var rentRequests = await _context.RequestsRents.ToListAsync();
+            return View(rentRequests); // Возвращает представление со списком заявок на аренду
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeRequestStatus(int id)
+        {
+            var request = await _context.RequestsRents.FindAsync(id);
+            if (request != null)
+            {
+                request.Status = !request.Status; // Изменение статуса на противоположный
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("RentRequestsList"); // Возвращение к списку заявок на аренду
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteRequest(int id)
+        {
+            var request = await _context.RequestsRents.FindAsync(id);
+            if (request != null)
+            {
+                _context.RequestsRents.Remove(request);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("RentRequestsList"); // Возвращение к списку заявок на аренду
+        }
+
 
         //Вызов страницы создания записи
         public IActionResult Create()
