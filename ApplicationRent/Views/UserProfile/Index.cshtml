@@ -1,10 +1,28 @@
-﻿@model ApplicationRent.Data.Identity.ApplicationIdentityUser
-
-@{
+﻿@{
     ViewData["Title"] = "Личный кабинет";
 }
-
+@model ApplicationRent.Controllers.RentedPlaceViewModel
 <h2>Личный кабинет</h2>
 <div>
-    <p>Добро пожаловать, @Model.FullNameUser!</p>
+    <p>Добро пожаловать, @ViewBag.FullNameUser!</p>
+    <h3>Арендуемые места</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Название</th>
+                <th>Дата начала аренды</th>
+                <th>Дата конца аренды</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var place in ViewBag.RentedPlaces)
+            {
+                <tr>
+                    <td>@place.Name</td>
+                    <td>@place.StartRent.ToShortDateString()</td>
+                    <td>@place.EndRent.ToShortDateString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
