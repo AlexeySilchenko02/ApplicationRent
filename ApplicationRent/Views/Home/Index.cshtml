@@ -130,182 +130,47 @@
             <ul class="uk-slider-nav uk-dotnav uk-flex-center uk-margin"></ul>
         </div>
     </section>
+    
+    <section class="contacts-form">
+        <div class="contacts-form-container">
+            <div class="contacts-form-grid">
+                <div class="contacts-form-block">
+                    <img src="~/img/Contacts\form-pic.jpg" alt="Форма обратной связи" class="contacts-form-pic" />
+                </div>
+                <div class="contacts-form-block">
+                    <h1 class="contacts-form-title">Свяжитесь с нами</h1>
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success">
+                            @TempData["SuccessMessage"]
+                        </div>
+                    }
 
-    @* <section class="carousel">
-        <div class="uk-position-relative uk-visible-toggle uk-light" tabindex="-1" uk-slider="autoplay: true autoplay-interval: 1000 pause-on-hover: true">
-            <ul class="uk-slider-items uk-child-width-1-2 uk-child-width-1-3@m uk-grid">
-                <li>
-                    <div class="uk-panel">
-                        <img src="~/img/Home/Feedback-1.jpg" width="316" height="497" alt="Слайдер" loading="lazy">
-                        <div class="uk-position-center uk-panel">                   
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="uk-panel">
-                        <img src="~/img/Home/Feedback-2.jpg" width="316" height="497" alt="Слайдер" loading="lazy">
-                        <div class="uk-position-center uk-panel">
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="uk-panel">
-                        <img src="~/img/Home/Feedback-3.jpg" width="316" height="497" alt="Слайдер" loading="lazy">
-                        <div class="uk-position-center uk-panel">
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="uk-panel">
-                        <img src="~/img/Home/Feedback-4.jpg" width="316" height="497" alt="Слайдер" loading="lazy">
-                        <div class="uk-position-center uk-panel">
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="uk-panel">
-                        <img src="~/img/Home/Feedback-1.jpg" width="316" height="497" alt="Слайдер" loading="lazy">
-                        <div class="uk-position-center uk-panel">
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="uk-panel">
-                        <img src="~/img/Home/Feedback-2.jpg" width="316" height="497" alt="Слайдер" loading="lazy">
-                        <div class="uk-position-center uk-panel">
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="uk-panel">
-                        <img src="~/img/Home/Feedback-3.jpg" width="316" height="497" alt="Слайдер" loading="lazy">
-                        <div class="uk-position-center uk-panel">
-                        </div>
-                    </div>
-                </li>
-            </ul>
+                    <form asp-action="SubmitFeedback" method="post" class="contacts-form-areas">
+                        <div asp-validation-summary="ModelOnly"></div>
 
-            <a class="uk-position-center-left uk-position-small uk-hidden-hover" href uk-slidenav-previous uk-slider-item="previous"></a>
-            <a class="uk-position-center-right uk-position-small uk-hidden-hover" href uk-slidenav-next uk-slider-item="next"></a>
-        </div>
-    </section> *@
+                        <div class="contacts-form-group">
+                            <input type="text" id="name" name="Name" placeholder="Введите ваше имя" required class="contacts-form-input" />
+                        </div>
 
-    @* <section class="benefits">
-        <div class="benefits_container">
-            <h2 class="benefits_title">
-                Наши преимущества
-            </h2>
-            <div class="benefits_cards">
-                <div class="benefits_card">
-                    <div class="benefits_card-pic">
-                        <img src="img/Home/buildings.svg" alt="Большой выбор помещений" class="benefits_card-thumb">
-                    </div>
-                    <h3 class="benefits_card-title">
-                        Большой выбор помещений
-                    </h3>
-                </div>
-                <div class="benefits_card">
-                    <div class="benefits_card-pic">
-                        <img src="img/Home/location.svg" alt="Удобная локация" class="benefits_card-thumb">
-                    </div>
-                    <h3 class="benefits_card-title">
-                        Удобная локация
-                    </h3>
-                </div>
-                <div class="benefits_card">
-                    <div class="benefits_card-pic">
-                        <img src="img/Home/edit.svg" alt="Быстрое оформление договоров" class="benefits_card-thumb">
-                    </div>
-                    <h3 class="benefits_card-title">
-                        Быстрое оформление договоров
-                    </h3>
-                </div>
-                <div class="benefits_card">
-                    <div class="benefits_card-pic">
-                        <img src="img/Home/setting-4.svg" alt="Функциональные фильтры поиска" class="benefits_card-thumb">
-                    </div>
-                    <h3 class="benefits_card-title">
-                        Функциональные фильтры поиска
-                    </h3>
-                </div>
-                <div class="benefits_card">
-                    <div class="benefits_card-pic">
-                        <img src="img/Home/lamp-on.svg" alt="Наличие дополнительных услуг" class="benefits_card-thumb">
-                    </div>
-                    <h3 class="benefits_card-title">
-                        Наличие дополнительных услуг
-                    </h3>
-                </div>
-                <div class="benefits_card">
-                    <div class="benefits_card-pic">
-                        <img src="img/Home/category-2.svg" alt="Широкий выбор типов помещений" class="benefits_card-thumb">
-                    </div>
-                    <h3 class="benefits_card-title">
-                        Широкий выбор типов помещений
-                    </h3>
+                        <div class="contacts-form-group">
+                            <input type="email" id="email" name="Email" placeholder="Введите ваш email" required class="contacts-form-input" />
+                        </div>
+
+                        <div class="contacts-form-group">
+                            <input type="text" id="subject" name="Subject" placeholder="Введите тему сообщения" required class="contacts-form-input" />
+                        </div>
+
+                        <div class="contacts-form-group">
+                            <textarea id="message" name="Message" placeholder="Введите ваше сообщение" required class="contacts-form-input-area"></textarea>
+                        </div>
+
+                        <button type="submit" class="contacts-form-btn">Отправить</button>
+                    </form>
                 </div>
             </div>
         </div>
-    </section> *@
-
-    @* <div id="carousel" class="carousel">
-        <button class="arrow-prev">
-            <img src="img/Home/Arrow_prev.svg" alt="<<">
-        </button> *@
-        @* <button class="arrow-prev"><<</button> *@
-        @* <div class="gallery">
-            <ul>
-                <li><img src="~/img/Home/Feedback-1.jpg" alt="Отзыв" class="carousel-img"></li>
-                <li><img src="~/img/Home/Feedback-2.jpg" alt="Отзыв" class="carousel-img"></li>
-                <li><img src="~/img/Home/Feedback-3.jpg" alt="Отзыв" class="carousel-img"></li>
-                <li><img src="~/img/Home/Feedback-4.jpg" alt="Отзыв" class="carousel-img"></li>
-                <li><img src="~/img/Home/Feedback-1.jpg" alt="Отзыв" class="carousel-img"></li>
-                <li><img src="~/img/Home/Feedback-2.jpg" alt="Отзыв" class="carousel-img"></li>
-                <li><img src="~/img/Home/Feedback-3.jpg" alt="Отзыв" class="carousel-img"></li>
-                <li><img src="~/img/Home/Feedback-4.jpg" alt="Отзыв" class="carousel-img"></li>
-                <li><img src="~/img/Home/Feedback-1.jpg" alt="Отзыв" class="carousel-img"></li>
-            </ul>
-        </div> *@
-        @* <button class="arrow-next">>></button> *@
-        @* <button class="arrow-next">
-            <img src="img/Home/Arrow_next.svg" alt=">>">
-        </button>
-    </div> *@
-
-    @* <script>
-        /* этот код помечает картинки, для удобства разработки */
-        let i = 1;
-        for (let li of carousel.querySelectorAll('li')) {
-            li.style.position = 'relative';
-            li.insertAdjacentHTML('beforeend', `<span style="position:absolute;left:0;top:0">${i}</span>`);
-            i++;
-        }
-
-        /* конфигурация */
-        let width = 336; // ширина картинки
-        let count = 3; // видимое количество изображений
-
-        let list = carousel.querySelector('ul');
-        let listElems = carousel.querySelectorAll('li');
-
-        let position = 0; // положение ленты прокрутки
-
-        carousel.querySelector('.arrow-prev').onclick = function () {
-            // сдвиг влево
-            position += width * count;
-            // последнее передвижение влево может быть не на 3, а на 2 или 1 элемент
-            position = Math.min(position, 0)
-            list.style.marginLeft = position + 'px';
-        };
-
-        carousel.querySelector('.arrow-next').onclick = function () {
-            // сдвиг вправо
-            position -= width * count;
-            // последнее передвижение вправо может быть не на 3, а на 2 или 1 элемент
-            position = Math.max(position, -width * (listElems.length - count));
-            list.style.marginLeft = position + 'px';
-        };
-    </script> *@
+    </section>
 
 </main>
 

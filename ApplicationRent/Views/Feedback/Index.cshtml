@@ -1,12 +1,77 @@
 ﻿@{
     ViewData["Title"] = "Обратная связь";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>
+<main class="main">
+    <section class="contacts">
+        <div class="contacts-container">
+            <h1 class="contacts-title">Контактная информация</h1>
+            <h4 class="contacts-address">Россия, 123456, г.Москва, Ул. Большая Семеновская 38</h4>
+            <p class="contacts-subtitle">Телефон в Москве</p>
+            <p class="contacts-info-tel">+7 (999) 777 66 55</p>
+            <p class="contacts-subtitle">Email</p>
+            <p class="contacts-info-mail">rentinfo@mail.ru</p>
+            <div class="contacts-icons">
+                <img src="~/img/Contacts\socials.svg" alt="VK" href="#" class="contacts-icon" />
+                <img src="~/img/Contacts\socials2.svg" alt="Telegram" href="#" class="contacts-icon" />
+                <img src="~/img/Contacts\socials3.svg" alt="WhatsApp" href="#" class="contacts-icon" />
+            </div>
+        </div>
+    </section>
+
+    <section class="contacts-form">
+        <div class="contacts-form-container">
+            <div class="contacts-form-grid">
+                <div class="contacts-form-block">
+                    <img src="~/img/Contacts\form-pic.jpg" alt="Форма обратной связи" class="contacts-form-pic" />
+                </div>
+                <div class="contacts-form-block">
+                    <h1 class="contacts-form-title">Свяжитесь с нами</h1>
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success">
+                            @TempData["SuccessMessage"]
+                        </div>
+                    }
+
+                    <form asp-action="SubmitFeedback" method="post" class="contacts-form-areas">
+                        <div asp-validation-summary="ModelOnly"></div>
+
+                        <div class="contacts-form-group">
+                            <input type="text" id="name" name="Name" placeholder="Введите ваше имя" required class="contacts-form-input" />
+                        </div>
+
+                        <div class="contacts-form-group">
+                            <input type="email" id="email" name="Email" placeholder="Введите ваш email" required class="contacts-form-input" />
+                        </div>
+
+                        <div class="contacts-form-group">
+                            <input type="text" id="subject" name="Subject" placeholder="Введите тему сообщения" required class="contacts-form-input" />
+                        </div>
+
+                        <div class="contacts-form-group">
+                            <textarea id="message" name="Message" placeholder="Введите ваше сообщение" required class="contacts-form-input-area"></textarea>
+                        </div>
+
+                        <button type="submit" class="contacts-form-btn">Отправить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+
+
+</main>
+
+@* <h1>@ViewData["Title"]</h1> *@
+
+@* <p>
     Обратная связь
-</p>
-@if (TempData["SuccessMessage"] != null)
+</p> *@
+
+@* @if (TempData["SuccessMessage"] != null)
 {
     <div class="alert alert-success">
         @TempData["SuccessMessage"]
@@ -37,4 +102,4 @@
     </div>
 
     <button type="submit" class="btn btn-primary">Отправить</button>
-</form>
+</form> *@
