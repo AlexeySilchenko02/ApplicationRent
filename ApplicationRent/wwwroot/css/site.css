@@ -53,23 +53,77 @@ img {
     height: auto;
 }
 
-/*main {
-    width: 100%;
-}*/
-
-.container-a {
-    max-width: 980px;
-    margin: 0 auto;
+main {
+    margin-top: 78px;
 }
 
 /* Header styles start*/
 
-.header {
+.header-rent {
+    display: block;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
+    background-color: white;
+    padding-top: 23px;
+    padding-bottom: 22px;
+    z-index: 1;
 }
+
+.header-rent-nav {
+    max-width: 1800px;
+    margin: 0 auto;
+}
+
+.header-rent-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: first baseline;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-rent-logo-link {
+
+}
+
+.header_logo_pic {
+
+}
+
+.header-rent-nav-container {
+
+}
+
+.header-rent-list {
+    display: flex;
+    flex-wrap: wrap;
+    list-style-type: none;
+    align-items: center;
+    margin-bottom: 0;
+    padding-left: 0;
+}
+
+.header-nav-item {
+    margin-right: 65px;
+}
+
+.header-rent-link {
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 21px;
+    letter-spacing: 0.05em;
+    color: #000;
+}
+
+.header-rent-link:hover, .header-rent-link:focus, .header-rent-link:active {
+    opacity: .75;
+}
+
+/*.header-rent-link_white:hover, .header_link_white:focus, .header_link_white:active {
+    color: rgba(255, 255, 255, 0.781);
+}*/
 
 .header_container {
     display: flex;
@@ -467,7 +521,7 @@ img {
 .contacts-subtitle {
     font-family: var(--font-family);
     font-weight: 600;
-    font-size: 20px;
+    font-size: 21px;
     letter-spacing: 0.05em;
     color: #2c3531;
     margin-top: 0;
@@ -799,6 +853,62 @@ img {
 }
 
 
+.footer-rent {
+    min-height: 190px;
+    width: 100%;
+    background-color: #2C3531;
+}
+
+.footer-rent-container {
+    margin-left: 226px;
+    margin-right: 226px;
+}
+
+.footer-rent-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-column-gap: 21px;
+    justify-items: center;
+    padding-top: 31px;
+}
+
+.footer-rent-block {
+
+}
+
+.footer-rent-number {
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 21px;
+    letter-spacing: 0.05em;
+    color: #ffcb9a;
+}
+
+.footer-rent-address {
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 21px;
+    letter-spacing: 0.05em;
+    color: #ffcb9a;
+}
+
+.footer-rent-email {
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 21px;
+    letter-spacing: 0.05em;
+    text-align: center;
+    color: #ffcb9a;
+}
+
+.footer-rent-icons {
+    margin-top: 44px;
+}
+
+.footer-rent-icon {
+    width: 40px;
+    height: 40px;
+}
 
 
 .footer-a {
