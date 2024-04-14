@@ -24,12 +24,12 @@ namespace ApplicationRent.Views.Shared.Components.Navigation
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
-            var fullName = user?.FullNameUser ?? "Гость";
+            var fullName = user?.FullNameUser;
 
             var model = new UserNavigationViewModel
             {
                 FullName = fullName,
-                ProfileUrl = Url.Action("Index", "UserProfile", new { userId = user?.Id }) 
+                ProfileUrl = user != null ? Url.Action("Index", "UserProfile", new { userId = user.Id }) : null
             };
 
             return View("Default", model);

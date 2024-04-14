@@ -1,5 +1,4 @@
-﻿
-@if (User.Identity.IsAuthenticated)
+﻿@if (User.Identity.IsAuthenticated && !string.IsNullOrEmpty(Model.FullName))
 {
     <li class="header-nav-item">
         <a class="header-rent-link" href="@Model.ProfileUrl" title="Manage">Привет, @Model.FullName!</a>
