@@ -161,6 +161,32 @@ namespace ApplicationRent.Controllers
             return RedirectToAction("RentRequestsList"); // Возвращение к списку заявок на аренду
         }
 
+        //Страница с просмотром онлайн аренд
+        public async Task<IActionResult> Rentals()
+        {
+            var rentals = await _context.Rentals
+                                .Include(r => r.User)
+                                .Include(r => r.Place)
+                                .OrderByDescending(r => r.Id)  // Сортировка по Id от большего к меньшему
+                                .ToListAsync();
+            return View(rentals);
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeleteRental(int id)
+        {
+            var rental = await _context.Rentals.FindAsync(id);
+            if (rental != null)
+            {
+                _context.Rentals.Remove(rental);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Rentals");
+            }
+            return NotFound();
+        }
+
+
+
+
 
         //Вызов страницы создания записи
         public IActionResult Create()
