@@ -1,7 +1,7 @@
 ﻿@model UserProfileViewModel
 
 <h2>Личный кабинет пользователя: @Model.User.FullNameUser!</h2>
-
+<a href="@Url.Action("UpdateUserProfile", "UserProfile")" class="btn btn-primary">Изменить данные пользователя</a>
 @if (Model.Rentals.Any())
 {
     <table class="table">

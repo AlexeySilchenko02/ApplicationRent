@@ -86,5 +86,88 @@ namespace ApplicationRent.Controllers
 
             return RedirectToAction(nameof(Index)); // Возвращаем пользователя на страницу индекса
         }
+
+        // Метод для отображения формы
+        [HttpGet]
+        public async Task<IActionResult> UpdateUserProfile()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return View("Error"); // Вывод страницы ошибки, если пользователь не найден
+            }
+            return View(user); // Передаем модель пользователя в представление
+        }
+
+        // Метод для обработки отправленной формы
+        [HttpPost]
+        public async Task<IActionResult> UpdateUserProfile(ApplicationIdentityUser model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return View("Error"); // Вывод страницы ошибки, если пользователь не найден
+            }
+
+            // Обновляем данные
+            user.FullNameUser = model.FullNameUser;
+            user.PhoneNumber = model.PhoneNumber;
+
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Index"); // Перенаправляем на метод Index
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description); // Добавляем ошибки в ModelState
+                }
+                return View(model);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return View("Error");
+            }
+
+            var changePasswordResult = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+            if (changePasswordResult.Succeeded)
+            {
+                TempData["SuccessMessage"] = "Пароль успешно изменен.";
+                //return RedirectToAction("Index");
+                return View(model);
+            }
+            else
+            {
+                foreach (var error in changePasswordResult.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+                return View(model);
+            }
+        }
     }
 }
