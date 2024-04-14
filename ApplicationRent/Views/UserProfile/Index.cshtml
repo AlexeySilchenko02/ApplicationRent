@@ -1,28 +1,50 @@
-﻿@{
-    ViewData["Title"] = "Личный кабинет";
-}
-@model ApplicationRent.Controllers.RentedPlaceViewModel
-<h2>Личный кабинет</h2>
-<div>
-    <p>Добро пожаловать, @ViewBag.FullNameUser!</p>
-    <h3>Арендуемые места</h3>
+﻿@model UserProfileViewModel
+
+<h2>Личный кабинет пользователя: @Model.User.FullNameUser!</h2>
+
+@if (Model.Rentals.Any())
+{
     <table class="table">
         <thead>
             <tr>
-                <th>Название</th>
-                <th>Дата начала аренды</th>
-                <th>Дата конца аренды</th>
+                <th>Место</th>
+                <th>Начало аренды</th>
+                <th>Окончание аренды</th>
+                <th>Продление аренды</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var place in ViewBag.RentedPlaces)
+            @foreach (var rental in Model.Rentals)
             {
                 <tr>
-                    <td>@place.Name</td>
-                    <td>@place.StartRent.ToShortDateString()</td>
-                    <td>@place.EndRent.ToShortDateString()</td>
+                    <td>@rental.Place.Name</td>
+                    <td>@rental.StartRent.ToShortDateString()</td>
+                    <td>@rental.EndRent.ToShortDateString()</td>
+                    <td>
+                        <button type="button" onclick="toggleForm('@rental.Id')">Продлить аренду</button>
+                        <form asp-action="UpdateRentalEndDate" method="post" id="form-@rental.Id" style="display:none;">
+                            <input type="hidden" name="rentalId" value="@rental.Id" />
+                            <input type="date" name="newEndDate" value="@rental.EndRent.ToString("yyyy-MM-dd")" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                            <button type="submit">Обновить</button>
+                        </form>
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
-</div>
+}
+else
+{
+    <p>У вас нет актуальных мест аренды.</p>
+}
+
+<script>
+    function toggleForm(rentalId) {
+        var form = document.getElementById('form-' + rentalId);
+        if (form.style.display === 'none') {
+            form.style.display = 'block';
+        } else {
+            form.style.display = 'none';
+        }
+    }
+</script>

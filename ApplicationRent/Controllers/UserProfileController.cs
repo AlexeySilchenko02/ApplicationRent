@@ -1,6 +1,7 @@
 ﻿using ApplicationRent.App_data;
 using ApplicationRent.Data;
 using ApplicationRent.Data.Identity;
+using ApplicationRent.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,15 +10,13 @@ namespace ApplicationRent.Controllers
 {
     public class UserProfileController : Controller
     {
-        private readonly UserManager<ApplicationIdentityUser> _userManager;
         private readonly ApplicationDbContext _context;
-        private readonly FirebaseService _firebaseService;
+        private readonly UserManager<ApplicationIdentityUser> _userManager;
 
-        public UserProfileController(UserManager<ApplicationIdentityUser> userManager, ApplicationDbContext context, FirebaseService firebaseService)
+        public UserProfileController(ApplicationDbContext context, UserManager<ApplicationIdentityUser> userManager)
         {
-            _userManager = userManager;
             _context = context;
-            _firebaseService = firebaseService;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
@@ -25,32 +24,67 @@ namespace ApplicationRent.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return View("Error");
+                return View("Error"); // Показываем страницу ошибки, если пользователь не найден
             }
 
-            var today = DateTime.Now;
-            var rentedPlaces = _context.Rentals
-                .Where(r => r.UserId == user.Id && r.EndRent > today)
-                .Select(r => new RentedPlaceViewModel // Используйте явно определенный класс вместо анонимного объекта
-                {
-                    Name = r.Place.Name,
-                    StartRent = r.StartRent,
-                    EndRent = r.EndRent
-                })
-                .ToList();
+            var today = DateTime.Now; // Получаем текущую дату
 
-            ViewBag.RentedPlaces = rentedPlaces;
-            ViewBag.FullNameUser = user.FullNameUser;
+            var rentals = await _context.Rentals
+                                        .Where(r => r.UserId == user.Id && r.EndRent > today) // Фильтруем по ID пользователя и дате окончания аренды
+                                        .Include(r => r.Place) // Добавляем данные о месте
+                                        .ToListAsync();
 
-            return View();
+            var model = new UserProfileViewModel
+            {
+                Rentals = rentals,
+                User = user
+            };
+
+            return View(model);
         }
 
-    }
-    public class RentedPlaceViewModel
-    {
-        public int RentalId { get; set; } // ID арендованного места
-        public string Name { get; set; }
-        public DateTime StartRent { get; set; }
-        public DateTime EndRent { get; set; }
+        [HttpPost]
+        public async Task<IActionResult> UpdateRentalEndDate(int rentalId, DateTime newEndDate, [FromServices] FirebaseService firebaseService)
+        {
+            var rental = await _context.Rentals
+                                       .Include(r => r.Place)
+                                       .FirstOrDefaultAsync(r => r.Id == rentalId);
+            if (rental == null)
+            {
+                return NotFound();
+            }
+
+            bool updateFirebase = false;  // Флаг для отслеживания, нужно ли обновлять Firebase
+
+            // Обновляем дату окончания аренды в Rental
+            if (newEndDate > rental.EndRent)
+            {
+                rental.EndRent = newEndDate;
+                updateFirebase = true;  // Помечаем, что нужно обновить Firebase
+            }
+
+            // Обновляем дату окончания аренды и статус в Place, если это необходимо
+            if (rental.Place != null && newEndDate > rental.Place.EndRent)
+            {
+                rental.Place.EndRent = newEndDate;
+                rental.Place.InRent = true; // Обновляем статус на "в аренде"
+                updateFirebase = true;  // Помечаем, что нужно обновить Firebase
+            }
+
+            // Сохраняем изменения в локальной базе данных
+            await _context.SaveChangesAsync();
+
+            // Если были изменения, обновляем данные в Firebase
+            if (updateFirebase)
+            {
+                await firebaseService.AddOrUpdateRental(rental);  // Обновляем данные аренды в Firebase
+                if (rental.Place != null)
+                {
+                    await firebaseService.AddOrUpdatePlace(rental.Place);  // Обновляем данные места в Firebase
+                }
+            }
+
+            return RedirectToAction(nameof(Index)); // Возвращаем пользователя на страницу индекса
+        }
     }
 }
