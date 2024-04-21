@@ -3,55 +3,36 @@
 }
 @model ApplicationRent.Data.Identity.Place
 
-<h2>Details</h2>
+<h2>Подробная информация</h2>
 <div>
-    <h4>Place</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
+            Название
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Name)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.StartRent)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.StartRent)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.EndRent)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.EndRent)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.InRent)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.InRent)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
+            Цена
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Price)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.SizePlace)
+            Размер места
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.SizePlace)
+            @Html.DisplayFor(model => model.SizePlace) м²
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
+            Описание
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Description)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Category)
+            Категория
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Category)
@@ -81,7 +62,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
 

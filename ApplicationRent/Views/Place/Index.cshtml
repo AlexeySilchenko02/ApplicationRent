@@ -60,40 +60,22 @@
 
 </style>
 
-<div>
-    <button id="show-cards">Отображение в виде карт</button>
-    <button id="show-list">Отображение списком</button>
-</div>
-
 @if (SignInManager.IsSignedIn(User))
 {
-    <div id="card-view" style="display:none;">
-        @foreach (var item in Model)
-        {
-            <div class="place-card @(item.InRent ? "rented" : "not-rented")">
-                <div class="place-info">
-                    <strong>@Html.DisplayFor(modelItem => item.Name)</strong>
-                </div>
-                <div class="actions">
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="action-btn">Edit</a>
-                    <a asp-action="Details" asp-route-id="@item.Id" class="action-btn">Details</a>
-                </div>
-            </div>
-        }
-    </div>
+<div>
+    <button id="show-list">Отображение списком</button>
+    <button id="show-cards">Отображение в виде карт</button>
+</div>
+
     <div id="list-view" style="display:none;">
         <table class="table">
             <thead>
                 <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Name)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Price)
-                    </th>
+                    <th>Название</th>
+                    <th>Цена</th>
                     <th>Категория</th>
                     <th>Статус</th>
-                    <th></th>
+                    <th>Действия</th>
                 </tr>
             </thead>
             <tbody>
@@ -104,10 +86,10 @@
                             @Html.DisplayFor(modelItem => item.Name)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Price)
+                            @Html.DisplayFor(modelItem => item.Price) ₽
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Category) <!-- Данные категории -->
+                            @Html.DisplayFor(modelItem => item.Category)
                         </td>
                         <td>
                             @if (!item.InRent)
@@ -120,7 +102,7 @@
                             }
                         </td>
                         <td>
-                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> 
+                            <a asp-action="Details" asp-route-id="@item.Id">Подробнее</a> 
                             @if (!item.InRent)
                             {
                                 <a asp-action="Rent" asp-route-id="@item.Id" class="btn btn-primary">Арендовать</a>
@@ -134,6 +116,21 @@
                 }
             </tbody>
         </table>
+    </div>
+
+    <div id="card-view" style="display:none;">
+        @foreach (var item in Model)
+        {
+            <div class="place-card @(item.InRent ? "rented" : "not-rented")">
+                <div class="place-info">
+                    <strong>@Html.DisplayFor(modelItem => item.Name)</strong>
+                </div>
+                <div class="actions">
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="action-btn">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="action-btn">Details</a>
+                </div>
+            </div>
+        }
     </div>
 }
 else
@@ -149,8 +146,8 @@ else
         const listView = document.getElementById("list-view");
 
         // Показать карточки по умолчанию
-        cardView.style.display = "block";
-        listView.style.display = "none";
+        cardView.style.display = "none";
+        listView.style.display = "block";
 
         showCards.addEventListener("click", function () {
             cardView.style.display = "block";

@@ -1,6 +1,6 @@
 ﻿@model UserProfileViewModel
 
-<h2>Личный кабинет пользователя: @Model.User.FullNameUser!</h2>
+<h2>Личный кабинет пользователя: @Model.User.FullNameUser</h2>
 <a href="@Url.Action("UpdateUserProfile", "UserProfile")" class="btn btn-primary">Изменить данные пользователя</a>
 @if (Model.Rentals.Any())
 {
@@ -18,8 +18,8 @@
             {
                 <tr>
                     <td>@rental.Place.Name</td>
-                    <td>@rental.StartRent.ToShortDateString()</td>
-                    <td>@rental.EndRent.ToShortDateString()</td>
+                    <td>@rental.StartRent.ToString("dd.MM.yyyy")</td>
+                    <td>@rental.EndRent.ToString("dd.MM.yyyy")</td>
                     <td>
                         <button type="button" onclick="toggleForm('@rental.Id')">Продлить аренду</button>
                         <form asp-action="UpdateRentalEndDate" method="post" id="form-@rental.Id" style="display:none;">

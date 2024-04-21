@@ -11,14 +11,14 @@ namespace ApplicationRent.App_data
 
         public FirebaseService()
         {
-            // Загрузите учетные данные Google Cloud из файла JSON
+            // Учетные данные Google Cloud из файла JSON
             var credential = GoogleCredential.FromFile(Path.Combine(Directory.GetCurrentDirectory(), "App_Data", "rent.json"))
                               .CreateScoped("https://www.googleapis.com/auth/firebase.database",
                                             "https://www.googleapis.com/auth/userinfo.email");
 
-            // Инициализируйте клиент Firebase
+            // Инициализация клиента Firebase
             _firebase = new FirebaseClient(
-                "https://rent-854b7-default-rtdb.europe-west1.firebasedatabase.app/", // Укажите URL вашей Firebase Realtime Database
+                "https://rent-c4c65-default-rtdb.europe-west1.firebasedatabase.app/", //URL Firebase Realtime Database
                 new FirebaseOptions
                 {
                     AuthTokenAsyncFactory = () => credential.UnderlyingCredential.GetAccessTokenForRequestAsync()
