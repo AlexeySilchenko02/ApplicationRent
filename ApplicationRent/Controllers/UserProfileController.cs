@@ -133,6 +133,7 @@ namespace ApplicationRent.Controllers
             }
         }
 
+        //Страница смены пароля
         [HttpGet]
         public IActionResult ChangePassword()
         {

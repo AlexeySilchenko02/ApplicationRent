@@ -56,12 +56,14 @@ namespace ApplicationRent.Controllers
             return View(places);
         }
 
+        //Получение списка пользователей
         public async Task<IActionResult> Users()
         {
             var users = await _userManager.Users.ToListAsync();
             return View(users);
         }
 
+        //Изменения статуса пользователя
         public async Task<IActionResult> ToggleAdminStatus(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
@@ -76,6 +78,8 @@ namespace ApplicationRent.Controllers
             }
             return View("Error");
         }
+
+        //Удаление пользователей
         [HttpPost]
         public async Task<IActionResult> DeleteUser(string id)
         {
@@ -98,12 +102,14 @@ namespace ApplicationRent.Controllers
             }
         }
 
+        //Получение списка обратной связи
         public async Task<IActionResult> FeedbackList()
         {
             var feedbacks = await _context.Feedbacks.ToListAsync();
-            return View(feedbacks); // Возвращает представление с записями обратной связи
+            return View(feedbacks); 
         }
 
+        //Изменение статуса обратной связи
         [HttpPost]
         public async Task<IActionResult> ChangeFeedbackStatus(int id)
         {
@@ -116,6 +122,8 @@ namespace ApplicationRent.Controllers
 
             return RedirectToAction("FeedbackList"); // Возвращаемся к списку обратной связи
         }
+
+        //Удаление записи обратной связи
         [HttpPost]
         public async Task<IActionResult> DeleteFeedback(int id)
         {
@@ -129,25 +137,28 @@ namespace ApplicationRent.Controllers
             return RedirectToAction("FeedbackList"); // Возвращаемся к списку обратной связи
         }
 
+        // Возвращает представление со списком заявок на аренду
         public async Task<IActionResult> RentRequestsList()
         {
             var rentRequests = await _context.RequestsRents.ToListAsync();
-            return View(rentRequests); // Возвращает представление со списком заявок на аренду
+            return View(rentRequests);
         }
 
+        // Изменение статуса представление заявоки на аренду
         [HttpPost]
         public async Task<IActionResult> ChangeRequestStatus(int id)
         {
             var request = await _context.RequestsRents.FindAsync(id);
             if (request != null)
             {
-                request.Status = !request.Status; // Изменение статуса на противоположный
+                request.Status = !request.Status;
                 await _context.SaveChangesAsync();
             }
 
             return RedirectToAction("RentRequestsList"); // Возвращение к списку заявок на аренду
         }
 
+        //Удаление заявки на аренду
         [HttpPost]
         public async Task<IActionResult> DeleteRequest(int id)
         {
@@ -183,10 +194,9 @@ namespace ApplicationRent.Controllers
             }
             return NotFound();
         }
-
-
-
-
+        /*
+            МЕСТА АРЕНДЫ
+         */
 
         //Вызов страницы создания записи
         public IActionResult Create()
@@ -209,7 +219,7 @@ namespace ApplicationRent.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            // Предполагаемые категории
+            //Категории
             ViewBag.Categories = new List<string> { "Фотостудия", "Склад", "Workspace", "Базовое место" };
             return View(place);
         }
@@ -227,11 +237,12 @@ namespace ApplicationRent.Controllers
             {
                 return NotFound();
             }
-            // Предполагаемые категории
+            //Категории
             ViewBag.Categories = new List<string> { "Фотостудия", "Склад", "Workspace", "Базовое место" };
             return View(place);
         }
 
+        //Страница редактирования
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Place place)
@@ -287,6 +298,7 @@ namespace ApplicationRent.Controllers
             return View(place);
         }
 
+        //Подтверждение удаления
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

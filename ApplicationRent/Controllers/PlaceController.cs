@@ -21,7 +21,6 @@ namespace ApplicationRent.Controllers
             _firebaseService = firebaseService;
         }
 
-        //Вызов страницы Index
         public async Task<IActionResult> Index()
         {
             var places = await _context.Places.ToListAsync();
@@ -115,7 +114,7 @@ namespace ApplicationRent.Controllers
                 var user = await _userManager.GetUserAsync(User);
                 if (user == null)
                 {
-                    // Не удалось получить пользователя, возможно, следует добавить обработку ошибок
+                    // Не удалось получить пользователя(добавить обработку ошибок)
                     return Unauthorized();
                 }
 
@@ -126,7 +125,7 @@ namespace ApplicationRent.Controllers
                     PlaceId = model.PlaceId,
                     StartRent = model.StartRent,
                     EndRent = model.EndRent,
-                    UserEmail = user.Email // Добавляем Email пользователя
+                    UserEmail = user.Email
                 };
 
                 _context.Add(rental);
@@ -176,7 +175,7 @@ namespace ApplicationRent.Controllers
                     UserId = user.Id,
                     PlaceId = model.PlaceId,
                     StartRent = model.StartRent,
-                    EndRent = endRent, // Используем вычисленную конечную дату
+                    EndRent = endRent,
                     UserEmail = model.UserEmail ?? user.Email,
                     UserName = model.UserName ?? user.UserName,
                     UserPhone = model.UserPhone
@@ -185,7 +184,7 @@ namespace ApplicationRent.Controllers
                 _context.Add(requestRent);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction(nameof(Index)); // Или на другую страницу подтверждения
+                return RedirectToAction(nameof(Index));
             }
 
             // В случае ошибки валидации, вернуть пользователя на форму
