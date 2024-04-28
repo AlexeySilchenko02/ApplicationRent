@@ -20,5 +20,6 @@ namespace ApplicationRent.Data.Identity
         public string Message { get; set; }
 
         public bool Status { get; set; } = false; // По умолчанию false
+        public string Platform { get; set; }
     }
 }

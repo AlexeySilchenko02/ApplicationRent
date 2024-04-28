@@ -33,11 +33,11 @@ namespace ApplicationRent.Controllers
                 _context.Add(feedback);
                 await _context.SaveChangesAsync();
 
-                TempData["SuccessMessage"] = "Сообщение успешно отправлено!";
-                return RedirectToAction(nameof(Index)); // Перезагружаем страницу, чтобы очистить форму и показать сообщение
+                return Json(new { success = true, message = "Сообщение успешно отправлено!" });
             }
 
-            return View("Index", feedback); // В случае ошибки валидации
+            var errors = ModelState.Values.SelectMany(v => v.Errors.Select(b => b.ErrorMessage));
+            return Json(new { success = false, message = errors });
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

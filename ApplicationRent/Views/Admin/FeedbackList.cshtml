@@ -13,6 +13,7 @@
             <th>Email</th>
             <th>Тема</th>
             <th>Сообщение</th>
+            <th>Платформа</th>
             <th>Статус</th>
             <th>Действия</th>
         </tr>
@@ -25,6 +26,7 @@
                 <td>@feedback.Email</td>
                 <td>@feedback.Subject</td>
                 <td>@feedback.Message</td>
+                <td>@feedback.Platform</td>
                 <td>@(feedback.Status ? "Просмотрено" : "Не просмотрено")</td>
                 <td>
                     <form asp-action="ChangeFeedbackStatus" asp-route-id="@feedback.Id" method="post" style="display: inline;">

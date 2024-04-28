@@ -5,7 +5,7 @@
 @{
     ViewData["Title"] = "Home Page";
 }
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <main class="main">
 
     <div class="intro">
@@ -131,7 +131,7 @@
         </div>
     </section>
     
-    <section class="contacts-form">
+   <section class="contacts-form">
         <div class="contacts-form-container">
             <div class="contacts-form-grid">
                 <div class="contacts-form-block">
@@ -139,14 +139,7 @@
                 </div>
                 <div class="contacts-form-block">
                     <h1 class="contacts-form-title">Свяжитесь с нами</h1>
-                    @if (TempData["SuccessMessage"] != null)
-                    {
-                        <div class="alert alert-success">
-                            @TempData["SuccessMessage"]
-                        </div>
-                    }
-
-                    <form asp-action="SubmitFeedback" method="post" class="contacts-form-areas">
+                    <form id="feedbackForm" asp-action="SubmitFeedback" method="post" class="contacts-form-areas">
                         <div asp-validation-summary="ModelOnly"></div>
 
                         <div class="contacts-form-group">
@@ -165,6 +158,8 @@
                             <textarea id="message" name="Message" placeholder="Введите ваше сообщение" required class="contacts-form-input-area"></textarea>
                         </div>
 
+                        <input type="hidden" name="Platform" value="Сайт" />
+
                         <button type="submit" class="contacts-form-btn">Отправить</button>
                     </form>
                 </div>
@@ -173,6 +168,30 @@
     </section>
 
 </main>
+
+<script>
+    $(document).ready(function () {
+        $('#feedbackForm').submit(function (event) {
+            event.preventDefault(); // Предотвращение стандартной отправки формы
+            var formData = $(this).serialize(); // Сериализация данных формы
+
+            $.ajax({
+                type: 'POST',
+                url: $(this).attr('action'),
+                data: formData,
+                success: function (response) {
+                    $('.alert').remove(); // Удаление предыдущих уведомлений
+                    if (response.success) {
+                        $('#feedbackForm').before('<div class="alert alert-success">' + response.message + '</div>'); // Добавление сообщения об успехе
+                        $('#feedbackForm').trigger('reset'); // Очистка формы
+                    } else {
+                        $('#feedbackForm').before('<div class="alert alert-danger">' + response.message + '</div>'); // Добавление сообщения об ошибке
+                    }
+                }
+            });
+        });
+    });
+</script>
 
 @* @if (SignInManager.IsSignedIn(User))
 {
