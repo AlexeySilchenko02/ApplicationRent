@@ -1,6 +1,7 @@
 using ApplicationRent.App_data;
 using ApplicationRent.Data;
 using ApplicationRent.Data.Identity;
+using ApplicationRent.Services;
 using ApplicationRent.Services.Email;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -14,8 +15,17 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<ApplicationIdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddDefaultIdentity<ApplicationIdentityUser>(options => {
+    options.SignIn.RequireConfirmedAccount = true;
+    // ƒополнительные настройки требований к паролю можно задать здесь
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequiredLength = 6;
+})
+.AddEntityFrameworkStores<ApplicationDbContext>()
+.AddErrorDescriber<RussianIdentityErrorDescriber>(); // ƒобавление вашего кастомного описател€ ошибок
 
 //builder.Services.AddTransient<IEmailSender, EmailSender>();
 
