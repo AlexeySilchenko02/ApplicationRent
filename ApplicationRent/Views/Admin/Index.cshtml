@@ -15,20 +15,16 @@
 <a class="btn btn-primary" href="@Url.Action("Rentals", "Admin")">Показать список аренд онлайн</a>
 <p>Редактирование мест аренды</p>
 <div>
-    <a asp-action="Create" class="action-btn">Create New</a>
+    <a asp-action="Create" class="action-btn">Создание нового места</a>
 </div>
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
+            <th>Название</th>
+            <th>Цена</th>
             <th>Категория</th>
             <th>Статус</th>
-            <th>Кнопки</th>
+            <th>Действия</th>
         </tr>
     </thead>
     <tbody>
@@ -57,10 +53,10 @@
                 <td>
                     @if (ViewBag.IsAdmin)
                     {
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Изменить</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
                     }
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    <a asp-action="Details" asp-route-id="@item.Id">Подробнее</a>
                 </td>
             </tr>
         }
