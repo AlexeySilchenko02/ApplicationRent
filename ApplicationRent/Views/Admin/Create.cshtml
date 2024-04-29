@@ -12,22 +12,6 @@
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="StartRent" class="control-label"></label>
-        <input asp-for="StartRent" class="form-control" />
-        <span asp-validation-for="StartRent" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="EndRent" class="control-label"></label>
-        <input asp-for="EndRent" class="form-control" />
-        <span asp-validation-for="EndRent" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <div class="form-check">
-            <input asp-for="InRent" class="form-check-input" />
-            <label asp-for="InRent" class="form-check-label"></label>
-        </div>
-    </div>
-    <div class="form-group">
         <label asp-for="Price" class="control-label"></label>
         <input asp-for="Price" class="form-control" />
         <span asp-validation-for="Price" class="text-danger"></span>
@@ -66,3 +50,20 @@
         <input type="submit" value="Create" class="btn btn-primary" />
     </div>
 </form>
+
+@*  <div class="form-group">
+        <label asp-for="StartRent" class="control-label"></label>
+        <input asp-for="StartRent" class="form-control" />
+        <span asp-validation-for="StartRent" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="EndRent" class="control-label"></label>
+        <input asp-for="EndRent" class="form-control" />
+        <span asp-validation-for="EndRent" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <div class="form-check">
+            <input asp-for="InRent" class="form-check-input" />
+            <label asp-for="InRent" class="form-check-label"></label>
+        </div>
+    </div> *@

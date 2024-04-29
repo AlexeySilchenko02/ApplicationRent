@@ -8,9 +8,9 @@ namespace ApplicationRent.Data.Identity
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public DateTime StartRent { get; set; }
-        public DateTime EndRent { get; set; }
-        public bool InRent { get; set; }
+        public DateTime StartRent { get; set; } = new DateTime(2024, 4, 12);
+        public DateTime EndRent { get; set; } = new DateTime(2024, 4, 13);
+        public bool InRent { get; set; } = false;
         public decimal Price { get; set; }
         public double SizePlace { get; set; }
         public string Description { get; set; }
