@@ -5,7 +5,52 @@
     ViewData["Title"] = "Вход";
 }
 
-<h1>@ViewData["Title"]</h1>
+<main class="main">
+    <section class="entrance-title-section">
+        <div class="entrance-title-container">
+            <h1 class="entrance-title-h1">Вход</h1>
+        </div>
+    </section>
+    <section class="entrance-form">
+        <div class="entrance-form-container">
+            <div class="entrance-form-grid">
+                <div class="entrance-form-grid-block">
+                    <form id="account" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                        <div class="entrance-form-group">
+                            <input asp-for="Input.Email" class="entrance-form-input" autocomplete="username" aria-required="true" placeholder="Введите email" />
+                            <span asp-validation-for="Input.Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="entrance-form-group2">
+                            <input asp-for="Input.Password" class="entrance-form-input" autocomplete="current-password" aria-required="true" placeholder="password" />
+                            <span asp-validation-for="Input.Password" class="text-danger"></span>
+                        </div>
+
+                        <div class="entrance-checkbox">
+                            <input type="checkbox" checked id="ent-che" class="entrance-checkbox-input" asp-for="Input.RememberMe " />
+                            <label for="ent-che" asp-for="Input.RememberMe">Запомнить?</label>
+                        </div>
+
+                        <div>
+                            <button id="login-submit" type="submit" class="entrance-form-btn">Войти</button>
+                        </div>
+
+                        <div class="forgot-password-container">
+                            <a id="forgot-password" class="entrance-forgot-password" asp-page="./ForgotPassword">Забыли пароль?</a>
+                        </div>
+                    </form>
+                </div>
+                <div class="entrance-form-grid-block">
+                    <h3 class="entrance-ent-to-reg-title">Нет аккаунта?</h3>
+                    <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="entrance-form-text">Зарегистрируйтесь</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+@* <h1>@ViewData["Title"]</h1>
 <div class="row">
     <div class="col-md-4">
         <section>
@@ -42,7 +87,7 @@
             </form>
         </section>
     </div>
-</div>
+</div> *@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

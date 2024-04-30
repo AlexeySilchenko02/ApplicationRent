@@ -16,105 +16,109 @@
     <script src="js/uikit-icons.min.js"></script>
 </head>
 <body>
-    <header class="header-rent">
-        <nav class="header-rent-nav">
-            <div class="header-rent-container">
-                <a class="header-rent-logo-link" asp-area="" asp-controller="Home" asp-action="Index">
-                    <img src="img/Header/Rent.svg" alt="Rent" class="header_logo_pic">
-                </a>
-                @* <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+    <div class="wrapper">
+        <header class="header-rent">
+            <nav class="header-rent-nav">
+                <div class="header-rent-container">
+                    <a class="header-rent-logo-link" asp-area="" asp-controller="Home" asp-action="Index">
+                        <img src="img/Header/Rent.svg" alt="Rent" class="header_logo_pic">
+                        @* <img src="../wwwroot/img/Header/Rent.svg" alt="Rent" class="header_logo_pic"> *@
+                    </a>
+                    @* <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
-                </button> *@
-                <div class="header-rent-nav-container">
-                    <ul class="header-rent-list">
-                        <li class="header-nav-item">
-                            <a class="header-rent-link" asp-area="" asp-controller="Home" asp-action="Index">Главная</a>
-                        </li>
-                        <li class="header-nav-item">
-                            <a class="header-rent-link" asp-area="" asp-controller="Services" asp-action="Index">Услуги</a>
-                        </li>
-                        <li class="header-nav-item">
-                            <a class="header-rent-link" asp-area="" asp-controller="Place" asp-action="Index">Аренда</a>
-                        </li>
-                        <li class="header-nav-item">
-                            <a class="header-rent-link" asp-area="" asp-controller="Feedback" asp-action="Index">Контакты</a>
-                        </li>
-                        @await Component.InvokeAsync("AdminNavigation")
-                        <!--Отображеие кнопок регистрации и имени в панели навигации-->
-                        @await Component.InvokeAsync("UserNavigation")
-                    </ul>                    
+                    </button> *@
+                    <div class="header-rent-nav-container">
+                        <ul class="header-rent-list">
+                            <li class="header-nav-item">
+                                <a class="header-rent-link" asp-area="" asp-controller="Home" asp-action="Index">Главная</a>
+                            </li>
+                            <li class="header-nav-item">
+                                <a class="header-rent-link" asp-area="" asp-controller="Services" asp-action="Index">Услуги</a>
+                            </li>
+                            <li class="header-nav-item">
+                                <a class="header-rent-link" asp-area="" asp-controller="Place" asp-action="Index">Аренда</a>
+                            </li>
+                            <li class="header-nav-item">
+                                <a class="header-rent-link" asp-area="" asp-controller="Feedback" asp-action="Index">Контакты</a>
+                            </li>
+                            @await Component.InvokeAsync("AdminNavigation")
+                            <!--Отображеие кнопок регистрации и имени в панели навигации-->
+                            @await Component.InvokeAsync("UserNavigation")
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </nav>
-    </header>
+            </nav>
+        </header>
 
-    @* <header>
+        @* <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ApplicationRent</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Главная</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Services" asp-action="Index">Услуги</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Place" asp-action="Index">Аренда</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Feedback" asp-action="Index">Обратная связь</a>
-                        </li>
-                        @await Component.InvokeAsync("AdminNavigation")
-                    </ul>
-                    <!--Отображеие кнопок регистрации и имени в панели навигации-->
-                    @await Component.InvokeAsync("UserNavigation")
-                    <!-- <partial name="_LoginPartial" /> //старая реализация с отображением почты в меню навигации-->
-                </div>
-            </div>
+        <div class="container-fluid">
+        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ApplicationRent</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+        <ul class="navbar-nav flex-grow-1">
+        <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Главная</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Services" asp-action="Index">Услуги</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Place" asp-action="Index">Аренда</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Feedback" asp-action="Index">Обратная связь</a>
+        </li>
+        @await Component.InvokeAsync("AdminNavigation")
+        </ul>
+        <!--Отображеие кнопок регистрации и имени в панели навигации-->
+        @await Component.InvokeAsync("UserNavigation")
+        <!-- <partial name="_LoginPartial" /> //старая реализация с отображением почты в меню навигации-->
+        </div>
+        </div>
         </nav>
-    </header> *@
+        </header> *@
 
-    @* <div class="container"> *@
-    <div>
-        <main role="main">
+        @* <div class="container"> *@
+        @* <div> *@
+            @* <main role="main"> *@
             @RenderBody()
-        </main>
-    </div>
+            @* </main> *@
+        @* </div> *@
 
-    @* <footer class="border-top footer text-muted"> *@
+        @* <footer class="border-top footer text-muted"> *@
 
-    <footer class="footer-rent">
-        <div class="footer-rent-container">
-            <div class="footer-rent-grid">
-                <div class="footer-rent-block">
-                    <p class="footer-rent-number">+7 (999) 777 66 55</p>
-                    <p class="footer-rent-address">Россия, 123456, г.Москва, Ул. Большая Семеновская 38</p>
-                </div>
-                <p class="footer-rent-email">rentinfo@mail.ru</p>
-                <div class="footer-rent-icons">
-                    <img src="~/img/Footer/socials.svg" alt="VK" href="#" class="footer-rent-icon" />
-                    <img src="~/img/Footer/socials2.svg" alt="Telegram" href="#" class="footer-rent-icon" />
-                    <img src="~/img/Footer/socials3.svg" alt="WhatsApp" href="#" class="footer-rent-icon" />
+        <footer class="footer-rent">
+            <div class="footer-rent-container">
+                <div class="footer-rent-grid">
+                    <div class="footer-rent-block">
+                        <p class="footer-rent-number">+7 (999) 777 66 55</p>
+                        <p class="footer-rent-address">Россия, 123456, г.Москва, Ул. Большая Семеновская 38</p>
+                    </div>
+                    <p class="footer-rent-email">rentinfo@mail.ru</p>
+                    <div class="footer-rent-icons">
+                        <img src="~/img/Footer/socials.svg" alt="VK" href="#" class="footer-rent-icon" />
+                        <img src="~/img/Footer/socials2.svg" alt="Telegram" href="#" class="footer-rent-icon" />
+                        <img src="~/img/Footer/socials3.svg" alt="WhatsApp" href="#" class="footer-rent-icon" />
+                    </div>
                 </div>
             </div>
-        </div>
-    </footer>
+        </footer>
 
-    @* <footer class="footer-a">
+        @* <footer class="footer-a">
         <div class="container">
-            &copy; 2024 - ApplicationRent - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        &copy; 2024 - ApplicationRent - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
-    </footer> *@
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+        </footer> *@
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        @await RenderSectionAsync("Scripts", required: false)
+    </div>
+    
 </body>
 </html>

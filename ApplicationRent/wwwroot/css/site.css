@@ -25,6 +25,7 @@ body {
 
 html {
     box-sizing: border-box;
+    height: 100%;
 }
 
  *, *::before, *::after{
@@ -35,11 +36,18 @@ html {
     --font-family: "Open Sans", sans-serif;
 }
 
+.wrapper {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
 body {
+    height: 100%;
     font-family: sans-serif;
     font-style: normal;
     margin: 0;
-    margin-bottom: 60px;
+    /*margin-bottom: 60px;*/
 }
 
 button {
@@ -54,7 +62,8 @@ img {
 }
 
 main {
-    margin-top: 78px;
+    padding-top: 78px;
+    flex: 1 1 auto;
 }
 
 /* Header styles start*/
@@ -107,6 +116,7 @@ main {
 
 .header-nav-item {
     margin-right: 65px;
+    text-decoration: none;
 }
 
 .header-rent-link {
@@ -115,16 +125,20 @@ main {
     font-size: 21px;
     letter-spacing: 0.05em;
     color: #000;
+    text-decoration: none;
 }
 
-.header-rent-link:hover, .header-rent-link:focus, .header-rent-link:active {
+.header-rent-link:hover {
+    opacity: .75;
+}
+
+.header-rent-link:active {
     opacity: .75;
 }
 
 /*.header-rent-link_white:hover, .header_link_white:focus, .header_link_white:active {
     color: rgba(255, 255, 255, 0.781);
 }*/
-
 .header_container {
     display: flex;
     flex-wrap: wrap;
@@ -851,6 +865,215 @@ main {
     color: #2c3531;
     margin-bottom: 0;
 }
+
+.entrance-title-section {
+    min-height: 113px;
+    width: auto;
+    background-color: white;
+    background-size: cover;
+    padding-top: 48px;
+}
+
+.entrance-title-container {
+    margin-left: 226px;
+    margin-right: 226px;
+}
+
+.entrance-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    justify-items: left;
+/*    padding-top: 31px;*/
+}
+
+.entrance-form-grid-block {
+
+}
+
+.entrance-title-h1 {
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 35px;
+    letter-spacing: 0.05em;
+    color: #2c3531;
+}
+
+.entrance-form {
+    height: inherit;
+    /*min-height: 700px;*/
+    width: auto;
+    background-color: #2C3531;
+    background-size: cover;
+    padding-top: 48px;
+    padding-bottom: 48px;
+}
+
+.entrance-form-container {
+    margin-left: 226px;
+    margin-right: 226px;
+}
+
+.entrance-form-group {
+    margin-bottom: 32px;
+}
+
+.entrance-form-group2 {
+    margin-bottom: 15px;
+}
+
+.entrance-form-input {
+    border: 3px solid #116466;
+    border-radius: 10px;
+    width: 316px;
+    height: 49px;
+    background: #d1e8e2;
+}
+
+.entrance-checkbox {
+    position: relative;
+    margin-bottom: 32px;
+}
+
+.entrance-checkbox-input {
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+}
+
+.entrance-checkbox-input+label {
+    user-select: none;
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.05em;
+    color: #fff;
+}
+
+.entrance-checkbox-input+label::before {
+    content: '';
+    display: inline-block;
+    flex-shrink: 0;
+    flex-grow: 0;
+    border: 1px solid #2c3531;
+    border-radius: 4px;
+    top: 0;
+    left: 0;
+    width: 24px;
+    height: 24px;
+    background: #fff;
+    margin-right: 0.5em;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.register-title-section {
+    min-height: 113px;
+    width: auto;
+    background-color: white;
+    background-size: cover;
+    padding-top: 48px;
+}
+
+.register-title-container {
+    margin-left: 226px;
+    margin-right: 226px;
+}
+
+.register-title-h1 {
+
+}
+
+.register-form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    justify-items: left;
+}
+
+.register-form-container {
+
+}
+
+.register-form-grid {
+
+}
+
+.register-form-grid-block {
+
+}
+
+.register-text {
+
+}
+
+
+/*стиль при активном чекбоксе*/
+.entrance-checkbox-input:checked + label::before {
+    border-color: #116466;
+    background-color: #d1e8e2;
+    background-image: url(../img/Entrance/check.svg);
+}
+
+/*стиль при наведении курсора на чекбокс*/
+.entrance-checkbox-input:not(:disabled):not(:checked)+label:hover::before {
+    border-color: #116466;
+    background-color: #d1e8e2;
+}
+
+.entrance-form-btn {
+    border: 3px solid #116466;
+    width: 148px;
+    height: 49px;
+    background: #d1e8e2;
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.05em;
+    text-align: center;
+    color: #2c3531;
+}
+
+.forgot-password-container {
+    margin-top:15px;
+}
+
+.entrance-forgot-password {
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.05em;
+    color: #fff;
+    text-decoration: none; 
+}
+
+.entrance-forgot-password:hover {
+     color: #FFCB9A;
+}
+
+.entrance-ent-to-reg-title {
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 23px;
+    letter-spacing: 0.05em;
+    text-align: center;
+    color: #fff;
+}
+
+.entrance-form-text {
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.05em;
+    text-align: center;
+    color: #fff;
+    text-decoration: none;
+}
+
+.entrance-form-text:hover {
+    color: #FFCB9A;
+}
+
 
 
 .footer-rent {
