@@ -2,7 +2,12 @@
     ViewData["Title"] = "Аренда";
 }
 @model ApplicationRent.Data.Identity.Place
-
+<style>
+    .upload-form {
+        display: none;
+    }
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <h2>Create</h2>
 
 <form asp-action="Create">
@@ -32,38 +37,61 @@
         <span asp-validation-for="Description" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="ImageUrl1" class="control-label">Image URL 1</label>
-        <input asp-for="ImageUrl1" class="form-control" required />
-        <span asp-validation-for="ImageUrl1" class="text-danger"></span>
+        <label asp-for="ImageFileName1" class="control-label">Image File 1</label>
+        <input asp-for="ImageFileName1" class="form-control" type="file" />
+        <span asp-validation-for="ImageFileName1" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="ImageUrl2" class="control-label">Image URL 2</label>
-        <input asp-for="ImageUrl2" class="form-control" />
-        <span asp-validation-for="ImageUrl2" class="text-danger"></span>
+        <label asp-for="ImageFileName2" class="control-label">Image File 1</label>
+        <input asp-for="ImageFileName2" class="form-control" type="file" />
+        <span asp-validation-for="ImageFileName2" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="ImageUrl3" class="control-label">Image URL 3</label>
-        <input asp-for="ImageUrl3" class="form-control" />
-        <span asp-validation-for="ImageUrl3" class="text-danger"></span>
+        <label asp-for="ImageFileName3" class="control-label">Image File 1</label>
+        <input asp-for="ImageFileName3" class="form-control" type="file" />
+        <span asp-validation-for="ImageFileName3" class="text-danger"></span>
     </div>
-    <div class="form-group">
-        <input type="submit" value="Create" class="btn btn-primary" />
-    </div>
+    <input type="submit" value="Create" class="btn btn-primary" />
 </form>
+<section class="upload-form">
+    <div class="upload-form-container">
+        <h1 class="upload-form-title">Загрузка фото</h1>
+        <form id="uploadForm" asp-action="UploadPhoto" method="post" enctype="multipart/form-data">
+            <input type="file" id="photo" name="photo" required />
+            <button type="submit" class="upload-form-btn">Загрузить</button>
+        </form>
+    </div>
+</section>
+<script>
+    $(document).ready(function () {
+        // При изменении файла в первой форме
+        $("input[type='file']").change(function () {
+            // Копирование файла во вторую форму
+            var fileInput = document.getElementById('photo');
+            fileInput.files = this.files;
 
-@*  <div class="form-group">
-        <label asp-for="StartRent" class="control-label"></label>
-        <input asp-for="StartRent" class="form-control" />
-        <span asp-validation-for="StartRent" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="EndRent" class="control-label"></label>
-        <input asp-for="EndRent" class="form-control" />
-        <span asp-validation-for="EndRent" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <div class="form-check">
-            <input asp-for="InRent" class="form-check-input" />
-            <label asp-for="InRent" class="form-check-label"></label>
-        </div>
-    </div> *@
+            // Создание FormData из второй формы
+            var formData = new FormData(document.getElementById('uploadForm'));
+
+            // Отправка FormData через AJAX на сервер
+            $.ajax({
+                type: 'POST',
+                url: $('#uploadForm').attr('action'),
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    alert('Файл успешно загружен: ' + response.message);
+                },
+                error: function () {
+                    alert('Ошибка при загрузке файла.');
+                }
+            });
+        });
+
+        // Предотвращаем обычную отправку формы
+        $('#uploadForm').submit(function (event) {
+            event.preventDefault();
+        });
+    });
+</script>

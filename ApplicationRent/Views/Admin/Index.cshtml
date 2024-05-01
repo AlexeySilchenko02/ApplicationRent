@@ -1,4 +1,4 @@
-﻿@using ApplicationRent.Data.Identity
+﻿﻿@using ApplicationRent.Data.Identity
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationIdentityUser> SignInManager
 
@@ -16,6 +16,7 @@
 <p>Редактирование мест аренды</p>
 <div>
     <a asp-action="Create" class="action-btn">Создание нового места</a>
+    <a href="@Url.Action("ManagePhotos", "Admin")" class="btn btn-primary">Управление фотографиями</a>
 </div>
 <table class="table">
     <thead>
@@ -38,7 +39,7 @@
                     @Html.DisplayFor(modelItem => item.Price)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Category) 
+                    @Html.DisplayFor(modelItem => item.Category)
                 </td>
                 <td>
                     @if (!item.InRent)

@@ -7,6 +7,8 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using ApplicationRent.Data;
 using ApplicationRent.App_data;
+using Microsoft.Extensions.Hosting;
+using System;
 
 namespace ApplicationRent.Controllers
 {
@@ -16,12 +18,14 @@ namespace ApplicationRent.Controllers
         private readonly UserManager<ApplicationIdentityUser> _userManager;
         private readonly ApplicationDbContext _context;
         private readonly FirebaseService _firebaseService;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
-        public AdminController(UserManager<ApplicationIdentityUser> userManager, ApplicationDbContext context, FirebaseService firebaseService)
+        public AdminController(UserManager<ApplicationIdentityUser> userManager, ApplicationDbContext context, FirebaseService firebaseService, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
             _userManager = userManager;
             _firebaseService = firebaseService;
+            _hostEnvironment = hostEnvironment;
         }
 
         public async Task<IActionResult> Index()
@@ -194,6 +198,42 @@ namespace ApplicationRent.Controllers
             }
             return NotFound();
         }
+        public IActionResult ManagePhotos()
+        {
+            // Получите список файлов из папки "place"
+            var photosDirectory = Path.Combine(_hostEnvironment.WebRootPath, "place");
+            var photoFiles = Directory.GetFiles(photosDirectory)
+                                       .Select(filePath => Path.GetFileName(filePath))
+                                       .ToList();
+
+            // Передайте список файлов в представление
+            return View(photoFiles);
+        }
+
+        [HttpPost]
+        public IActionResult DeletePhoto(string photoFileName)
+        {
+            try
+            {
+                // Получение пути к файлу
+                var filePath = Path.Combine(_hostEnvironment.WebRootPath, "place", photoFileName);
+
+                // Проверка существования файла
+                if (System.IO.File.Exists(filePath))
+                {
+                    // Удаление файла
+                    System.IO.File.Delete(filePath);
+                }
+
+                return RedirectToAction("ManagePhotos");
+            }
+            catch (Exception ex)
+            {
+                // Обработка ошибки, если удаление не удалось
+                return RedirectToAction("Error", "Home");
+            }
+        }
+
         /*
             МЕСТА АРЕНДЫ
          */
@@ -207,21 +247,101 @@ namespace ApplicationRent.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Place place)
+        public async Task<IActionResult> Create(Place place, IFormFile? imageFile1, IFormFile? imageFile2, IFormFile? imageFile3)
         {
             if (ModelState.IsValid)
             {
+                // Сохранение изображений в папку "images" в корневом каталоге веб-сайта
+                string uploadsFolder = Path.Combine(_hostEnvironment.WebRootPath, "place");
+
+                if (imageFile1 != null)
+                {
+                    string uniqueFileName1 = Guid.NewGuid().ToString() + "_" + imageFile1.FileName;
+                    string filePath1 = Path.Combine(uploadsFolder, uniqueFileName1);
+                    var path = Path.Combine(_hostEnvironment.WebRootPath, "place", Path.GetFileName(imageFile1.FileName));
+
+
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        await imageFile1.CopyToAsync(stream);
+                    }
+                    place.ImageFileName1 = uniqueFileName1;
+                }
+
+                if (imageFile2 != null)
+                {
+                    string uniqueFileName2 = Guid.NewGuid().ToString() + "_" + imageFile2.FileName;
+                    string filePath2 = Path.Combine(uploadsFolder, uniqueFileName2);
+                    using (var fileStream = new FileStream(filePath2, FileMode.Create))
+                    {
+                        await imageFile2.CopyToAsync(fileStream);
+                    }
+                    place.ImageFileName2 = uniqueFileName2;
+                }
+
+                if (imageFile3 != null)
+                {
+                    string uniqueFileName3 = Guid.NewGuid().ToString() + "_" + imageFile3.FileName;
+                    string filePath3 = Path.Combine(uploadsFolder, uniqueFileName3);
+                    using (var fileStream = new FileStream(filePath3, FileMode.Create))
+                    {
+                        await imageFile3.CopyToAsync(fileStream);
+                    }
+                    place.ImageFileName3 = uniqueFileName3;
+                }
+
+                // Добавление информации о месте в базу данных
                 _context.Add(place);
                 await _context.SaveChangesAsync();
 
                 // Сохранение в Firebase
                 await _firebaseService.AddOrUpdatePlace(place);
 
+                // Перенаправление на страницу со списком мест после успешного добавления
                 return RedirectToAction(nameof(Index));
             }
-            //Категории
+
+            // Если модель не валидна, возвращаем пользователя обратно на форму с заполненными данными и ошибками валидации
             ViewBag.Categories = new List<string> { "Фотостудия", "Склад", "Workspace", "Базовое место" };
             return View(place);
+        }
+
+        /*[HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UploadPhoto(IFormFile photo)
+        {
+            if (photo != null && photo.Length > 0)
+            {
+                var path = Path.Combine(_hostEnvironment.WebRootPath, "place", Path.GetFileName(photo.FileName));
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await photo.CopyToAsync(stream);
+                }
+                return Json(new { success = true, message = "Фото успешно загружено!" });
+            }
+
+            return Json(new { success = false, message = "Ошибка при загрузке файла." });
+        }*/
+
+        //загрузка фото в файловую систему
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UploadPhoto(IFormFile photo)
+        {
+            if (photo != null && photo.Length > 0)
+            {
+                var fileName = Path.GetFileName(photo.FileName);
+                var path = Path.Combine(_hostEnvironment.WebRootPath, "place", fileName);
+
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await photo.CopyToAsync(stream);
+                }
+
+                return Json(new { success = true, message = "Фото успешно загружено!", fileName = fileName });
+            }
+
+            return Json(new { success = false, message = "Ошибка при загрузке файла." });
         }
 
         //Вызов страницы редактирования
@@ -245,7 +365,7 @@ namespace ApplicationRent.Controllers
         //Страница редактирования
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Place place)
+        public async Task<IActionResult> Edit(int id, Place place, IFormFile? imageFile1, IFormFile? imageFile2, IFormFile? imageFile3)
         {
             if (id != place.Id)
             {
@@ -256,6 +376,44 @@ namespace ApplicationRent.Controllers
             {
                 try
                 {
+                    // Сохранение изображений в папку "images" в корневом каталоге веб-сайта
+                    string uploadsFolder = Path.Combine(_hostEnvironment.WebRootPath, "place");
+
+                    if (imageFile1 != null)
+                    {
+                        string uniqueFileName1 = Guid.NewGuid().ToString() + "_" + imageFile1.FileName;
+                        string filePath1 = Path.Combine(uploadsFolder, uniqueFileName1);
+                        var path = Path.Combine(_hostEnvironment.WebRootPath, "place", Path.GetFileName(imageFile1.FileName));
+
+
+                        using (var stream = new FileStream(path, FileMode.Create))
+                        {
+                            await imageFile1.CopyToAsync(stream);
+                        }
+                        place.ImageFileName1 = uniqueFileName1;
+                    }
+
+                    if (imageFile2 != null)
+                    {
+                        string uniqueFileName2 = Guid.NewGuid().ToString() + "_" + imageFile2.FileName;
+                        string filePath2 = Path.Combine(uploadsFolder, uniqueFileName2);
+                        using (var fileStream = new FileStream(filePath2, FileMode.Create))
+                        {
+                            await imageFile2.CopyToAsync(fileStream);
+                        }
+                        place.ImageFileName1 = uniqueFileName2;
+                    }
+
+                    if (imageFile3 != null)
+                    {
+                        string uniqueFileName3 = Guid.NewGuid().ToString() + "_" + imageFile3.FileName;
+                        string filePath3 = Path.Combine(uploadsFolder, uniqueFileName3);
+                        using (var fileStream = new FileStream(filePath3, FileMode.Create))
+                        {
+                            await imageFile3.CopyToAsync(fileStream);
+                        }
+                        place.ImageFileName3 = uniqueFileName3;
+                    }
                     _context.Update(place);
                     await _context.SaveChangesAsync();
 

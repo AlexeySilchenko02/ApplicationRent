@@ -15,8 +15,8 @@ namespace ApplicationRent.Data.Identity
         public double SizePlace { get; set; }
         public string Description { get; set; }
         public string Category { get; set; }
-        public string ImageUrl1 { get; set; } 
-        public string? ImageUrl2 { get; set; } 
-        public string? ImageUrl3 { get; set; }
+        public string? ImageFileName1 { get; set; }
+        public string? ImageFileName2 { get; set; }
+        public string? ImageFileName3 { get; set; }
     }
 }

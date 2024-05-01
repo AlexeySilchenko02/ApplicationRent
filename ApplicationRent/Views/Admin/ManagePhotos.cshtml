@@ -1,0 +1,62 @@
+﻿@model List<string>
+
+@{
+    ViewData["Title"] = "Управление фотографиями";
+}
+
+<h2>Управление фотографиями</h2>
+
+@if (Model.Count == 0)
+{
+    <p>Нет фотографий для отображения.</p>
+}
+else
+{
+    <div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Фото</th>
+                    <th>Название</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var photoFileName in Model)
+                {
+                    <tr>
+                        <td>
+                            <img src="@Url.Content("~/place/" + photoFileName)" alt="Photo" style="max-width: 100px; max-height: 100px;" />
+                        </td>
+                        <td>@photoFileName</td>
+                        <td>
+                            <form id="deleteForm_@photoFileName" asp-action="DeletePhoto" asp-route-photoFileName="@photoFileName" method="post">
+                                <button type="button" class="btn btn-danger delete-button" data-photo="@photoFileName">Удалить</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<a href="@Url.Action("Index", "Admin")" class="btn btn-primary">Вернуться в админ панель</a>
+
+@section Scripts {
+    <script>
+        // Добавление обработчика клика для кнопок удаления
+        document.querySelectorAll('.delete-button').forEach(button => {
+            button.addEventListener('click', function () {
+                // Получение имени файла из атрибута data-photo
+                var photoFileName = this.getAttribute('data-photo');
+                // Отображение модального окна подтверждения удаления
+                var isConfirmed = confirm('Вы уверены, что хотите удалить фото ' + photoFileName + '?');
+                if (isConfirmed) {
+                    // Если подтверждено, отправить форму удаления
+                    document.getElementById('deleteForm_' + photoFileName).submit();
+                }
+            });
+        });
+    </script>
+}
