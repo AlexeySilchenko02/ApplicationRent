@@ -13,16 +13,22 @@
     </section>
     <section class="entrance-form">
         <div class="entrance-form-container">
-            <div class="entrance-form-grid">
-                <div class="entrance-form-grid-block">
-                    <form id="account" method="post">
+            @* <div class="entrance-form-grid"> *@
+                @* <div class="entrance-form-grid-block"> *@
+                    <form id="account" method="post" class="login-form">
                         <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
                         <div class="entrance-form-group">
+                            <div class="register-form-label-container">
+                                <label asp-for="Input.Email" class="register-form-label">Введите имя</label>
+                            </div>
                             <input asp-for="Input.Email" class="entrance-form-input" autocomplete="username" aria-required="true" placeholder="Введите email" />
                             <span asp-validation-for="Input.Email" class="text-danger"></span>
                         </div>
 
                         <div class="entrance-form-group2">
+                            <div class="register-form-label-container">
+                                <label asp-for="Input.Password" class="register-form-label">Введите пароль</label>
+                            </div>
                             <input asp-for="Input.Password" class="entrance-form-input" autocomplete="current-password" aria-required="true" placeholder="password" />
                             <span asp-validation-for="Input.Password" class="text-danger"></span>
                         </div>
@@ -39,13 +45,14 @@
                         <div class="forgot-password-container">
                             <a id="forgot-password" class="entrance-forgot-password" asp-page="./ForgotPassword">Забыли пароль?</a>
                         </div>
+                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="entrance-form-text">Нет аккаунта? Зарегистрируйтесь</a>
                     </form>
-                </div>
-                <div class="entrance-form-grid-block">
-                    <h3 class="entrance-ent-to-reg-title">Нет аккаунта?</h3>
-                    <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="entrance-form-text">Зарегистрируйтесь</a>
-                </div>
-            </div>
+                @* </div> *@
+                @* <div class="entrance-form-grid-block"> *@
+                    @* <h3 class="entrance-ent-to-reg-title">Нет аккаунта?</h3> *@
+                    
+                @* </div> *@
+            @* </div> *@
         </div>
     </section>
 </main>

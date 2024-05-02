@@ -4,7 +4,7 @@
     ViewData["Title"] = "Регистрация";
 }
 
-@* <main class="main">
+<main class="main">
     <section class="register-title-section">
         <div class="register-title-container">
             <h1 class="register-title-h1">Регистрация</h1>
@@ -12,78 +12,69 @@
     </section>
     <section class="register-form">
         <div class="register-form-container">
-            <div class="register-form-grid">
-                <div class="register-form-grid-block">
-                    <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post"> 
-                        <p class="register-text">При регистрации указывайте номер телефона, который привязан к телеграмм, если хотите получить доступ к чат-боту.</p>
+            @* <div class="register-form-grid"> *@
+                @* <div class="register-form-grid-block"> *@
+                    <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="reg-form"> 
+                        <div>
+                            <p class="register-text">При регистрации указывайте номер телефона, который привязан к телеграмм, если хотите получить доступ к чат-боту.</p>
+                        </div>
+                        
                         <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-                        <div class="form-floating mb-3">
-                            <input asp-for="Input.Name" class="form-control" autocomplete="name" aria-required="true" placeholder="Name" />
-                            <label asp-for="Input.Name">Name</label>
+                        <div class="register-form-group">
+                            <div class="register-form-label-container">
+                                <label asp-for="Input.Name" class="register-form-label">Введите имя</label>
+                            </div>
+                            <input asp-for="Input.Name" class="register-form-input" autocomplete="name" aria-required="true" placeholder="Имя" />
                             <span asp-validation-for="Input.Name" class="text-danger"></span>
                         </div>
-                        <div class="form-floating mb-3">
-                            <input asp-for="Input.PhoneNumber" class="form-control" autocomplete="phone" aria-required="true" placeholder="Phone" />
-                            <label asp-for="Input.PhoneNumber">PhoneNumber</label>
+                        <div class="register-form-group">
+                            <div class="register-form-label-container">
+                                <label asp-for="Input.PhoneNumber" class="register-form-label">Введите номер телефона</label>
+                            </div>
+                            <input asp-for="Input.PhoneNumber" class="register-form-input" autocomplete="phone" aria-required="true" placeholder="+7 (000) 000 00 00" />
                             <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
                         </div>
-                        <div class="form-floating mb-3">
-                            <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                            <label asp-for="Input.Email">Email</label>
+                        <div class="register-form-group">
+                            <div class="register-form-label-container">
+                                <label asp-for="Input.Email" class="register-form-label">Введите Email</label>
+                            </div>
+                            <input asp-for="Input.Email" class="register-form-input" autocomplete="username" aria-required="true" placeholder="name@example.com" />
                             <span asp-validation-for="Input.Email" class="text-danger"></span>
                         </div>
-                        <div class="form-floating mb-3">
-                            <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                            <label asp-for="Input.Password">Password</label>
+                        <div class="register-form-group">
+                            <div class="register-form-label-container">
+                                <label asp-for="Input.Password" class="register-form-label">Введите пароль</label>
+                            </div>
+                            <input asp-for="Input.Password" class="register-form-input" autocomplete="new-password" aria-required="true" placeholder="Пароль" />
                             <span asp-validation-for="Input.Password" class="text-danger"></span>
                         </div>
-                        <div class="form-floating mb-3">
-                            <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                            <label asp-for="Input.ConfirmPassword">Confirm Password</label>
+                        <div class="register-form-group">
+                            <div class="register-form-label-container">
+                                <label asp-for="Input.ConfirmPassword" class="register-form-label">Повторите пароль</label>
+                            </div>
+                            <input asp-for="Input.ConfirmPassword" class="register-form-input" autocomplete="new-password" aria-required="true" placeholder="Повтор пароля" />
                             <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                         </div>
-                        <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Регистрация</button>
+                        <div class="register-form-btn-container">
+                            <button id="registerSubmit" type="submit" class="register-form-btn">Регистрация</button>
+                        </div>
+                        <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl" class="register-form-text">Есть аккаунт? Войти</a>
                     </form>
-                    <form id="account" method="post">
-                        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-                        <div class="entrance-form-group">
-                            <input asp-for="Input.Email" class="entrance-form-input" autocomplete="username" aria-required="true" placeholder="Введите email" />
-                            <span asp-validation-for="Input.Email" class="text-danger"></span>
-                        </div>
-
-                        <div class="entrance-form-group2">
-                            <input asp-for="Input.Password" class="entrance-form-input" autocomplete="current-password" aria-required="true" placeholder="password" />
-                            <span asp-validation-for="Input.Password" class="text-danger"></span>
-                        </div>
-
-                        <div class="entrance-checkbox">
-                            <input type="checkbox" checked id="ent-che" class="entrance-checkbox-input" asp-for="Input.RememberMe " />
-                            <label for="ent-che" asp-for="Input.RememberMe">Запомнить?</label>
-                        </div>
-
-                        <div>
-                            <button id="login-submit" type="submit" class="entrance-form-btn">Войти</button>
-                        </div>
-
-                        <div class="forgot-password-container">
-                            <a id="forgot-password" class="entrance-forgot-password" asp-page="./ForgotPassword">Забыли пароль?</a>
-                        </div>
-                    </form>
-                </div>
-                <div class="entrance-form-grid-block">
-                    <h3 class="entrance-ent-to-reg-title">Нет аккаунта?</h3>
-                    <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="entrance-form-text">Зарегистрируйтесь</a>
-                </div>
-            </div>
+                @* </div> *@
+                @* <div class="register-form-grid-block"> *@
+                    @* <h3 class="register-reg-to-ent-title">Есть аккаунт?</h3> *@
+                    
+                @* </div> *@
+            @* </div> *@
         </div>
     </section>
-</main> *@
+</main>
 
 
 
 
 
-<h1>@ViewData["Title"]</h1>
+@* <h1>@ViewData["Title"]</h1>
 
 <div class="row">
     <div class="col-md-4">
@@ -120,7 +111,7 @@
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Регистрация</button>
         </form>
     </div>
-</div>
+</div> *@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

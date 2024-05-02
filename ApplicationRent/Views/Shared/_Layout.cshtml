@@ -21,14 +21,15 @@
             <nav class="header-rent-nav">
                 <div class="header-rent-container">
                     <a class="header-rent-logo-link" asp-area="" asp-controller="Home" asp-action="Index">
-                        <img src="img/Header/Rent.svg" alt="Rent" class="header_logo_pic">
+                        <h1 class="header_logo_pic">Rent</h1>
+                        @* <img src="img/Header/Rent.svg" alt="Rent" class="header_logo_pic"> *@
                         @* <img src="../wwwroot/img/Header/Rent.svg" alt="Rent" class="header_logo_pic"> *@
                     </a>
                     @* <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                     </button> *@
-                    <div class="header-rent-nav-container">
+                    <nav class="header-rent-nav-container" data-nav>
                         <ul class="header-rent-list">
                             <li class="header-nav-item">
                                 <a class="header-rent-link" asp-area="" asp-controller="Home" asp-action="Index">Главная</a>
@@ -46,7 +47,10 @@
                             <!--Отображеие кнопок регистрации и имени в панели навигации-->
                             @await Component.InvokeAsync("UserNavigation")
                         </ul>
-                    </div>
+                    </nav>
+                    <button class="burger" data-burger aria-label="Открыть меню" aria-expanded="false">
+                        <span class="burger-line"></span>
+                    </button>
                 </div>
             </nav>
         </header>
