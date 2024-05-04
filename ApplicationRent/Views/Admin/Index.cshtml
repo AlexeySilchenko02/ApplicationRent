@@ -7,59 +7,62 @@
 }
 @model IEnumerable<ApplicationRent.Data.Identity.Place>
 
-<h2>Админ панель</h2>
-<p>Добро пожаловать в административную панель.</p>
-<a href="@Url.Action("Users", "Admin")" class="btn btn-primary">Просмотр пользователей</a>
-<a href="@Url.Action("FeedbackList", "Admin")" class="btn btn-primary">Посмотреть Feedback</a>
-<a href="@Url.Action("RentRequestsList", "Admin")" class="btn btn-primary">Посмотреть заявки на аренду</a>
-<a class="btn btn-primary" href="@Url.Action("Rentals", "Admin")">Показать список аренд онлайн</a>
-<p>Редактирование мест аренды</p>
-<div>
-    <a asp-action="Create" class="action-btn">Создание нового места</a>
-    <a href="@Url.Action("ManagePhotos", "Admin")" class="btn btn-primary">Управление фотографиями</a>
-</div>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Название</th>
-            <th>Цена</th>
-            <th>Категория</th>
-            <th>Статус</th>
-            <th>Действия</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+
+<main class="main">
+    <h2>Админ панель</h2>
+    <p>Добро пожаловать в административную панель.</p>
+    <a href="@Url.Action("Users", "Admin")" class="btn btn-primary">Просмотр пользователей</a>
+    <a href="@Url.Action("FeedbackList", "Admin")" class="btn btn-primary">Посмотреть Feedback</a>
+    <a href="@Url.Action("RentRequestsList", "Admin")" class="btn btn-primary">Посмотреть заявки на аренду</a>
+    <a class="btn btn-primary" href="@Url.Action("Rentals", "Admin")">Показать список аренд онлайн</a>
+    <p>Редактирование мест аренды</p>
+    <div>
+        <a asp-action="Create" class="action-btn">Создание нового места</a>
+        <a href="@Url.Action("ManagePhotos", "Admin")" class="btn btn-primary">Управление фотографиями</a>
+    </div>
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Price)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Category)
-                </td>
-                <td>
-                    @if (!item.InRent)
-                    {
-                        @:Свободно
-                    }
-                    else
-                    {
-                        @:Занято до: @item.EndRent.ToString("dd.MM.yyyy")
-                    }
-                </td>
-                <td>
-                    @if (ViewBag.IsAdmin)
-                    {
-                        <a asp-action="Edit" asp-route-id="@item.Id">Изменить</a>
-                        <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
-                    }
-                    <a asp-action="Details" asp-route-id="@item.Id">Подробнее</a>
-                </td>
+                <th>Название</th>
+                <th>Цена</th>
+                <th>Категория</th>
+                <th>Статус</th>
+                <th>Действия</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Category)
+                    </td>
+                    <td>
+                        @if (!item.InRent)
+                        {
+                            @:Свободно
+                        }
+                        else
+                        {
+                            @:Занято до: @item.EndRent.ToString("dd.MM.yyyy")
+                        }
+                    </td>
+                    <td>
+                        @if (ViewBag.IsAdmin)
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.Id">Изменить</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                        }
+                        <a asp-action="Details" asp-route-id="@item.Id">Подробнее</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</main>

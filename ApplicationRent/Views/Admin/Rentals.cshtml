@@ -4,58 +4,60 @@
     DateTime today = DateTime.Now;
 }
 
-<h2>@ViewData["Title"]</h2>
-<a href="@Url.Action("Index", "Admin")" class="btn btn-primary">Вернуться в админ панель</a>
-<button onclick="toggleRentals()" class="btn btn-secondary">Скрыть неактуальные заявки</button>
-<table class="table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Имя пользователя</th>
-            <th>Название места</th>
-            <th>Начало аренды</th>
-            <th>Конец аренды</th>
-            <th>Действия</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var rental in Model)
-        {
-            var isOutdated = rental.EndRent < today;
-            <tr class="@(isOutdated ? "outdated" : "")">
-                <td>@rental.Id</td>
-                <td>@rental.User.FullNameUser</td>
-                <td>@rental.Place.Name</td>
-                <td>@rental.StartRent.ToShortDateString()</td>
-                <td>@rental.EndRent.ToShortDateString()</td>
-                <td>
-                    <button onclick="confirmDeletion('@rental.Id')" class="btn btn-danger">Удалить</button>
-                </td>
+<main class="main">
+    <h2>@ViewData["Title"]</h2>
+    <a href="@Url.Action("Index", "Admin")" class="btn btn-primary">Вернуться в админ панель</a>
+    <button onclick="toggleRentals()" class="btn btn-secondary">Скрыть неактуальные заявки</button>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Имя пользователя</th>
+                <th>Название места</th>
+                <th>Начало аренды</th>
+                <th>Конец аренды</th>
+                <th>Действия</th>
             </tr>
+        </thead>
+        <tbody>
+            @foreach (var rental in Model)
+            {
+                var isOutdated = rental.EndRent < today;
+                <tr class="@(isOutdated ? "outdated" : "")">
+                    <td>@rental.Id</td>
+                    <td>@rental.User.FullNameUser</td>
+                    <td>@rental.Place.Name</td>
+                    <td>@rental.StartRent.ToShortDateString()</td>
+                    <td>@rental.EndRent.ToShortDateString()</td>
+                    <td>
+                        <button onclick="confirmDeletion('@rental.Id')" class="btn btn-danger">Удалить</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <form id="deleteForm" method="post" action="/Admin/DeleteRental" style="display:none;">
+        <input type="hidden" name="id" id="deleteId" />
+    </form>
+
+    <script>
+        function confirmDeletion(id) {
+            if (confirm("Вы уверены, что хотите удалить эту запись?")) {
+                var form = document.getElementById('deleteForm');
+                document.getElementById('deleteId').value = id;
+                form.submit();
+            }
         }
-    </tbody>
-</table>
 
-<form id="deleteForm" method="post" action="/Admin/DeleteRental" style="display:none;">
-    <input type="hidden" name="id" id="deleteId" />
-</form>
+        var showOutdated = true;
 
-<script>
-    function confirmDeletion(id) {
-        if (confirm("Вы уверены, что хотите удалить эту запись?")) {
-            var form = document.getElementById('deleteForm');
-            document.getElementById('deleteId').value = id;
-            form.submit();
+        function toggleRentals() {
+            var rows = document.querySelectorAll('.outdated');
+            showOutdated = !showOutdated;
+            for (var i = 0; i < rows.length; i++) {
+                rows[i].style.display = showOutdated ? 'table-row' : 'none';
+            }
         }
-    }
-
-    var showOutdated = true;
-
-    function toggleRentals() {
-        var rows = document.querySelectorAll('.outdated');
-        showOutdated = !showOutdated;
-        for (var i = 0; i < rows.length; i++) {
-            rows[i].style.display = showOutdated ? 'table-row' : 'none';
-        }
-    }
-</script>
+    </script>
+</main>
