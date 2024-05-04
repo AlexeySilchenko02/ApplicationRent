@@ -6,160 +6,163 @@
 }
 @model IEnumerable<ApplicationRent.Data.Identity.Place>
 
-<h2>Помещения</h2>
+<main class="main">
+    <h2>Помещения</h2>
 
-<style>
-    .place-card {
-        width: 150px;
-        height: 150px;
-        margin: 10px;
-        padding: 10px;
-        box-shadow: 0 0 5px #ccc;
-        display: inline-block;
-        vertical-align: top;
-        position: relative;
-    }
-
-        .place-card.rented {
-            background-color: red;
+    <style>
+        .place-card {
+            width: 150px;
+            height: 150px;
+            margin: 10px;
+            padding: 10px;
+            box-shadow: 0 0 5px #ccc;
+            display: inline-block;
+            vertical-align: top;
+            position: relative;
         }
 
-        .place-card .place-info {
-            margin-bottom: 20px;
+            .place-card.rented {
+                background-color: red;
+            }
+
+            .place-card .place-info {
+                margin-bottom: 20px;
+            }
+
+            .place-card .actions {
+                position: absolute;
+                bottom: 10px;
+                width: 100%;
+                text-align: center;
+            }
+
+        .action-btn {
+            text-decoration: none;
+            color: white;
+            background-color: #007bff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
         }
 
-        .place-card .actions {
-            position: absolute;
-            bottom: 10px;
-            width: 100%;
-            text-align: center;
+            .action-btn:not(:last-child) {
+                margin-right: 5px;
+            }
+
+        .place-card.not-rented {
+            background-color: green;
         }
 
-    .action-btn {
-        text-decoration: none;
-        color: white;
-        background-color: #007bff;
-        padding: 5px 10px;
-        border-radius: 5px;
-        font-size: 12px;
-    }
-
-        .action-btn:not(:last-child) {
-            margin-right: 5px;
+        .place-cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: start;
         }
 
-    .place-card.not-rented {
-        background-color: green;
-    }
+    </style>
 
-    .place-cards-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: start;
-    }
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <div>
+            <button id="show-list">Отображение списком</button>
+            <button id="show-cards">Отображение в виде карт</button>
+        </div>
 
-</style>
-
-@if (SignInManager.IsSignedIn(User))
-{
-<div>
-    <button id="show-list">Отображение списком</button>
-    <button id="show-cards">Отображение в виде карт</button>
-</div>
-
-    <div id="list-view" style="display:none;">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Название</th>
-                    <th>Цена</th>
-                    <th>Категория</th>
-                    <th>Статус</th>
-                    <th>Действия</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
+        <div id="list-view" style="display:none;">
+            <table class="table">
+                <thead>
                     <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Price) ₽
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Category)
-                        </td>
-                        <td>
-                            @if (!item.InRent)
-                            {
-                                @:Свободно
-                            }
-                            else
-                            {
-                                @:Занято до: @item.EndRent.ToString("dd.MM.yyyy")
-                            }
-                        </td>
-                        <td>
-                            <a asp-action="Details" asp-route-id="@item.Id">Подробнее</a> 
-                            @if (!item.InRent)
-                            {
-                                <a asp-action="Rent" asp-route-id="@item.Id" class="btn btn-primary">Арендовать</a>
-                            }
-                            else
-                            {
-                                <button disabled class="btn btn-secondary btn-lg disabled">Арендовать</button>
-                            }
-                        </td>
+                        <th>Название</th>
+                        <th>Цена</th>
+                        <th>Категория</th>
+                        <th>Статус</th>
+                        <th>Действия</th>
                     </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Price) ₽
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Category)
+                            </td>
+                            <td>
+                                @if (!item.InRent)
+                                {
+                                    @:Свободно
+                                }
+                                else
+                                {
+                                    @:Занято до: @item.EndRent.ToString("dd.MM.yyyy")
+                                }
+                            </td>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@item.Id">Подробнее</a>
+                                @if (!item.InRent)
+                                {
+                                    <a asp-action="Rent" asp-route-id="@item.Id" class="btn btn-primary">Арендовать</a>
+                                }
+                                else
+                                {
+                                    <button disabled class="btn btn-secondary btn-lg disabled">Арендовать</button>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
 
-    <div id="card-view" style="display:none;">
-        @foreach (var item in Model)
-        {
-            <div class="place-card @(item.InRent ? "rented" : "not-rented")">
-                <div class="place-info">
-                    <strong>@Html.DisplayFor(modelItem => item.Name)</strong>
+        <div id="card-view" style="display:none;">
+            @foreach (var item in Model)
+            {
+                <div class="place-card @(item.InRent ? "rented" : "not-rented")">
+                    <div class="place-info">
+                        <strong>@Html.DisplayFor(modelItem => item.Name)</strong>
+                    </div>
+                    <div class="actions">
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="action-btn">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="action-btn">Details</a>
+                    </div>
                 </div>
-                <div class="actions">
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="action-btn">Edit</a>
-                    <a asp-action="Details" asp-route-id="@item.Id" class="action-btn">Details</a>
-                </div>
-            </div>
-        }
-    </div>
-}
-else
-{
-    <p>Для отображения мест аренды зарегистрируйтесь</p>
-}
+            }
+        </div>
+    }
+    else
+    {
+        <p>Для отображения мест аренды зарегистрируйтесь</p>
+    }
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const showCards = document.getElementById("show-cards");
-        const showList = document.getElementById("show-list");
-        const cardView = document.getElementById("card-view");
-        const listView = document.getElementById("list-view");
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const showCards = document.getElementById("show-cards");
+            const showList = document.getElementById("show-list");
+            const cardView = document.getElementById("card-view");
+            const listView = document.getElementById("list-view");
 
-        // Показать карточки по умолчанию
-        cardView.style.display = "none";
-        listView.style.display = "block";
-
-        showCards.addEventListener("click", function () {
-            cardView.style.display = "block";
-            listView.style.display = "none";
-        });
-
-        showList.addEventListener("click", function () {
+            // Показать карточки по умолчанию
             cardView.style.display = "none";
             listView.style.display = "block";
+
+            showCards.addEventListener("click", function () {
+                cardView.style.display = "block";
+                listView.style.display = "none";
+            });
+
+            showList.addEventListener("click", function () {
+                cardView.style.display = "none";
+                listView.style.display = "block";
+            });
         });
-    });
-</script>
+    </script>
+</main>
+
 
 
 
