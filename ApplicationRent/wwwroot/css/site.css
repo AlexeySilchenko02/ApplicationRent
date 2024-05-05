@@ -1233,6 +1233,384 @@ h1 {
     color: #FFCB9A;
 }
 
+.rent-title-section {
+    min-height: 113px;
+    width: auto;
+    background-color: white;
+    background-size: cover;
+    padding-top: 48px;
+}
+
+.rent-title-container {
+    margin-left: 226px;
+    margin-right: 226px;
+}
+
+.rent-title-h1 {
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 35px;
+    letter-spacing: 0.05em;
+    color: #2c3531;
+}
+
+.rent {
+    background: #e8e8e8;
+}
+
+.rent-container {
+    margin-left: 226px;
+    margin-right: 226px;
+}
+
+
+
+.rent-switch-container {
+    padding-top: 33px;
+    text-align: center;
+}
+
+.rent-switch-label {
+    display: inline-block;
+    position: relative;
+    width: 48px;
+    height: 24px;
+}
+
+.rent-switch-input {
+    height: 0;
+    width: 0;
+    opacity: 0;
+}
+
+.rent-switch-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    border-radius: 12px;
+    background-color: #116466;
+    transition: 0.4s;
+}
+
+.rent-switch-slider::before {
+    content: "";
+    position: absolute;
+    cursor: pointer;
+    left: 4px;
+    bottom: 4px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: white;
+    transition: 0.4s;
+}
+
+.rent-switch-input:focus + .rent-switch-slider {
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+}
+
+.rent-switch-input:checked + .rent-switch-slider {
+    background-color: #116466;
+}
+
+.rent-switch-input:checked + .rent-switch-slider:before {
+    transform: translateX(24px);
+    -webkit-transform: translateX(24px);
+    -ms-transform: translateX(24px);
+}
+
+.rent-switch-text {
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 17px;
+    letter-spacing: 0.05em;
+    text-align: right;
+    color: #000;
+/*    cursor: pointer;*/
+}
+
+.rent-list-view {
+
+}
+
+.rent-list-container {
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+.rent-list-grid {
+    display: grid;
+    grid-template-columns: 240px auto 260px 150px;
+/*    justify-items: center;*/
+    column-gap: 20px;
+    row-gap: 50px;
+
+}
+
+.rent-list-grid-block1 {
+    align-self: center;
+    text-align: center;
+}
+
+.rent-list-grid-block2 {
+
+}
+
+.rent-list-grid-block3 {
+    align-self: center;
+    text-align: center;
+}
+
+.rent-list-grid-block4 {
+    align-self: center;
+    text-align: center;
+}
+
+.rent-list-pic {
+    width: 232px;
+    height: 232px;
+}
+
+.rent-list-h2 {
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 23px;
+    letter-spacing: 0.05em;
+    color: #000;
+}
+
+.rent-list-description {
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 15px;
+    letter-spacing: 0.05em;
+    color: #292d32;
+}
+
+.rent-list-facts {
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: 0.05em;
+    text-align: center;
+    color: #292d32;
+}
+
+.rent-list-status {
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: 0.05em;
+    text-align: center;
+    color: #292d32;
+}
+
+/*.rent-list-status-rented {
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: 0.05em;
+    text-align: center;
+    color: #292d32;
+    background-color: #F2A6A6;
+}
+
+.rent-list-status-not-rented {
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: 0.05em;
+    text-align: center;
+    color: #292d32;
+    background-color: #D1E8E2;
+}*/
+
+.rent-list-btn-details {
+    border: 3px solid #2c3531;
+    width: 148px;
+    height: 49px;
+    background: #116466;
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.05em;
+    text-align: center;
+    color: #ffcb9a;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.rent-list-btn {
+    border: 3px solid #116466;
+    width: 148px;
+    height: 49px;
+    background: #d1e8e2;
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.05em;
+    text-align: center;
+    color: #2c3531;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.rent-list-btn-disabled {
+    border: 3px solid #292D32;
+    width: 148px;
+    height: 49px;
+    background: #E8E8E8;
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.05em;
+    text-align: center;
+    color: #2c3531;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.rent-card-view {
+    padding-top: 27px;
+    padding-bottom: 27px;
+}
+
+.rent-place-card {
+    width: 315px;
+    height: 505px;
+    margin: 10px;
+    padding-bottom: 19px;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    background: #fff;
+    text-align: center;
+    display: inline-block;
+}
+
+.rent-place-card-title {
+
+}
+
+.rent-place-card-h2 {
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 23px;
+    letter-spacing: 0.05em;
+    text-align: center;
+    color: #000;
+    margin-top: 7px;
+    margin-bottom: 0;
+}
+
+.rent-place-card-pic {
+    width: 232px;
+    height: 232px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.rent-place-card-status-container {
+    width: 315px;
+    height: 25px;
+    margin-top: 7px;
+}
+
+.rent-place-card-status-container.rented {
+    background-color: #F2A6A6;
+}
+
+.rent-place-card-status-container.not-rented {
+    background-color: #D1E8E2;
+}
+
+.rent-place-card-status-text {
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: 0.05em;
+    text-align: center;
+    color: #292d32;
+}
+
+.rent-place-card-details-grid {
+    width: 232px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-column-gap: 20px;
+    justify-items: center;
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: 0.05em;
+    text-align: center;
+    color: #292d32;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 15px;
+}
+
+.rent-place-card-category {
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: 0.05em;
+    text-align: center;
+    color: #292d32;
+}
+
+.rent-place-card-category-text {
+    margin-bottom: 10px;
+}
+
+.rent-place-card-actions {
+}
+
+.rent-place-card-btn-details {
+    border: 3px solid #2c3531;
+    width: 148px;
+    height: 49px;
+    background: #116466;
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.05em;
+    text-align: center;
+    color: #ffcb9a;
+}
+
+.rent-place-card-btn {
+    border: 3px solid #116466;
+    width: 148px;
+    height: 49px;
+    background: #d1e8e2;
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.05em;
+    text-align: center;
+    color: #2c3531;
+}
+
+.rent-place-card-btn-disabled {
+    border: 3px solid #292D32;
+    width: 148px;
+    height: 49px;
+    background: #E8E8E8;
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.05em;
+    text-align: center;
+    color: #2c3531;
+}
+
+.rent-place-card-actions-btn {
+    margin-top: 10px;
+}
+
+
 .footer-rent {
     min-height: 190px;
     width: 100%;
@@ -1307,8 +1685,7 @@ h1 {
     }
 }*/
 
-
-@media screen and (max-width: 1207px) {
+@media screen and (max-width: 1400px) {
     .burger {
         display: block;
     }
@@ -1342,20 +1719,35 @@ h1 {
     }
 
     .header-rent-link {
+        text-align: left;
         display: inline-block;
         width: 100%;
         font-size: 25px;
         padding: 20px 30px;
         padding-bottom: 10px;
-
     }
 
-    .header-rent-link:not(:last-child) {
-        
+    .rent-container {
+        margin-left: 150px;
+        margin-right: 150px;
     }
+}
+
+@media screen and (max-width: 1207px) {
+    
 
     .contacts-container {
         padding-bottom: 20px;
+    }
+
+    .rent-list-grid {
+        grid-template-columns: 240px auto;
+        
+    }
+
+    .footer-rent-container {
+        margin-left: 150px;
+        margin-right: 150px;
     }
 }
 
@@ -1371,12 +1763,39 @@ h1 {
         padding-bottom: 54px;
         row-gap: 15px;
     }
+
+    .rent-container {
+        margin-left: 100px;
+        margin-right: 100px;
+    }
+
+    .footer-rent-container {
+        margin-left: 75px;
+        margin-right: 75px;
+    }
+
+    .footer-rent-number {
+        font-size: 16px;
+    }
+
+    .footer-rent-address {
+        font-size: 16px;
+    }
+
+    .footer-rent-email {
+        font-size: 16px;
+    }
 }
 
 @media screen and (max-width: 830px) {
     .benefits_cards {
         grid-template-columns: repeat(2, 1fr);
         grid-template-rows: repeat(3, 1fr);
+    }
+
+    .rent-container {
+        margin-left: 30px;
+        margin-right: 30px;
     }
 }
 
@@ -1393,4 +1812,6 @@ h1 {
     .contacts-container {
         margin-left: 150px;
     }
+
+    
 }
