@@ -1,8 +1,26 @@
 ﻿@model UserProfileViewModel
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
 <main class="main">
     <h2>Личный кабинет пользователя: @Model.User.FullNameUser</h2>
-    <a href="@Url.Action("UpdateUserProfile", "UserProfile")" class="btn btn-primary">Изменить данные пользователя</a>
+    <form id="updateUserProfileForm" asp-action="UpdateUserProfile" method="post" onsubmit="updateUserProfile(event)">
+        <div class="form-group">
+            <label for="FullNameUser">Полное имя</label>
+            <input type="text" class="form-control" id="FullNameUser" name="FullNameUser" value="@Model.User.FullNameUser" required>
+        </div>
+        <div class="form-group">
+            <label for="Email">Email</label>
+            <input type="email" class="form-control" id="Email" name="Email" value="@Model.User.Email" required>
+            <div id="emailError" class="text-danger" style="display:none;"></div>
+        </div>
+        <div class="form-group">
+            <label for="PhoneNumber">Телефонный номер</label>
+            <input type="tel" class="form-control" id="PhoneNumber" name="PhoneNumber" value="@Model.User.PhoneNumber" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Обновить</button>
+    </form>
+    <a href="@Url.Action("ChangePassword", "UserProfile")" class="btn btn-secondary">Изменить пароль</a>
     @if (Model.Rentals.Any())
     {
         <table class="table">
@@ -38,8 +56,8 @@
     {
         <p>У вас нет актуальных мест аренды.</p>
     }
-
     <script>
+        //функция продления аренды
         function toggleForm(rentalId) {
             var form = document.getElementById('form-' + rentalId);
             if (form.style.display === 'none') {
@@ -49,5 +67,43 @@
             }
         }
     </script>
-</main>
+    <script>
+        function updateUserProfile(event) {
+            // Предотвращаем действие по умолчанию (отправку формы)
+            event.preventDefault();
 
+            var form = document.getElementById('updateUserProfileForm');
+            var formData = new FormData(form);
+
+            // Отправляем AJAX-запрос
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // Если ответ успешен, перезагружаем страницу
+                        window.location.reload();
+                    } else if (response.status === 400) {
+                        // Если ответ содержит ошибку 400 (неверные данные), обрабатываем ошибку
+                        response.json().then(data => {
+                            if (data.errors) {
+                                // Если есть ошибки, отображаем их
+                                for (var key in data.errors) {
+                                    var errorElement = document.getElementById(key + 'Error');
+                                    if (errorElement) {
+                                        errorElement.innerText = data.errors[key];
+                                        errorElement.style.display = 'block';
+                                    }
+                                }
+                            }
+                        });
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
+</main>

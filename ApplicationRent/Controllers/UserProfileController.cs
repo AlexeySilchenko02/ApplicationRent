@@ -87,25 +87,13 @@ namespace ApplicationRent.Controllers
             return RedirectToAction(nameof(Index)); // Возвращаем пользователя на страницу индекса
         }
 
-        // Метод для отображения формы
-        [HttpGet]
-        public async Task<IActionResult> UpdateUserProfile()
-        {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return View("Error"); // Вывод страницы ошибки, если пользователь не найден
-            }
-            return View(user); // Передаем модель пользователя в представление
-        }
-
-        // Метод для обработки отправленной формы
         [HttpPost]
         public async Task<IActionResult> UpdateUserProfile(ApplicationIdentityUser model)
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                // Возвращаем ошибку 400 с сообщением о неверных данных
+                return BadRequest(new { errors = ModelState });
             }
 
             var user = await _userManager.GetUserAsync(User);
@@ -114,14 +102,24 @@ namespace ApplicationRent.Controllers
                 return View("Error"); // Вывод страницы ошибки, если пользователь не найден
             }
 
+            // Проверяем, существует ли пользователь с таким email
+            var existingUser = await _userManager.FindByEmailAsync(model.Email);
+            if (existingUser != null && existingUser.Id != user.Id)
+            {
+                // Возвращаем ошибку 400 с сообщением о существующем email
+                return BadRequest(new { errors = new { Email = "Пользователь с таким email уже существует." } });
+            }
+
             // Обновляем данные
             user.FullNameUser = model.FullNameUser;
             user.PhoneNumber = model.PhoneNumber;
+            user.Email = model.Email;
+            user.UserName = model.Email; // Обновляем UserName согласно email
 
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
             {
-                return RedirectToAction("Index"); // Перенаправляем на метод Index
+                return Ok(); // Возвращаем успешный статус 200
             }
             else
             {
@@ -129,9 +127,11 @@ namespace ApplicationRent.Controllers
                 {
                     ModelState.AddModelError("", error.Description); // Добавляем ошибки в ModelState
                 }
-                return View(model);
+                // Возвращаем ошибку 400 с сообщением о неверных данных
+                return BadRequest(new { errors = ModelState });
             }
         }
+
 
         //Страница смены пароля
         [HttpGet]
