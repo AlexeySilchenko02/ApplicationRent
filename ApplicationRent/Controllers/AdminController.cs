@@ -9,6 +9,7 @@ using ApplicationRent.Data;
 using ApplicationRent.App_data;
 using Microsoft.Extensions.Hosting;
 using System;
+using ApplicationRent.Models;
 
 namespace ApplicationRent.Controllers
 {
@@ -67,7 +68,7 @@ namespace ApplicationRent.Controllers
             return View(users);
         }
 
-        //Изменения статуса пользователя
+        /*//Изменения статуса пользователя
         public async Task<IActionResult> ToggleAdminStatus(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
@@ -81,7 +82,7 @@ namespace ApplicationRent.Controllers
                 }
             }
             return View("Error");
-        }
+        }*/
 
         //Удаление пользователей
         [HttpPost]
@@ -104,6 +105,70 @@ namespace ApplicationRent.Controllers
                 // Обработка возможных ошибок при удалении
                 return View("Error"); 
             }
+        }
+
+        public async Task<IActionResult> EditUser(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var model = new EditUserViewModel
+            {
+                Id = user.Id,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                FullNameUser = user.FullNameUser,
+                Admin = user.Admin
+            };
+
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> EditUser(EditUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByIdAsync(model.Id);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+
+                // Проверка на уникальность электронной почты
+                var existingUser = await _userManager.FindByEmailAsync(model.Email);
+                if (existingUser != null && existingUser.Id != model.Id)
+                {
+                    ModelState.AddModelError("Email", "Пользователь с такой электронной почтой уже существует.");
+                    return View(model);
+                }
+
+                // Обновление свойств пользователя
+                if (user.Email != model.Email)
+                {
+                    user.Email = model.Email;
+                    user.UserName = model.Email;  // Обновление UserName
+                }
+
+                user.PhoneNumber = model.PhoneNumber;
+                user.FullNameUser = model.FullNameUser;
+                user.Admin = model.Admin;
+
+                var result = await _userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Users");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+            }
+
+            return View(model);
         }
 
         //Получение списка обратной связи

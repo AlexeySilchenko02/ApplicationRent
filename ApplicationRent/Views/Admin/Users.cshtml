@@ -6,8 +6,9 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Email</th>
                 <th>Полное имя</th>
+                <th>Email</th>
+                <th>Телефон</th>
                 <th>Админ</th>
                 <th>Действия</th>
             </tr>
@@ -16,17 +17,21 @@
             @foreach (var user in Model)
             {
                 <tr>
-                    <td>@user.Email</td>
                     <td>@user.FullNameUser</td>
+                    <td>@user.Email</td>
+                    <td>@user.PhoneNumber</td>
                     <td>@user.Admin</td>
                     <td>
-                        <a href="@Url.Action("ToggleAdminStatus", "Admin", new { id = user.Id })" class="btn btn-primary">
+                        @* <a href="@Url.Action("ToggleAdminStatus", "Admin", new { id = user.Id })" class="btn btn-primary">
                             Изменить статус
-                        </a>
+                        </a> *@
                         <form action="@Url.Action("DeleteUser", "Admin")" method="post" style="display: inline;">
                             <input type="hidden" name="id" value="@user.Id" />
                             <button type="submit" class="btn btn-danger" onclick="return confirm('Вы уверены, что хотите удалить пользователя?');">Удалить пользователя</button>
                         </form>
+                        <a href="@Url.Action("EditUser", "Admin", new { id = user.Id })" class="btn btn-secondary">
+                            Изменить
+                        </a>
                     </td>
                 </tr>
             }
