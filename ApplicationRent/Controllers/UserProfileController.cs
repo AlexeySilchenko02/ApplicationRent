@@ -142,9 +142,12 @@ namespace ApplicationRent.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
+            List<string> errors = new List<string>();
+
             if (!ModelState.IsValid)
             {
-                return View(model);
+                errors = ModelState.Values.SelectMany(v => v.Errors.Select(b => b.ErrorMessage)).ToList();
+                return Json(new { success = false, errors = errors });
             }
 
             var user = await _userManager.GetUserAsync(User);
@@ -153,20 +156,22 @@ namespace ApplicationRent.Controllers
                 return View("Error");
             }
 
+            // Проверка на совпадение нового пароля и подтверждения
+            if (model.NewPassword != model.ConfirmPassword)
+            {
+                errors.Add("Пароли не совпадают");
+                return Json(new { success = false, errors = errors });
+            }
+
             var changePasswordResult = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
             if (changePasswordResult.Succeeded)
             {
-                TempData["SuccessMessage"] = "Пароль успешно изменен.";
-                //return RedirectToAction("Index");
-                return View(model);
+                return Json(new { success = true });
             }
             else
             {
-                foreach (var error in changePasswordResult.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
-                return View(model);
+                errors.AddRange(changePasswordResult.Errors.Select(e => e.Description));
+                return Json(new { success = false, errors = errors });
             }
         }
     }
