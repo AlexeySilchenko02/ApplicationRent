@@ -106,7 +106,6 @@ namespace ApplicationRent.Controllers
             var existingUser = await _userManager.FindByEmailAsync(model.Email);
             if (existingUser != null && existingUser.Id != user.Id)
             {
-                // Возвращаем ошибку 400 с сообщением о существующем email
                 return BadRequest(new { errors = new { Email = "Пользователь с таким email уже существует." } });
             }
 
