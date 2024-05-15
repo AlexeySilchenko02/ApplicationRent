@@ -23,7 +23,7 @@
             @foreach (var rental in Model)
             {
                 var isOutdated = rental.EndRent < today;
-                <tr class="@(isOutdated ? "outdated" : "")">
+                <tr class="@(isOutdated ? "outdated" : "")" data-rental-id="@rental.Id">
                     <td>@rental.Id</td>
                     <td>@rental.User.FullNameUser</td>
                     <td>@rental.Place.Name</td>
@@ -37,17 +37,33 @@
         </tbody>
     </table>
 
-    <form id="deleteForm" method="post" action="/Admin/DeleteRental" style="display:none;">
-        <input type="hidden" name="id" id="deleteId" />
-    </form>
-
     <script>
         function confirmDeletion(id) {
             if (confirm("Вы уверены, что хотите удалить эту запись?")) {
-                var form = document.getElementById('deleteForm');
-                document.getElementById('deleteId').value = id;
-                form.submit();
+                deleteRental(id);
             }
+        }
+
+        function deleteRental(id) {
+            fetch(`/Admin/DeleteRental/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '@(ViewData["__RequestVerificationToken"] ?? "")'
+                },
+                body: JSON.stringify({ id: id })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        var row = document.querySelector(`tr[data-rental-id='${id}']`);
+                        if (row) {
+                            row.remove();
+                        }
+                    } else {
+                        alert("Ошибка при удалении записи.");
+                    }
+                });
         }
 
         var showOutdated = true;

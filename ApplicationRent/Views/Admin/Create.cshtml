@@ -8,53 +8,64 @@
         .upload-form {
             display: none;
         }
+
+        .thumbnail {
+            display: none;
+            margin-top: 10px;
+            max-width: 200px;
+            max-height: 200px;
+        }
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <h2>Create</h2>
 
     <form asp-action="Create">
         <div class="form-group">
-            <label asp-for="Name" class="control-label"></label>
+            <label asp-for="Name" class="control-label">Название</label>
             <input asp-for="Name" class="form-control" />
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="Price" class="control-label"></label>
+            <label asp-for="Price" class="control-label">Цена</label>
             <input asp-for="Price" class="form-control" />
             <span asp-validation-for="Price" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="SizePlace" class="control-label"></label>
+            <label asp-for="SizePlace" class="control-label">Размер помещения</label>
             <input asp-for="SizePlace" class="form-control" />
             <span asp-validation-for="SizePlace" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="Category" class="control-label"></label>
+            <label asp-for="Category" class="control-label">Категория</label>
             <select asp-for="Category" class="form-control" asp-items="@(new SelectList(ViewBag.Categories))"></select>
             <span asp-validation-for="Category" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="Description" class="control-label"></label>
+            <label asp-for="Description" class="control-label">Описание</label>
             <input asp-for="Description" class="form-control" />
             <span asp-validation-for="Description" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="ImageFileName1" class="control-label">Image File 1</label>
-            <input asp-for="ImageFileName1" class="form-control" type="file" />
+            <label asp-for="ImageFileName1" class="control-label">Фото 1</label>
+            <input asp-for="ImageFileName1" class="form-control" type="file" id="imageInput1" />
             <span asp-validation-for="ImageFileName1" class="text-danger"></span>
+            <img id="thumbnail1" class="thumbnail" src="" alt="Image preview" />
         </div>
         <div class="form-group">
-            <label asp-for="ImageFileName2" class="control-label">Image File 1</label>
-            <input asp-for="ImageFileName2" class="form-control" type="file" />
+            <label asp-for="ImageFileName2" class="control-label">Фото 2</label>
+            <input asp-for="ImageFileName2" class="form-control" type="file" id="imageInput2" />
             <span asp-validation-for="ImageFileName2" class="text-danger"></span>
+            <img id="thumbnail2" class="thumbnail" src="" alt="Image preview" />
         </div>
         <div class="form-group">
-            <label asp-for="ImageFileName3" class="control-label">Image File 1</label>
-            <input asp-for="ImageFileName3" class="form-control" type="file" />
+            <label asp-for="ImageFileName3" class="control-label">Фото 3</label>
+            <input asp-for="ImageFileName3" class="form-control" type="file" id="imageInput3" />
             <span asp-validation-for="ImageFileName3" class="text-danger"></span>
+            <img id="thumbnail3" class="thumbnail" src="" alt="Image preview" />
         </div>
-        <input type="submit" value="Create" class="btn btn-primary" />
+        <input type="submit" value="Создание" class="btn btn-primary" />
     </form>
+    <button type="button" class="btn btn-secondary" onclick="window.location.href='@Url.Action("Index", "Admin")';">Отмена</button>
     <section class="upload-form">
         <div class="upload-form-container">
             <h1 class="upload-form-title">Загрузка фото</h1>
@@ -66,16 +77,36 @@
     </section>
     <script>
         $(document).ready(function () {
-            // При изменении файла в первой форме
+            function readURL(input, thumbnailId) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        var thumbnail = $('#' + thumbnailId);
+                        thumbnail.attr('src', e.target.result);
+                        thumbnail.show();
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $('#imageInput1').change(function () {
+                readURL(this, 'thumbnail1');
+            });
+
+            $('#imageInput2').change(function () {
+                readURL(this, 'thumbnail2');
+            });
+
+            $('#imageInput3').change(function () {
+                readURL(this, 'thumbnail3');
+            });
+
             $("input[type='file']").change(function () {
-                // Копирование файла во вторую форму
                 var fileInput = document.getElementById('photo');
                 fileInput.files = this.files;
 
-                // Создание FormData из второй формы
                 var formData = new FormData(document.getElementById('uploadForm'));
 
-                // Отправка FormData через AJAX на сервер
                 $.ajax({
                     type: 'POST',
                     url: $('#uploadForm').attr('action'),
@@ -91,7 +122,6 @@
                 });
             });
 
-            // Предотвращаем обычную отправку формы
             $('#uploadForm').submit(function (event) {
                 event.preventDefault();
             });

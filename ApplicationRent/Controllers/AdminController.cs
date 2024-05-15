@@ -32,26 +32,6 @@ namespace ApplicationRent.Controllers
         public async Task<IActionResult> Index()
         {
             var places = await _context.Places.ToListAsync();
-            var today = DateTime.Now;
-
-            foreach (var place in places)
-            {
-                // Проверка, истекла ли дата аренды, и обновление свойства InRent
-                if (place.EndRent < today)
-                {
-                    place.InRent = false;
-                    // Обновление в Firebase
-                    await _firebaseService.AddOrUpdatePlace(place);
-                }
-                else
-                {
-                    place.InRent = true;
-                    // Обновление в Firebase
-                    await _firebaseService.AddOrUpdatePlace(place);
-                }
-            }
-            // Сохранение изменений, если они есть
-            await _context.SaveChangesAsync();
 
             // Передача статуса пользователя
             var user = await _userManager.GetUserAsync(User);
@@ -178,7 +158,7 @@ namespace ApplicationRent.Controllers
             return View(feedbacks); 
         }
 
-        //Изменение статуса обратной связи
+        // Изменение статуса обратной связи
         [HttpPost]
         public async Task<IActionResult> ChangeFeedbackStatus(int id)
         {
@@ -187,12 +167,13 @@ namespace ApplicationRent.Controllers
             {
                 feedback.Status = !feedback.Status; // Изменение статуса на противоположный
                 await _context.SaveChangesAsync();
+                return Json(new { success = true, status = feedback.Status });
             }
 
-            return RedirectToAction("FeedbackList"); // Возвращаемся к списку обратной связи
+            return Json(new { success = false });
         }
 
-        //Удаление записи обратной связи
+        // Удаление записи обратной связи
         [HttpPost]
         public async Task<IActionResult> DeleteFeedback(int id)
         {
@@ -201,9 +182,10 @@ namespace ApplicationRent.Controllers
             {
                 _context.Feedbacks.Remove(feedback);
                 await _context.SaveChangesAsync();
+                return Json(new { success = true });
             }
 
-            return RedirectToAction("FeedbackList"); // Возвращаемся к списку обратной связи
+            return Json(new { success = false });
         }
 
         // Возвращает представление со списком заявок на аренду
@@ -222,12 +204,13 @@ namespace ApplicationRent.Controllers
             {
                 request.Status = !request.Status;
                 await _context.SaveChangesAsync();
+                return Json(new { success = true, status = request.Status });
             }
 
-            return RedirectToAction("RentRequestsList"); // Возвращение к списку заявок на аренду
+            return Json(new { success = false });
         }
 
-        //Удаление заявки на аренду
+        // Удаление заявки на аренду
         [HttpPost]
         public async Task<IActionResult> DeleteRequest(int id)
         {
@@ -236,9 +219,10 @@ namespace ApplicationRent.Controllers
             {
                 _context.RequestsRents.Remove(request);
                 await _context.SaveChangesAsync();
+                return Json(new { success = true });
             }
 
-            return RedirectToAction("RentRequestsList"); // Возвращение к списку заявок на аренду
+            return Json(new { success = false });
         }
 
         //Страница с просмотром онлайн аренд
@@ -259,9 +243,9 @@ namespace ApplicationRent.Controllers
             {
                 _context.Rentals.Remove(rental);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Rentals");
+                return Json(new { success = true });
             }
-            return NotFound();
+            return Json(new { success = false });
         }
         public IActionResult ManagePhotos()
         {
@@ -273,6 +257,50 @@ namespace ApplicationRent.Controllers
 
             // Передайте список файлов в представление
             return View(photoFiles);
+        }
+        public IActionResult DownloadPhoto(string photoFileName)
+        {
+            var photosDirectory = Path.Combine(_hostEnvironment.WebRootPath, "place");
+            var filePath = Path.Combine(photosDirectory, photoFileName);
+
+            if (!System.IO.File.Exists(filePath))
+            {
+                return NotFound();
+            }
+
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(filePath, FileMode.Open))
+            {
+                stream.CopyTo(memory);
+            }
+            memory.Position = 0;
+
+            return File(memory, GetContentType(filePath), Path.GetFileName(filePath));
+        }
+
+        private string GetContentType(string path)
+        {
+            var types = GetMimeTypes();
+            var ext = Path.GetExtension(path).ToLowerInvariant();
+            return types[ext];
+        }
+
+        private Dictionary<string, string> GetMimeTypes()
+        {
+            return new Dictionary<string, string>
+            {
+        {".txt", "text/plain"},
+        {".pdf", "application/pdf"},
+        {".doc", "application/vnd.ms-word"},
+        {".docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"},
+        {".xls", "application/vnd.ms-excel"},
+        {".xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"},
+        {".png", "image/png"},
+        {".jpg", "image/jpeg"},
+        {".jpeg", "image/jpeg"},
+        {".gif", "image/gif"},
+        {".csv", "text/csv"}
+            };
         }
 
         [HttpPost]

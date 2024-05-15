@@ -8,6 +8,13 @@
         .upload-form {
             display: none;
         }
+
+        .thumbnail {
+            display: none;
+            margin-top: 10px;
+            max-width: 200px;
+            max-height: 200px;
+        }
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <h2>Изменение информации о месте</h2>
@@ -59,42 +66,25 @@
             <label asp-for="ImageFileName1" class="control-label">Image File 1</label>
             <input asp-for="ImageFileName1" class="form-control" type="file" data-image-id="image1" />
             <span asp-validation-for="ImageFileName1" class="text-danger"></span>
+            <img id="image1" class="thumbnail" src="@(!string.IsNullOrEmpty(Model.ImageFileName1) ? Url.Content("~/place/" + Model.ImageFileName1) : "")" alt="Image 1" />
         </div>
-        @if (!string.IsNullOrEmpty(Model.ImageFileName1))
-        {
-            <dt class="col-sm-2">Image 1</dt>
-            <dd class="col-sm-10">
-                <img id="image1" src="@Url.Content("~/place/" + Model.ImageFileName1)" alt="Image 1" style="max-width: 200px; max-height: 200px;" />
-            </dd>
-        }
         <div class="form-group">
             <label asp-for="ImageFileName2" class="control-label">Image File 2</label>
             <input asp-for="ImageFileName2" class="form-control" type="file" data-image-id="image2" />
             <span asp-validation-for="ImageFileName2" class="text-danger"></span>
+            <img id="image2" class="thumbnail" src="@(!string.IsNullOrEmpty(Model.ImageFileName2) ? Url.Content("~/place/" + Model.ImageFileName2) : "")" alt="Image 2" />
         </div>
-        @if (!string.IsNullOrEmpty(Model.ImageFileName2))
-        {
-            <dt class="col-sm-2">Image 2</dt>
-            <dd class="col-sm-10">
-                <img id="image2" src="@Url.Content("~/place/" + Model.ImageFileName2)" alt="Image 2" style="max-width: 200px; max-height: 200px;" />
-            </dd>
-        }
         <div class="form-group">
             <label asp-for="ImageFileName3" class="control-label">Image File 3</label>
             <input asp-for="ImageFileName3" class="form-control" type="file" data-image-id="image3" />
             <span asp-validation-for="ImageFileName3" class="text-danger"></span>
+            <img id="image3" class="thumbnail" src="@(!string.IsNullOrEmpty(Model.ImageFileName3) ? Url.Content("~/place/" + Model.ImageFileName3) : "")" alt="Image 3" />
         </div>
-        @if (!string.IsNullOrEmpty(Model.ImageFileName3))
-        {
-            <dt class="col-sm-2">Image 3</dt>
-            <dd class="col-sm-10">
-                <img id="image3" src="@Url.Content("~/place/" + Model.ImageFileName3)" alt="Image 3" style="max-width: 200px; max-height: 200px;" />
-            </dd>
-        }
         <div class="form-group">
             <input type="submit" value="Сохранить" class="btn btn-primary" />
         </div>
     </form>
+    <button type="button" class="btn btn-secondary" onclick="window.location.href='@Url.Action("Index", "Admin")';">Отмена</button>
     <section class="upload-form">
         <div class="upload-form-container">
             <h1 class="upload-form-title">Загрузка фото</h1>
@@ -106,6 +96,18 @@
     </section>
     <script>
         $(document).ready(function () {
+            function readURL(input, imageId) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        var imageElement = $('#' + imageId);
+                        imageElement.attr('src', e.target.result);
+                        imageElement.show();
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
             $("input[type='file']").change(function () {
                 var fileInput = document.getElementById('photo');
                 fileInput.files = this.files;
@@ -123,12 +125,10 @@
                         alert('Файл успешно загружен: ' + response.message);
 
                         var fileName = response.fileName;
-                        var parentFormGroup = currentInput.closest('.form-group');
-
-                        // Найти соответствующее изображение и обновить его src атрибут
                         var imageId = currentInput.data('image-id');
                         var imageElement = $('#' + imageId);
                         imageElement.attr('src', '@Url.Content("~/place/")' + fileName);
+                        imageElement.show();
                     },
                     error: function () {
                         alert('Ошибка при загрузке файла.');
@@ -138,6 +138,13 @@
 
             $('#uploadForm').submit(function (event) {
                 event.preventDefault();
+            });
+
+            // Показать существующие изображения
+            $('.thumbnail').each(function () {
+                if ($(this).attr('src') !== '') {
+                    $(this).show();
+                }
             });
         });
     </script>

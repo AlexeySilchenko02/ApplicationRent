@@ -24,26 +24,6 @@ namespace ApplicationRent.Controllers
         public async Task<IActionResult> Index()
         {
             var places = await _context.Places.ToListAsync();
-            var today = DateTime.Now;
-
-            foreach (var place in places)
-            {
-                // Проверка, истекла ли дата аренды, и обновление свойства InRent
-                if (place.EndRent < today)
-                {
-                    place.InRent = false;
-                    // Обновление в Firebase
-                    await _firebaseService.AddOrUpdatePlace(place);
-                }
-                else
-                {
-                    place.InRent = true;
-                    // Обновление в Firebase
-                    await _firebaseService.AddOrUpdatePlace(place);
-                }
-            }
-            // Сохранение изменений, если они есть
-            await _context.SaveChangesAsync();
 
             // Передача статуса пользователя
             var user = await _userManager.GetUserAsync(User);
@@ -51,6 +31,27 @@ namespace ApplicationRent.Controllers
             ViewBag.IsAdmin = isAdmin;
 
             return View(places);
+        }
+
+        // Фоновая проверка статуса арендованного места
+        public async Task UpdateRentStatusAsync()
+        {
+            var places = await _context.Places.ToListAsync();
+            var today = DateTime.Now;
+
+            foreach (var place in places)
+            {
+                if (place.EndRent < today)
+                {
+                    place.InRent = false;
+                }
+                else
+                {
+                    place.InRent = true;
+                }
+                await _firebaseService.AddOrUpdatePlace(place);
+            }
+            await _context.SaveChangesAsync();
         }
 
         //Вызов страници для отображения детальной информации

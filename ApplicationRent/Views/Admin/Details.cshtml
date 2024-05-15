@@ -38,9 +38,9 @@
             <dd class="col-sm-10">
                 @Html.DisplayFor(model => model.Category)
             </dd>
-            <p>@Html.DisplayFor(model => model.ImageFileName1)</p>
-            <p>@Html.DisplayFor(model => model.ImageFileName2)</p>
-            <p>@Html.DisplayFor(model => model.ImageFileName2)</p>
+            <p>Название фото 1: @(string.IsNullOrEmpty(Model.ImageFileName1) ? "Фото не загружено" : Html.DisplayFor(model => model.ImageFileName1))</p>
+            <p>Название фото 2: @(string.IsNullOrEmpty(Model.ImageFileName2) ? "Фото не загружено" : Html.DisplayFor(model => model.ImageFileName2))</p>
+            <p>Название фото 3: @(string.IsNullOrEmpty(Model.ImageFileName3) ? "Фото не загружено" : Html.DisplayFor(model => model.ImageFileName3))</p>
             @if (!string.IsNullOrEmpty(Model.ImageFileName1))
             {
                 <dt class="col-sm-2">Image 1</dt>
@@ -65,7 +65,8 @@
         </dl>
     </div>
     <div>
-        <a asp-action="Index">Back to List</a>
+        @* <a asp-action="Index">Вернуться назад</a> *@
+        <button type="button" class="btn btn-secondary" onclick="window.location.href='@Url.Action("Index", "Admin")';">Вернуться назад</button>
     </div>
 </main>
 

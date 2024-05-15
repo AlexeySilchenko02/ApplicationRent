@@ -34,6 +34,7 @@
                                 <form id="deleteForm_@photoFileName" asp-action="DeletePhoto" asp-route-photoFileName="@photoFileName" method="post">
                                     <button type="button" class="btn btn-danger delete-button" data-photo="@photoFileName">Удалить</button>
                                 </form>
+                                <a href="@Url.Action("DownloadPhoto", new { photoFileName })" class="btn btn-primary">Скачать</a>
                             </td>
                         </tr>
                     }

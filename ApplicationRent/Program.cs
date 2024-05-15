@@ -1,4 +1,5 @@
 using ApplicationRent.App_data;
+using ApplicationRent.Controllers;
 using ApplicationRent.Data;
 using ApplicationRent.Data.Identity;
 using ApplicationRent.Services;
@@ -33,6 +34,12 @@ builder.Services.AddDefaultIdentity<ApplicationIdentityUser>(options => {
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
 builder.Services.AddSingleton<FirebaseService>();
+
+// Регистрация PlaceController как службы
+builder.Services.AddScoped<PlaceController>();
+
+// Добавление RentStatusUpdater как фоновой службы
+builder.Services.AddHostedService<RentStatusUpdater>();
 
 var app = builder.Build();
 

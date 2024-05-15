@@ -23,20 +23,16 @@
         <tbody>
             @foreach (var feedback in Model)
             {
-                <tr class="@(feedback.Status ? "feedback-read" : "")">
+                <tr class="@(feedback.Status ? "feedback-read" : "")" data-feedback-id="@feedback.Id">
                     <td>@feedback.Name</td>
                     <td>@feedback.Email</td>
                     <td>@feedback.Subject</td>
                     <td>@feedback.Message</td>
                     <td>@feedback.Platform</td>
-                    <td>@(feedback.Status ? "Просмотрено" : "Не просмотрено")</td>
+                    <td class="status-text">@(feedback.Status ? "Просмотрено" : "Не просмотрено")</td>
                     <td>
-                        <form asp-action="ChangeFeedbackStatus" asp-route-id="@feedback.Id" method="post" style="display: inline;">
-                            <button type="submit" class="btn btn-primary">Изменить статус</button>
-                        </form>
-                        <form asp-action="DeleteFeedback" asp-route-id="@feedback.Id" method="post" style="display: inline;">
-                            <button type="submit" class="btn btn-danger" onclick="return confirm('Вы уверены, что хотите удалить эту запись?');">Удалить</button>
-                        </form>
+                        <button class="btn btn-primary change-status" data-feedback-id="@feedback.Id">Изменить статус</button>
+                        <button class="btn btn-danger delete-feedback" data-feedback-id="@feedback.Id" onclick="return confirm('Вы уверены, что хотите удалить эту запись?');">Удалить</button>
                     </td>
                 </tr>
             }
@@ -52,6 +48,56 @@
                         row.style.display = row.style.display === 'none' ? '' : 'none';
                     });
                 });
+
+                document.querySelectorAll('.change-status').forEach(function (button) {
+                    button.addEventListener('click', function () {
+                        var feedbackId = this.getAttribute('data-feedback-id');
+                        changeStatus(feedbackId);
+                    });
+                });
+
+                document.querySelectorAll('.delete-feedback').forEach(function (button) {
+                    button.addEventListener('click', function () {
+                        var feedbackId = this.getAttribute('data-feedback-id');
+                        deleteFeedback(feedbackId);
+                    });
+                });
+
+                function changeStatus(feedbackId) {
+                    fetch(`@Url.Action("ChangeFeedbackStatus", "Admin")/${feedbackId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '@(ViewData["__RequestVerificationToken"] ?? "")'
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                var row = document.querySelector(`tr[data-feedback-id='${feedbackId}']`);
+                                var statusText = row.querySelector('.status-text');
+                                var isRead = row.classList.toggle('feedback-read');
+                                statusText.textContent = isRead ? "Просмотрено" : "Не просмотрено";
+                            }
+                        });
+                }
+
+                function deleteFeedback(feedbackId) {
+                    fetch(`@Url.Action("DeleteFeedback", "Admin")/${feedbackId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '@(ViewData["__RequestVerificationToken"] ?? "")'
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                var row = document.querySelector(`tr[data-feedback-id='${feedbackId}']`);
+                                row.remove();
+                            }
+                        });
+                }
             });
         </script>
     }

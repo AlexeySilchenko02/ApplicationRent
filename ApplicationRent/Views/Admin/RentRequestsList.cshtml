@@ -23,20 +23,16 @@
         <tbody>
             @foreach (var request in Model)
             {
-                <tr class="@(request.Status ? "request-read" : "")">
+                <tr class="@(request.Status ? "request-read" : "")" data-request-id="@request.Id">
                     <td>@request.Id</td>
                     <td>@request.UserName</td>
                     <td>@request.PlaceId</td>
                     <td>@request.StartRent</td>
                     <td>@request.EndRent</td>
-                    <td>@(request.Status ? "Просмотрено" : "Не просмотрено")</td>
+                    <td class="status-text">@(request.Status ? "Просмотрено" : "Не просмотрено")</td>
                     <td>
-                        <form asp-action="ChangeRequestStatus" asp-route-id="@request.Id" method="post" style="display: inline;">
-                            <button type="submit" class="btn btn-primary">Изменить статус</button>
-                        </form>
-                        <form asp-action="DeleteRequest" asp-route-id="@request.Id" method="post" style="display: inline;">
-                            <button type="submit" class="btn btn-danger" onclick="return confirm('Вы уверены, что хотите удалить эту заявку?');">Удалить</button>
-                        </form>
+                        <button class="btn btn-primary change-status" data-request-id="@request.Id">Изменить статус</button>
+                        <button class="btn btn-danger delete-request" data-request-id="@request.Id" onclick="return confirm('Вы уверены, что хотите удалить эту заявку?');">Удалить</button>
                     </td>
                 </tr>
             }
@@ -52,6 +48,56 @@
                         row.style.display = row.style.display === 'none' ? '' : 'none';
                     });
                 });
+
+                document.querySelectorAll('.change-status').forEach(function (button) {
+                    button.addEventListener('click', function () {
+                        var requestId = this.getAttribute('data-request-id');
+                        changeStatus(requestId);
+                    });
+                });
+
+                document.querySelectorAll('.delete-request').forEach(function (button) {
+                    button.addEventListener('click', function () {
+                        var requestId = this.getAttribute('data-request-id');
+                        deleteRequest(requestId);
+                    });
+                });
+
+                function changeStatus(requestId) {
+                    fetch(`@Url.Action("ChangeRequestStatus", "Admin")/${requestId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '@(ViewData["__RequestVerificationToken"] ?? "")'
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                var row = document.querySelector(`tr[data-request-id='${requestId}']`);
+                                var statusText = row.querySelector('.status-text');
+                                var isRead = row.classList.toggle('request-read');
+                                statusText.textContent = isRead ? "Просмотрено" : "Не просмотрено";
+                            }
+                        });
+                }
+
+                function deleteRequest(requestId) {
+                    fetch(`@Url.Action("DeleteRequest", "Admin")/${requestId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '@(ViewData["__RequestVerificationToken"] ?? "")'
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                var row = document.querySelector(`tr[data-request-id='${requestId}']`);
+                                row.remove();
+                            }
+                        });
+                }
             });
         </script>
     }
