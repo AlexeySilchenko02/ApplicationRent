@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using ApplicationRent.App_data;
+using ApplicationRent.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 
 namespace ApplicationRent.Controllers
@@ -21,7 +23,7 @@ namespace ApplicationRent.Controllers
             _firebaseService = firebaseService;
         }
 
-        public async Task<IActionResult> Index()
+        /*public async Task<IActionResult> Index()
         {
             var places = await _context.Places.ToListAsync();
 
@@ -31,6 +33,77 @@ namespace ApplicationRent.Controllers
             ViewBag.IsAdmin = isAdmin;
 
             return View(places);
+        }*/
+        public async Task<IActionResult> Index(PlaceFilter filter)
+        {
+            var places = ApplyFilters(filter);
+
+            var user = await _userManager.GetUserAsync(User);
+            var isAdmin = user?.Admin ?? false;
+            ViewBag.IsAdmin = isAdmin;
+
+            return View(await places.ToListAsync());
+        }
+
+        public async Task<IActionResult> Filter(PlaceFilter filter)
+        {
+            var places = ApplyFilters(filter);
+            return PartialView("_PlaceList", await places.ToListAsync());
+        }
+
+        private IQueryable<Place> ApplyFilters(PlaceFilter filter)
+        {
+            var places = _context.Places.AsQueryable();
+
+            if (!string.IsNullOrEmpty(filter.Category))
+            {
+                places = places.Where(p => p.Category == filter.Category);
+            }
+
+            if (filter.InRent.HasValue)
+            {
+                places = places.Where(p => p.InRent == filter.InRent.Value);
+            }
+
+            if (!string.IsNullOrEmpty(filter.PriceSort))
+            {
+                places = filter.PriceSort == "PriceAsc" ? places.OrderBy(p => p.Price) : places.OrderByDescending(p => p.Price);
+            }
+
+            if (!string.IsNullOrEmpty(filter.SizeSort))
+            {
+                places = filter.SizeSort == "SizeAsc" ? places.OrderBy(p => p.SizePlace) : places.OrderByDescending(p => p.SizePlace);
+            }
+
+            return places;
+        }
+
+        public async Task<IActionResult> Calculator()
+        {
+            var places = await _context.Places.ToListAsync();
+            ViewBag.Places = new SelectList(places, "Id", "Name");
+
+            // Словарь для цен
+            var prices = places.ToDictionary(p => p.Id, p => p.Price);
+            ViewBag.Prices = prices;
+
+            var model = new RentCalculatorViewModel(); // Инициализация модели
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Calculate(RentCalculatorViewModel model)
+        {
+            var place = await _context.Places.FindAsync(model.PlaceId);
+
+            if (place != null)
+            {
+                var days = (model.EndDate - model.StartDate).Days + 1; // Включаем последний день
+                var dailyRate = place.Price / 28;
+                model.TotalCost = dailyRate * days;
+            }
+
+            return Json(new { totalCost = model.TotalCost.ToString("F2") });
         }
 
         // Фоновая проверка статуса арендованного места
@@ -112,7 +185,7 @@ namespace ApplicationRent.Controllers
             return View(viewModel);
         }
 
-
+        //Подтверждение аренды
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ConfirmRent(RentViewModel model)

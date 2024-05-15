@@ -1,0 +1,66 @@
+﻿@model RentCalculatorViewModel
+@{
+    ViewBag.Title = "Калькулятор аренды";
+    var prices = ViewBag.Prices as Dictionary<int, decimal>;
+}
+<main class="main">
+    <h2>Калькулятор аренды</h2>
+
+    <form id="rentForm">
+        <div>
+            <label for="PlaceId">Место:</label>
+            <select id="PlaceId" asp-for="PlaceId" asp-items="ViewBag.Places" onchange="updatePrice()"></select>
+        </div>
+        <div>
+            <span>Цена аренды за месяц: </span><span id="monthlyPrice"></span>
+        </div>
+        <div>
+            <label for="StartDate">Дата начала:</label>
+            <input type="date" id="StartDate" asp-for="StartDate" value="@Model.StartDate.ToString("yyyy-MM-dd")" />
+        </div>
+        <div>
+            <label for="EndDate">Дата окончания:</label>
+            <input type="date" id="EndDate" asp-for="EndDate" value="@Model.EndDate.ToString("yyyy-MM-dd")" />
+        </div>
+        <button type="submit">Рассчитать</button>
+    </form>
+
+    <div id="result">
+        @if (Model.TotalCost > 0)
+        {
+            <h3>Стоимость аренды: @Model.TotalCost.ToString("F2") ₽</h3>
+        }
+    </div>
+
+    <button type="button" class="btn btn-secondary" onclick="window.location.href='@Url.Action("Index", "Place")';">Вернуться назад</button>
+</main>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        const prices = @Html.Raw(Json.Serialize(prices));
+
+        function updatePrice() {
+            const placeId = document.getElementById('PlaceId').value;
+            const price = prices[placeId] || 0;
+            document.getElementById('monthlyPrice').innerText = price.toFixed(2) + " ₽";
+        }
+
+        $(document).ready(function () {
+            updatePrice(); // Обновление цены при загрузке страницы
+
+            $('#rentForm').submit(function (event) {
+                event.preventDefault(); // Останавливаем стандартное поведение формы
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Calculate")',
+                    data: $(this).serialize(),
+                    success: function (response) {
+                        $('#result').html('<h3>Стоимость аренды: ' + response.totalCost + ' ₽</h3>');
+                    }
+                });
+            });
+        });
+    </script>
+}

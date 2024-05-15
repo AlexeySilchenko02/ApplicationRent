@@ -1,0 +1,101 @@
+﻿@model IEnumerable<ApplicationRent.Data.Identity.Place>
+
+<div id="list-view">
+    <div class="rent-list-grid">
+        @foreach (var item in Model)
+        {
+            <div class="rent-list-grid-block1">
+                <img class="rent-list-pic" src="@Url.Content("~/place/" + item.ImageFileName1)" alt="Image 1" />
+            </div>
+            <div class="rent-list-grid-block2">
+                <h2 class="rent-list-h2">@Html.DisplayFor(modelItem => item.Name)</h2>
+                <p class="rent-list-description">@Html.DisplayFor(modelItem => item.Description)</p>
+            </div>
+            <div class="rent-list-grid-block3">
+                <p class="rent-list-facts">@Html.DisplayFor(modelItem => item.SizePlace) м²</p>
+                <p class="rent-list-facts">@Html.DisplayFor(modelItem => item.Price) ₽</p>
+                @if (!item.InRent)
+                {
+                    <p class="rent-list-status">Свободно</p>
+                }
+                else
+                {
+                    <p class="rent-list-status">Занято до: @item.EndRent.ToString("dd.MM.yyyy")</p>
+                }
+            </div>
+            <div class="rent-list-grid-block4">
+                <button onclick="location.href='@Url.Action("Details", new { id = @item.Id })'" class="rent-list-btn-details">Подробнее</button>
+                @if (!item.InRent)
+                {
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <button onclick="location.href='@Url.Action("Rent", new { id = @item.Id })'" class="rent-list-btn">Арендовать</button>
+                    }
+                    else
+                    {
+                        <button class="rent-list-btn unauthorized-rent-btn">Арендовать</button>
+                    }
+                }
+                else
+                {
+                    <button disabled class="rent-list-btn-disabled">Арендовать</button>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+<div id="card-view" class="rent-card-view" style="display:none;">
+    @foreach (var item in Model)
+    {
+        <div class="rent-place-card">
+            <div class="rent-place-card-title">
+                <h2 class="rent-place-card-h2">@Html.DisplayFor(modelItem => item.Name)</h2>
+            </div>
+            <img class="rent-place-card-pic" src="@Url.Content("~/place/" + item.ImageFileName1)" alt="Image 1 " />
+            <div class="rent-place-card-status-container @(item.InRent ? "rented" : "not-rented")">
+                @if (!item.InRent)
+                {
+                    <p class="rent-place-card-status-text">Свободно</p>
+                }
+                else
+                {
+                    <p class="rent-place-card-status-text">Занято до: @item.EndRent.ToString("dd.MM.yyyy")</p>
+                }
+            </div>
+            <div class="rent-place-card-details-grid">
+                <div>
+                    @Html.DisplayFor(modelItem => item.Price) ₽
+                </div>
+                <div>
+                    @Html.DisplayFor(modelItem => item.SizePlace) м
+                </div>
+            </div>
+            <div class="rent-place-card-category">
+                <p class="rent-place-card-category-text">@Html.DisplayFor(modelItem => item.Category)</p>
+            </div>
+            <div class="rent-place-card-actions">
+                <div class="rent-place-card-actions-btn">
+                    <button onclick="location.href='@Url.Action("Details", new { id = @item.Id })'" class="rent-place-card-btn-details">Подробнее</button>
+                </div>
+                <div class="rent-place-card-actions-btn">
+                    @if (!item.InRent)
+                    {
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <button onclick="location.href='@Url.Action("Rent", new { id = @item.Id })'" class="rent-place-card-btn">Арендовать</button>
+                        }
+                        else
+                        {
+                            <button class="rent-place-card-btn unauthorized-rent-btn">Арендовать</button>
+                        }
+                    }
+                    else
+                    {
+                        <button disabled class="rent-place-card-btn-disabled">Арендовать</button>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+    </div>
