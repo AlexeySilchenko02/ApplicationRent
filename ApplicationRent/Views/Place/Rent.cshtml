@@ -7,16 +7,18 @@
 <main class="main">
     <section class="rent-title-section">
         <div class="rent-title-container">
-            <h1 class="rent-title-h1">Помещения?</h1>
+            <h1 class="rent-title-h1">Аренда помещения: @Model.PlaceName</h1>
         </div>
     </section>
     <h2>Аренда</h2>
 
     <div>
-        <button id="show-cards">Онлайн аренда</button>
+        @if (Model.IsOnlineRentAvailable)
+        {
+            <button id="show-cards">Онлайн аренда</button>
+        }
         <button id="show-list">Заявка на аренду</button>
     </div>
-
 
     <div id="card-view" style="display:none;">
         <form asp-action="ConfirmRent" method="post">
@@ -61,9 +63,10 @@
                     <option value="4">4 месяца</option>
                 </select>
                 <button type="submit" class="btn btn-primary">Отправить заявку</button>
+            </div>
         </form>
+        <button type="button" class="btn btn-secondary" onclick="window.location.href='@Url.Action("Index", "Place")';">Отмена</button>
     </div>
-
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -72,14 +75,21 @@
             const cardView = document.getElementById("card-view");
             const listView = document.getElementById("list-view");
 
-            // Показать карточки по умолчанию
-            cardView.style.display = "block";
-            listView.style.display = "none";
-
-            showCards.addEventListener("click", function () {
+            // Показать карточки по умолчанию, если доступно
+            if (showCards) {
                 cardView.style.display = "block";
                 listView.style.display = "none";
-            });
+            } else {
+                cardView.style.display = "none";
+                listView.style.display = "block";
+            }
+
+            if (showCards) {
+                showCards.addEventListener("click", function () {
+                    cardView.style.display = "block";
+                    listView.style.display = "none";
+                });
+            }
 
             showList.addEventListener("click", function () {
                 cardView.style.display = "none";
@@ -88,4 +98,3 @@
         });
     </script>
 </main>
-

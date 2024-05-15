@@ -306,7 +306,7 @@ namespace ApplicationRent.Controllers
         //Вызов страницы создания записи
         public IActionResult Create()
         {
-            ViewBag.Categories = new List<string> { "Фотостудия", "Склад", "Workspace", "Базовое место" };
+            ViewBag.Categories = new List<string> { "Фотостудия", "Склад", "Офис", "Базовое место" };
             return View();
         }
 
@@ -367,7 +367,7 @@ namespace ApplicationRent.Controllers
             }
 
             // Если модель не валидна, возвращаем пользователя обратно на форму с заполненными данными и ошибками валидации
-            ViewBag.Categories = new List<string> { "Фотостудия", "Склад", "Workspace", "Базовое место" };
+            ViewBag.Categories = new List<string> { "Фотостудия", "Склад", "Офис", "Базовое место" };
             return View(place);
         }
 
@@ -423,7 +423,7 @@ namespace ApplicationRent.Controllers
                 return NotFound();
             }
             //Категории
-            ViewBag.Categories = new List<string> { "Фотостудия", "Склад", "Workspace", "Базовое место" };
+            ViewBag.Categories = new List<string> { "Фотостудия", "Склад", "Офис", "Базовое место" };
             return View(place);
         }
 
@@ -499,7 +499,7 @@ namespace ApplicationRent.Controllers
                 return RedirectToAction(nameof(Index));
             }
             // Предполагаемые категории (передача снова в случае ошибки валидации)
-            ViewBag.Categories = new List<string> { "Фотостудия", "Склад", "Workspace", "Базовое место" };
+            ViewBag.Categories = new List<string> { "Фотостудия", "Склад", "Офис", "Базовое место" };
             return View(place);
         }
 

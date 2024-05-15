@@ -91,19 +91,26 @@ namespace ApplicationRent.Controllers
                 return Unauthorized();
             }
 
+            // Определяем доступные виды аренды на основе категории места
+            bool isOnlineRentAvailable = place.Category == "Офис" || place.Category == "Фотостудия";
+
             // Создаем модель представления с данными пользователя и места, устанавливаем начальные даты
             var viewModel = new RequestsRentViewModel
             {
                 PlaceId = place.Id,
+                PlaceName = place.Name,
                 UserName = user.FullNameUser,
                 UserEmail = user.Email,
                 UserPhone = user.PhoneNumber,
                 StartRent = DateTime.Today, // Сегодняшняя дата для начала аренды
-                EndRent = DateTime.Today.AddDays(1) // Завтрашняя дата для окончания аренды по умолчанию
+                EndRent = DateTime.Today.AddDays(1), // Завтрашняя дата для окончания аренды по умолчанию
+                Category = place.Category, // Добавляем категорию
+                IsOnlineRentAvailable = isOnlineRentAvailable // Добавляем доступность онлайн аренды
             };
 
             return View(viewModel);
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -194,11 +201,14 @@ namespace ApplicationRent.Controllers
     public class RequestsRentViewModel
     {
         public int PlaceId { get; set; }
+        public string PlaceName { get; set; }
         public DateTime StartRent { get; set; }
         public DateTime EndRent { get; set; }
         public string UserName { get; set; }
         public string UserEmail { get; set; }
         public string UserPhone { get; set; }
+        public string Category { get; set; }
+        public bool IsOnlineRentAvailable { get; set; }
     }
     public class RentViewModel
     {

@@ -43,7 +43,11 @@
                             <button type="button" onclick="toggleForm('@rental.Id')">Продлить аренду</button>
                             <form asp-action="UpdateRentalEndDate" method="post" id="form-@rental.Id" style="display:none;">
                                 <input type="hidden" name="rentalId" value="@rental.Id" />
-                                <input type="date" name="newEndDate" value="@rental.EndRent.ToString("yyyy-MM-dd")" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                                @* <input type="date" name="newEndDate" value="@rental.EndRent.ToString("yyyy-MM-dd")" min="@DateTime.Now.ToString("yyyy-MM-dd")" /> *@
+                                @{
+                                    var newEndDate = rental.EndRent.AddDays(1);
+                                }
+                                <input type="date" name="newEndDate" value="@newEndDate.ToString("yyyy-MM-dd")" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
                                 <button type="submit">Обновить</button>
                             </form>
                         </td>

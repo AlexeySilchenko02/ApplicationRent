@@ -67,13 +67,10 @@
 
     @if (SignInManager.IsSignedIn(User))
     {
-
-
         <section class="rent">
             <div class="rent-container">
 
                 <div class="rent-filters">
-
                 </div>
 
                 <div class="rent-switch-container">
@@ -125,56 +122,6 @@
                             </div>
                         </div>
                     </div>
-                    
-                    
-                    @* <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Название</th>
-                                <th>Цена</th>
-                                <th>Категория</th>
-                                <th>Статус</th>
-                                <th>Действия</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model)
-                            {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Name)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Price) ₽
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Category)
-                                    </td>
-                                    <td>
-                                        @if (!item.InRent)
-                                        {
-                                            @:Свободно
-                                        }
-                                        else
-                                        {
-                                            @:Занято до: @item.EndRent.ToString("dd.MM.yyyy")
-                                        }
-                                    </td>
-                                    <td>
-                                        <a asp-action="Details" asp-route-id="@item.Id">Подробнее</a>
-                                        @if (!item.InRent)
-                                        {
-                                            <a asp-action="Rent" asp-route-id="@item.Id" class="btn btn-primary">Арендовать</a>
-                                        }
-                                        else
-                                        {
-                                            <button disabled class="btn btn-secondary btn-lg disabled">Арендовать</button>
-                                        }
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table> *@
                 </div>
 
                 <div id="card-view" class="rent-card-view" style="display:none;">
@@ -209,13 +156,11 @@
                             <div class="rent-place-card-actions">
                                 <div class="rent-place-card-actions-btn">
                                     <button onclick="location.href='@Url.Action("Details", new { id = @item.Id })'" class="rent-place-card-btn-details">Подробнее</button>
-                                    @* <a asp-action="Details" asp-route-id="@item.Id" class="rent-place-card-btn">Подробнее</a> *@
                                 </div>
                                 <div class="rent-place-card-actions-btn">
                                     @if (!item.InRent)
                                     {
                                         <button onclick="location.href='@Url.Action("Rent", new { id = @item.Id })'" class="rent-place-card-btn">Арендовать</button>
-                                        @* <a asp-action="Rent" asp-route-id="@item.Id" class="rent-place-card-btn">Арендовать</a> *@
                                     }
                                     else
                                     {
@@ -224,26 +169,119 @@
                                 </div>
                             </div>
                         </div>
-
-                        @* <div class="place-card @(item.InRent ? "rented" : "not-rented")">
-                            <div class="place-info">
-                                <strong>@Html.DisplayFor(modelItem => item.Name)</strong>
-                            </div>
-                            <div class="actions">
-                                <a asp-action="Edit" asp-route-id="@item.Id" class="action-btn">Edit</a>
-                                <a asp-action="Details" asp-route-id="@item.Id" class="action-btn">Details</a>
-                            </div>
-                        </div> *@
                     }
                 </div>
             </div>
         </section>
-
-        
     }
     else
     {
-        <p>Для отображения мест аренды зарегистрируйтесь</p>
+        <section class="rent">
+            <div class="rent-container">
+
+                <div class="rent-filters">
+                </div>
+
+                <div class="rent-switch-container">
+                    <label class="rent-switch-text">Список</label>
+                    <label class="rent-switch-label" id="list-label">
+                        <input type="checkbox" class="rent-switch-input" id="view-switch" />
+                        <span class="rent-switch-slider"></span>
+                    </label>
+                    <label class="rent-switch-text">Карточки</label>
+                </div>
+
+                <div id="list-view" class="rent-list-view" style="display:none;">
+                    <div>
+                        <div class="rent-list-container">
+                            <div class="rent-list-grid">
+                                @foreach (var item in Model)
+                                {
+                                    <div class="rent-list-grid-block1">
+                                        <img class="rent-list-pic" src="@Url.Content("~/place/" + item.ImageFileName1)" alt="Image 1 " />
+                                    </div>
+                                    <div class="rent-list-grid-block2">
+                                        <h2 class="rent-list-h2">@Html.DisplayFor(modelItem => item.Name)</h2>
+                                        <p class="rent-list-description">@Html.DisplayFor(modelItem => item.Description)</p>
+                                    </div>
+                                    <div class="rent-list-grid-block3">
+                                        <p class="rent-list-facts">@Html.DisplayFor(modelItem => item.SizePlace) м</p>
+                                        <p class="rent-list-facts">@Html.DisplayFor(modelItem => item.Price) м</p>
+                                        @if (!item.InRent)
+                                        {
+                                            <p class="rent-list-status">Свободно</p>
+                                        }
+                                        else
+                                        {
+                                            <p class="rent-list-status">Занято до: @item.EndRent.ToString("dd.MM.yyyy")</p>
+                                        }
+                                    </div>
+                                    <div class="rent-list-grid-block4">
+                                        <button onclick="location.href='@Url.Action("Details", new { id = @item.Id })'" class="rent-list-btn-details">Подробнее</button>
+                                        @if (!item.InRent)
+                                        {
+                                            <button class="rent-list-btn unauthorized-rent-btn">Арендовать</button>
+                                        }
+                                        else
+                                        {
+                                            <button disabled class="rent-list-btn-disabled">Арендовать</button>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="card-view" class="rent-card-view" style="display:none;">
+                    @foreach (var item in Model)
+                    {
+                        <div class="rent-place-card">
+                            <div class="rent-place-card-title">
+                                <h2 class="rent-place-card-h2">@Html.DisplayFor(modelItem => item.Name)</h2>
+                            </div>
+                            <img class="rent-place-card-pic" src="@Url.Content("~/place/" + item.ImageFileName1)" alt="Image 1 " />
+                            <div class="rent-place-card-status-container @(item.InRent ? "rented" : "not-rented")">
+                                @if (!item.InRent)
+                                {
+                                    <p class="rent-place-card-status-text">Свободно</p>
+                                }
+                                else
+                                {
+                                    <p class="rent-place-card-status-text">Занято до: @item.EndRent.ToString("dd.MM.yyyy")</p>
+                                }
+                            </div>
+                            <div class="rent-place-card-details-grid">
+                                <div>
+                                    @Html.DisplayFor(modelItem => item.Price) ₽
+                                </div>
+                                <div>
+                                    @Html.DisplayFor(modelItem => item.SizePlace) м
+                                </div>
+                            </div>
+                            <div class="rent-place-card-category">
+                                <p class="rent-place-card-category-text">@Html.DisplayFor(modelItem => item.Category)</p>
+                            </div>
+                            <div class="rent-place-card-actions">
+                                <div class="rent-place-card-actions-btn">
+                                    <button onclick="location.href='@Url.Action("Details", new { id = @item.Id })'" class="rent-place-card-btn-details">Подробнее</button>
+                                </div>
+                                <div class="rent-place-card-actions-btn">
+                                    @if (!item.InRent)
+                                    {
+                                        <button class="rent-place-card-btn unauthorized-rent-btn">Арендовать</button>
+                                    }
+                                    else
+                                    {
+                                        <button disabled class="rent-place-card-btn-disabled">Арендовать</button>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </section>
     }
 
     <script>
@@ -251,6 +289,7 @@
             const viewSwitch = document.getElementById("view-switch");
             const cardView = document.getElementById("card-view");
             const listView = document.getElementById("list-view");
+            const rentButtons = document.querySelectorAll(".unauthorized-rent-btn");
 
             // Скрыть карточки по умолчанию
             cardView.style.display = "none";
@@ -267,32 +306,15 @@
                     listView.style.display = "block";
                 }
             });
+
+            rentButtons.forEach(button => {
+                button.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    alert("Для аренды необходимо авторизоваться");
+                });
+            });
         });
     </script>
-
-
-    @* <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const showCards = document.getElementById("show-cards");
-            const showList = document.getElementById("show-list");
-            const cardView = document.getElementById("card-view");
-            const listView = document.getElementById("list-view");
-
-            // Показать карточки по умолчанию
-            cardView.style.display = "none";
-            listView.style.display = "block";
-
-            showCards.addEventListener("click", function () {
-                cardView.style.display = "block";
-                listView.style.display = "none";
-            });
-
-            showList.addEventListener("click", function () {
-                cardView.style.display = "none";
-                listView.style.display = "block";
-            });
-        });
-    </script> *@
 </main>
 
 
