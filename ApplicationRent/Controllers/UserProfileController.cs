@@ -194,31 +194,50 @@ namespace ApplicationRent.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateRentalEndDate(int rentalId, DateTime newEndDate, [FromServices] FirebaseService firebaseService)
+        public async Task<IActionResult> UpdateRentalEndDate([FromBody] ExtendRentalRequest request, [FromServices] FirebaseService firebaseService)
         {
             var rental = await _context.Rentals
                                        .Include(r => r.Place)
-                                       .FirstOrDefaultAsync(r => r.Id == rentalId);
+                                       .FirstOrDefaultAsync(r => r.Id == request.RentalId);
             if (rental == null)
             {
-                return NotFound();
+                return Json(new { success = false, error = "Аренда не найдена" });
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Json(new { success = false, error = "Пользователь не найден" });
+            }
+
+            if (user.Balance < request.Cost)
+            {
+                return Json(new { success = false, error = "Недостаточно средств на балансе" });
             }
 
             bool updateFirebase = false;  // Флаг для отслеживания, нужно ли обновлять Firebase
 
             // Обновляем дату окончания аренды в Rental
-            if (newEndDate > rental.EndRent)
+            if (request.NewEndDate > rental.EndRent)
             {
-                rental.EndRent = newEndDate;
+                rental.EndRent = request.NewEndDate;
                 updateFirebase = true;  // Помечаем, что нужно обновить Firebase
             }
 
             // Обновляем дату окончания аренды и статус в Place, если это необходимо
-            if (rental.Place != null && newEndDate > rental.Place.EndRent)
+            if (rental.Place != null && request.NewEndDate > rental.Place.EndRent)
             {
-                rental.Place.EndRent = newEndDate;
+                rental.Place.EndRent = request.NewEndDate;
                 rental.Place.InRent = true; // Обновляем статус на "в аренде"
                 updateFirebase = true;  // Помечаем, что нужно обновить Firebase
+            }
+
+            // Вычитаем стоимость продления из баланса пользователя
+            user.Balance -= request.Cost;
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                return Json(new { success = false, error = "Ошибка при обновлении баланса пользователя" });
             }
 
             // Сохраняем изменения в локальной базе данных
@@ -234,7 +253,7 @@ namespace ApplicationRent.Controllers
                 }
             }
 
-            return RedirectToAction(nameof(Index)); // Возвращаем пользователя на страницу индекса
+            return Json(new { success = true });
         }
     }
 }

@@ -84,6 +84,7 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                             <button onclick="location.href='@Url.Action("Rent", new { id = @item.Id })'" class="rent-place-card-btn">Арендовать</button>
+                            
                         }
                         else
                         {
