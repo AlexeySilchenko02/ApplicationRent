@@ -20,6 +20,6 @@ namespace ApplicationRent.Data.Identity
         public string? ImageFileName3 { get; set; }
 
         // Добавляем связь с отзывами
-        public ICollection<Review> Reviews { get; set; }
+        public ICollection<Review> Reviews { get; set; } = new List<Review>();
     }
 }
