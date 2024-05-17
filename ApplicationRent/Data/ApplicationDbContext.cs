@@ -33,6 +33,22 @@ namespace ApplicationRent.Data
                     Category = "Склад",
                 });*/
 
+            // Конфигурация для свойства Balance в ApplicationIdentityUser
+            builder.Entity<ApplicationIdentityUser>()
+                   .Property(u => u.Balance)
+                   .HasColumnType("decimal(18, 2)");
+
+            // Конфигурация для сущности TransactionHistory
+            builder.Entity<TransactionHistory>()
+                   .Property(t => t.Amount)
+                   .HasColumnType("decimal(18, 2)");
+
+            builder.Entity<TransactionHistory>()
+                   .HasOne(t => t.User)
+                   .WithMany()
+                   .HasForeignKey(t => t.UserId)
+                   .OnDelete(DeleteBehavior.Cascade);
+
             base.OnModelCreating(builder);
         }
 
@@ -41,6 +57,7 @@ namespace ApplicationRent.Data
         public DbSet<RequestsRent> RequestsRents { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<Review> Reviews { get; set; }
+        public DbSet<TransactionHistory> TransactionHistories { get; set; }
 
     }
 }

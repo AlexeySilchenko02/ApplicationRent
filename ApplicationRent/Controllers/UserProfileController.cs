@@ -42,51 +42,6 @@ namespace ApplicationRent.Controllers
 
             return View(model);
         }
-
-        [HttpPost]
-        public async Task<IActionResult> UpdateRentalEndDate(int rentalId, DateTime newEndDate, [FromServices] FirebaseService firebaseService)
-        {
-            var rental = await _context.Rentals
-                                       .Include(r => r.Place)
-                                       .FirstOrDefaultAsync(r => r.Id == rentalId);
-            if (rental == null)
-            {
-                return NotFound();
-            }
-
-            bool updateFirebase = false;  // Флаг для отслеживания, нужно ли обновлять Firebase
-
-            // Обновляем дату окончания аренды в Rental
-            if (newEndDate > rental.EndRent)
-            {
-                rental.EndRent = newEndDate;
-                updateFirebase = true;  // Помечаем, что нужно обновить Firebase
-            }
-
-            // Обновляем дату окончания аренды и статус в Place, если это необходимо
-            if (rental.Place != null && newEndDate > rental.Place.EndRent)
-            {
-                rental.Place.EndRent = newEndDate;
-                rental.Place.InRent = true; // Обновляем статус на "в аренде"
-                updateFirebase = true;  // Помечаем, что нужно обновить Firebase
-            }
-
-            // Сохраняем изменения в локальной базе данных
-            await _context.SaveChangesAsync();
-
-            // Если были изменения, обновляем данные в Firebase
-            if (updateFirebase)
-            {
-                await firebaseService.AddOrUpdateRental(rental);  // Обновляем данные аренды в Firebase
-                if (rental.Place != null)
-                {
-                    await firebaseService.AddOrUpdatePlace(rental.Place);  // Обновляем данные места в Firebase
-                }
-            }
-
-            return RedirectToAction(nameof(Index)); // Возвращаем пользователя на страницу индекса
-        }
-
         [HttpPost]
         public async Task<IActionResult> UpdateUserProfile(ApplicationIdentityUser model)
         {
@@ -173,6 +128,113 @@ namespace ApplicationRent.Controllers
                 errors.AddRange(changePasswordResult.Errors.Select(e => e.Description));
                 return Json(new { success = false, errors = errors });
             }
+        }
+
+        [HttpGet]
+        public IActionResult TopUpBalance()
+        {
+            return View(new TopUpBalanceViewModel());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> TopUpBalance(TopUpBalanceViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return View("Error");
+            }
+
+            user.Balance += model.Amount;
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                var transaction = new TransactionHistory
+                {
+                    UserId = user.Id,
+                    Amount = model.Amount,
+                    TransactionDate = DateTime.UtcNow.AddHours(3)
+                };
+
+                _context.TransactionHistories.Add(transaction);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+                return View(model);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> TransactionHistory()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return View("Error");
+            }
+
+            var transactions = await _context.TransactionHistories
+                                             .Where(t => t.UserId == user.Id)
+                                             .OrderByDescending(t => t.TransactionDate)
+                                             .ToListAsync();
+
+            return View(transactions);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateRentalEndDate(int rentalId, DateTime newEndDate, [FromServices] FirebaseService firebaseService)
+        {
+            var rental = await _context.Rentals
+                                       .Include(r => r.Place)
+                                       .FirstOrDefaultAsync(r => r.Id == rentalId);
+            if (rental == null)
+            {
+                return NotFound();
+            }
+
+            bool updateFirebase = false;  // Флаг для отслеживания, нужно ли обновлять Firebase
+
+            // Обновляем дату окончания аренды в Rental
+            if (newEndDate > rental.EndRent)
+            {
+                rental.EndRent = newEndDate;
+                updateFirebase = true;  // Помечаем, что нужно обновить Firebase
+            }
+
+            // Обновляем дату окончания аренды и статус в Place, если это необходимо
+            if (rental.Place != null && newEndDate > rental.Place.EndRent)
+            {
+                rental.Place.EndRent = newEndDate;
+                rental.Place.InRent = true; // Обновляем статус на "в аренде"
+                updateFirebase = true;  // Помечаем, что нужно обновить Firebase
+            }
+
+            // Сохраняем изменения в локальной базе данных
+            await _context.SaveChangesAsync();
+
+            // Если были изменения, обновляем данные в Firebase
+            if (updateFirebase)
+            {
+                await firebaseService.AddOrUpdateRental(rental);  // Обновляем данные аренды в Firebase
+                if (rental.Place != null)
+                {
+                    await firebaseService.AddOrUpdatePlace(rental.Place);  // Обновляем данные места в Firebase
+                }
+            }
+
+            return RedirectToAction(nameof(Index)); // Возвращаем пользователя на страницу индекса
         }
     }
 }

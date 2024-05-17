@@ -1,0 +1,12 @@
+﻿@model TopUpBalanceViewModel
+
+<main class="main">
+    <h2>Пополнение баланса</h2>
+    <form asp-action="TopUpBalance" method="post">
+        <div class="form-group">
+            <label for="Amount">Сумма пополнения</label>
+            <input type="number" class="form-control" id="Amount" name="Amount" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Пополнить</button>
+    </form>
+</main>

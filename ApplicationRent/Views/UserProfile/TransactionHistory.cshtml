@@ -1,0 +1,22 @@
+﻿@model IEnumerable<ApplicationRent.Data.Identity.TransactionHistory>
+<main class="main">
+    <h2>История транзакций</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Дата транзакции</th>
+                <th>Сумма</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var transaction in Model)
+            {
+                <tr>
+                    <td>@transaction.TransactionDate.ToString("dd.MM.yyyy HH:mm:ss")</td>
+                    <td>@transaction.Amount</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a href="@Url.Action("Index", "UserProfile")" class="btn btn-secondary">Назад</a>
+</main>

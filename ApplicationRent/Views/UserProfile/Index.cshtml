@@ -4,6 +4,9 @@
 
 <main class="main">
     <h2>Личный кабинет пользователя: @Model.User.FullNameUser</h2>
+    <p>Баланс: @Model.User.Balance.ToString("C")</p>
+    <a href="@Url.Action("TopUpBalance", "UserProfile")" class="btn btn-secondary">Пополнить баланс</a>
+    <a href="@Url.Action("TransactionHistory", "UserProfile")" class="btn btn-secondary">История транзакций</a>
     <form id="updateUserProfileForm" asp-action="UpdateUserProfile" method="post" onsubmit="updateUserProfile(event)">
         <div class="form-group">
             <label for="FullNameUser">Полное имя</label>
