@@ -18,5 +18,8 @@ namespace ApplicationRent.Data.Identity
         public string? ImageFileName1 { get; set; }
         public string? ImageFileName2 { get; set; }
         public string? ImageFileName3 { get; set; }
+
+        // Добавляем связь с отзывами
+        public ICollection<Review> Reviews { get; set; }
     }
 }

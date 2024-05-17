@@ -127,7 +127,34 @@ namespace ApplicationRent.Controllers
             await _context.SaveChangesAsync();
         }
 
-        //Вызов страници для отображения детальной информации
+        /*public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var place = await _context.Places
+                .Include(p => p.Reviews)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (place == null)
+            {
+                return NotFound();
+            }
+
+            var averageRating = place.Reviews.Any() ? place.Reviews.Average(r => r.Rating) : 0;
+
+            var model = new PlaceDetailsViewModel
+            {
+                Place = place,
+                Reviews = place.Reviews.ToList(),
+                NewReview = new ReviewViewModel { PlaceId = place.Id },
+                AverageRating = averageRating
+            };
+
+            return View(model);
+        }*/
+
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -136,53 +163,79 @@ namespace ApplicationRent.Controllers
             }
 
             var place = await _context.Places
+                .Include(p => p.Reviews)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (place == null)
             {
                 return NotFound();
             }
 
-            return View(place);
-        }
+            var averageRating = place.Reviews.Any() ? place.Reviews.Average(r => r.Rating) : 0;
+            var userName = string.Empty;
 
-        // Вызов страницы аренды
-        public async Task<IActionResult> Rent(int? id)
-        {
-            if (id == null)
+            if (User.Identity.IsAuthenticated)
             {
-                return NotFound();
+                var user = await _context.Users
+                    .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+                if (user != null)
+                {
+                    userName = user.FullNameUser;
+                }
             }
 
-            var place = await _context.Places.FindAsync(id);
+            var model = new PlaceDetailsViewModel
+            {
+                Place = place,
+                Reviews = place.Reviews.ToList(),
+                NewReview = new ReviewViewModel { PlaceId = place.Id, Name = userName },
+                AverageRating = averageRating
+            };
+
+            return View(model);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> AddReview([FromBody] ReviewViewModel model)
+        {
+            if (model.Rating < 1 || model.Rating > 10)
+            {
+                return Json(new { success = false, message = "Поставьте оценку от 1 до 10" });
+            }
+
+            if (ModelState.IsValid)
+            {
+                var review = new Review
+                {
+                    PlaceId = model.PlaceId,
+                    Name = model.Name,
+                    Comment = model.Comment,
+                    Rating = model.Rating
+                };
+
+                _context.Reviews.Add(review);
+                await _context.SaveChangesAsync();
+
+                return Json(new { success = true });
+            }
+
+            return Json(new { success = false, message = "An error occurred while submitting your review." });
+        }
+        public async Task<IActionResult> GetAverageRating(int placeId)
+        {
+            var place = await _context.Places
+                .Include(p => p.Reviews)
+                .FirstOrDefaultAsync(m => m.Id == placeId);
+
             if (place == null)
             {
                 return NotFound();
             }
 
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return Unauthorized();
-            }
+            var averageRating = place.Reviews.Any() ? place.Reviews.Average(r => r.Rating) : 0;
 
-            // Определяем доступные виды аренды на основе категории места
-            bool isOnlineRentAvailable = place.Category == "Офис" || place.Category == "Фотостудия";
-
-            // Создаем модель представления с данными пользователя и места, устанавливаем начальные даты
-            var viewModel = new RequestsRentViewModel
-            {
-                PlaceId = place.Id,
-                PlaceName = place.Name,
-                UserName = user.FullNameUser,
-                UserEmail = user.Email,
-                UserPhone = user.PhoneNumber,
-                StartRent = DateTime.Today, // Сегодняшняя дата для начала аренды
-                EndRent = DateTime.Today.AddDays(1), // Завтрашняя дата для окончания аренды по умолчанию
-                Category = place.Category, // Добавляем категорию
-                IsOnlineRentAvailable = isOnlineRentAvailable // Добавляем доступность онлайн аренды
-            };
-
-            return View(viewModel);
+            return Json(new { averageRating = averageRating });
         }
 
         //Подтверждение аренды

@@ -41,6 +41,56 @@ namespace ApplicationRent.Controllers
             return View(places);
         }
 
+        /*public async Task<IActionResult> ViewReviews()
+        {
+            var places = await _context.Places.Include(p => p.Reviews).ToListAsync();
+            return View(places);
+        }
+
+        public async Task<IActionResult> DeleteReview(int id)
+        {
+            var review = await _context.Reviews.FindAsync(id);
+            if (review != null)
+            {
+                _context.Reviews.Remove(review);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(ViewReviews));
+        }*/
+
+        public async Task<IActionResult> ViewReviews()
+        {
+            var places = await _context.Places.ToListAsync();
+            return View(places);
+        }
+
+        public async Task<IActionResult> Reviews(int placeId)
+        {
+            var place = await _context.Places
+                .Include(p => p.Reviews)
+                .FirstOrDefaultAsync(p => p.Id == placeId);
+
+            if (place == null)
+            {
+                return NotFound();
+            }
+
+            return View(place);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteReview(int id)
+        {
+            var review = await _context.Reviews.FindAsync(id);
+            if (review != null)
+            {
+                _context.Reviews.Remove(review);
+                await _context.SaveChangesAsync();
+                return Json(new { success = true });
+            }
+            return Json(new { success = false });
+        }
+
         //Получение списка пользователей
         public async Task<IActionResult> Users()
         {

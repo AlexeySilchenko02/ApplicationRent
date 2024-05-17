@@ -1,0 +1,24 @@
+﻿@model IEnumerable<ApplicationRent.Data.Identity.Place>
+
+<main class="main">
+    <h2>Выберите место для просмотра отзывов</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Название места</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var place in Model)
+            {
+                <tr>
+                    <td>@place.Name</td>
+                    <td>
+                        <a href="@Url.Action("Reviews", "Admin", new { placeId = place.Id })" class="btn btn-primary">Посмотреть отзывы</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</main>

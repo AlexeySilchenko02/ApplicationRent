@@ -1,0 +1,68 @@
+﻿@model ApplicationRent.Data.Identity.Place
+
+<main class="main">
+    <h2>Отзывы для @Model.Name</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Имя</th>
+                <th>Оценка</th>
+                <th>Отзыв</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Reviews != null && Model.Reviews.Any())
+            {
+                @foreach (var review in Model.Reviews)
+                {
+                    <tr id="review-@review.Id">
+                        <td>@review.Name</td>
+                        <td>@review.Rating / 10</td>
+                        <td>@review.Comment</td>
+                        <td>
+                            <button data-review-id="@review.Id" class="btn btn-danger delete-review-btn">Удалить</button>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="4">Нет отзывов</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a href="@Url.Action("ViewReviews", "Admin")" class="btn btn-primary">Назад к выбору места</a>
+</main>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.delete-review-btn').click(function () {
+                var reviewId = $(this).data('review-id');
+                var row = $('#review-' + reviewId);
+
+                if (confirm('Вы уверены, что хотите удалить этот отзыв?')) {
+                    $.ajax({
+                        url: '@Url.Action("DeleteReview", "Admin")',
+                        type: 'POST',
+                        data: { id: reviewId },
+                        success: function (result) {
+                            if (result.success) {
+                                row.remove();
+                            } else {
+                                alert('Ошибка при удалении отзыва.');
+                            }
+                        },
+                        error: function () {
+                            alert('Ошибка при удалении отзыва.');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}

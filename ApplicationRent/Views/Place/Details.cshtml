@@ -1,70 +1,217 @@
-﻿@{
-    ViewData["Title"] = "Аренда";
-}
-@model ApplicationRent.Data.Identity.Place
+﻿@model PlaceDetailsViewModel
+
+<style>
+    .full-stars {
+        text-align: center;
+    }
+
+        .full-stars .rating-group {
+            display: inline-flex;
+            flex-direction: row-reverse;
+            justify-content: flex-start;
+        }
+
+        .full-stars input {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .full-stars label {
+            margin: 0;
+            cursor: pointer;
+        }
+
+            .full-stars label svg {
+                margin: 2px;
+                height: 40px;
+                width: 40px;
+                fill: #ddd;
+                transition: fill 0.3s;
+            }
+
+        .full-stars input:checked ~ label svg,
+        .full-stars input:checked ~ label ~ label svg {
+            fill: #337AB7;
+        }
+
+        .full-stars .rating-group:hover label svg {
+            fill: #ddd;
+        }
+
+        .full-stars .rating-group input:hover ~ label svg,
+        .full-stars .rating-group input:hover ~ label ~ label svg {
+            fill: #337AB7;
+        }
+</style>
 
 <main class="main">
     <h2>Подробная информация</h2>
     <div>
         <hr />
         <dl class="row">
-            <dt class="col-sm-2">
-                Название
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Name)
-            </dd>
-            <dt class="col-sm-2">
-                Цена
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Price)
-            </dd>
-            <dt class="col-sm-2">
-                Размер места
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.SizePlace) м²
-            </dd>
-            <dt class="col-sm-2">
-                Описание
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Description)
-            </dd>
-            <dt class="col-sm-2">
-                Категория
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Category)
-            </dd>
-            @if (!string.IsNullOrEmpty(Model.ImageFileName1))
+            <dt class="col-sm-2">Название</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(model => model.Place.Name)</dd>
+            <dt class="col-sm-2">Цена</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(model => model.Place.Price)</dd>
+            <dt class="col-sm-2">Размер места</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(model => model.Place.SizePlace) м²</dd>
+            <dt class="col-sm-2">Описание</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(model => model.Place.Description)</dd>
+            <dt class="col-sm-2">Категория</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(model => model.Place.Category)</dd>
+            <dt class="col-sm-2">Средняя оценка</dt>
+            <dd class="col-sm-10" id="averageRating">@Model.AverageRating.ToString("0.0") / 10</dd>
+            @if (!string.IsNullOrEmpty(Model.Place.ImageFileName1))
             {
                 <dt class="col-sm-2">Image 1</dt>
                 <dd class="col-sm-10">
-                    <img src="@Url.Content("~/place/" + Model.ImageFileName1)" alt="Image 1" style="max-width: 200px; max-height: 200px;" />
+                    <img src="@Url.Content("~/place/" + Model.Place.ImageFileName1)" alt="Image 1" style="max-width: 200px; max-height: 200px;" />
                 </dd>
             }
-            @if (!string.IsNullOrEmpty(Model.ImageFileName2))
+            @if (!string.IsNullOrEmpty(Model.Place.ImageFileName2))
             {
                 <dt class="col-sm-2">Image 2</dt>
                 <dd class="col-sm-10">
-                    <img src="@Url.Content("~/place/" + Model.ImageFileName2)" alt="Image 2" style="max-width: 200px; max-height: 200px;" />
+                    <img src="@Url.Content("~/place/" + Model.Place.ImageFileName2)" alt="Image 2" style="max-width: 200px; max-height: 200px;" />
                 </dd>
             }
-            @if (!string.IsNullOrEmpty(Model.ImageFileName3))
+            @if (!string.IsNullOrEmpty(Model.Place.ImageFileName3))
             {
                 <dt class="col-sm-2">Image 3</dt>
                 <dd class="col-sm-10">
-                    <img src="@Url.Content("~/place/" + Model.ImageFileName3)" alt="Image 3" style="max-width: 200px; max-height: 200px;" />
+                    <img src="@Url.Content("~/place/" + Model.Place.ImageFileName3)" alt="Image 3" style="max-width: 200px; max-height: 200px;" />
                 </dd>
             }
-
         </dl>
     </div>
+
+
+    <h3>Отзывы</h3>
+    @* <div id="reviews">
+        @foreach (var review in Model.Reviews)
+        {
+            <div>
+                <h4>@Html.DisplayFor(modelItem => review.Name)</h4>
+                <p>Оценка: @Html.DisplayFor(modelItem => review.Rating) / 10</p>
+                <p>@Html.DisplayFor(modelItem => review.Comment)</p>
+            </div>
+            <hr />
+        }
+
+    </div> *@
+    <div id="reviews">
+        @if (Model.Reviews != null && Model.Reviews.Any())
+        {
+            @foreach (var review in Model.Reviews)
+            {
+                <div>
+                    <h4>@Html.DisplayFor(modelItem => review.Name)</h4>
+                    <p>Оценка: @Html.DisplayFor(modelItem => review.Rating) / 10</p>
+                    <p>@Html.DisplayFor(modelItem => review.Comment)</p>
+                </div>
+                <hr />
+            }
+        }
+        else
+        {
+            <p>У этого места еще нет отзывов</p>
+        }
+    </div>
+    <h3>Добавить отзыв</h3>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <form id="reviewForm">
+            <div class="form-group">
+                <label asp-for="NewReview.Name"></label>
+                <input asp-for="NewReview.Name" class="form-control" id="Name" value="@Model.NewReview.Name" />
+            </div>
+            <div class="form-group">
+                <label asp-for="NewReview.Comment"></label>
+                <textarea asp-for="NewReview.Comment" class="form-control" id="Comment"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Рейтинг</label>
+                <div class="full-stars">
+                    <div class="rating-group">
+                        @* <input name="rating" value="0" type="radio" disabled checked /> *@
+                        <input name="rating" value="0" type="radio" />
+                        @for (int i = 10; i >= 1; i--)
+                        {
+                            <input name="rating" id="rating-@i" value="@i" type="radio" />
+                            <label for="rating-@i">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                                    <path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z" />
+                                </svg>
+                            </label>
+                        }
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" id="PlaceId" value="@Model.Place.Id" />
+            <button type="button" class="btn btn-primary" onclick="submitReview()">Добавить отзыв</button>
+        </form>
+    }
+    else
+    {
+        <p>Для того чтобы оставить отзыв, пожалуйста зарегистрируйтесь.</p>
+    }
     <div>
         <a asp-action="Index">Back to List</a>
     </div>
 </main>
 
+@section Scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        function submitReview() {
+            var review = {
+                PlaceId: $("#PlaceId").val(),
+                Name: $("#Name").val(),
+                Comment: $("#Comment").val(),
+                Rating: $('input[name="rating"]:checked').val()
+            };
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("AddReview", "Place")',
+                data: JSON.stringify(review),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    if (response.success) {
+                        var name = review.Name ? review.Name : "";
+                        var comment = review.Comment ? review.Comment : "";
+                        $("#reviews").append('<div><h4>' + name + '</h4><p>Оценка: ' + review.Rating + ' / 10</p><p>' + comment + '</p></div><hr />');
+                        $("#Name").val('');
+                        $("#Comment").val('');
+                        $('input[name="rating"]:checked').prop('checked', false);
+
+                        // Обновить среднюю оценку
+                        updateAverageRating();
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function (response) {
+                    alert("Произошла ошибка при отправке отзыва.");
+                }
+            });
+        }
+
+        function updateAverageRating() {
+            var placeId = $("#PlaceId").val();
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetAverageRating", "Place")',
+                data: { placeId: placeId },
+                success: function (response) {
+                    $("#averageRating").text(response.averageRating.toFixed(1) + " / 10");
+                },
+                error: function (response) {
+                    alert("Произошла ошибка при обновлении средней оценки.");
+                }
+            });
+        }
+    </script>
+}
 

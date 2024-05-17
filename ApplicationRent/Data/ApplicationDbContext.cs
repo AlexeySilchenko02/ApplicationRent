@@ -40,7 +40,7 @@ namespace ApplicationRent.Data
         public DbSet<Rental> Rentals { get; set; }
         public DbSet<RequestsRent> RequestsRents { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
-
+        public DbSet<Review> Reviews { get; set; }
 
     }
 }
