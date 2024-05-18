@@ -151,7 +151,8 @@ namespace ApplicationRent.Controllers
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
                 FullNameUser = user.FullNameUser,
-                Admin = user.Admin
+                Admin = user.Admin,
+                Balance = user.Balance
             };
 
             return View(model);
@@ -185,6 +186,7 @@ namespace ApplicationRent.Controllers
                 user.PhoneNumber = model.PhoneNumber;
                 user.FullNameUser = model.FullNameUser;
                 user.Admin = model.Admin;
+                user.Balance = model.Balance;
 
                 var result = await _userManager.UpdateAsync(user);
                 if (result.Succeeded)
@@ -199,6 +201,28 @@ namespace ApplicationRent.Controllers
             }
 
             return View(model);
+        }
+        public async Task<IActionResult> UserTransactions(string userId)
+        {
+            var transactions = await _context.TransactionHistories
+                .Where(t => t.UserId == userId)
+                .ToListAsync();
+
+            ViewBag.UserId = userId;
+            return View(transactions);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteTransactionAjax(int id)
+        {
+            var transaction = await _context.TransactionHistories.FindAsync(id);
+            if (transaction != null)
+            {
+                _context.TransactionHistories.Remove(transaction);
+                await _context.SaveChangesAsync();
+                return Json(new { success = true });
+            }
+            return Json(new { success = false, error = "Transaction not found" });
         }
 
         //Получение списка обратной связи

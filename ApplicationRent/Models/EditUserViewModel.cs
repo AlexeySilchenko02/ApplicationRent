@@ -18,5 +18,6 @@ namespace ApplicationRent.Models
         public string FullNameUser { get; set; }
 
         public bool Admin { get; set; }
+        public decimal Balance { get; set; }
     }
 }

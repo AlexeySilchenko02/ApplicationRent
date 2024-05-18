@@ -258,10 +258,8 @@ namespace ApplicationRent.Controllers
                 return Unauthorized();
             }
 
-            // Определяем доступные виды аренды на основе категории места
             bool isOnlineRentAvailable = place.Category == "Офис" || place.Category == "Фотостудия";
 
-            // Создаем модель представления с данными пользователя и места, устанавливаем начальные даты
             var viewModel = new RequestsRentViewModel
             {
                 PlaceId = place.Id,
@@ -269,18 +267,18 @@ namespace ApplicationRent.Controllers
                 UserName = user.FullNameUser,
                 UserEmail = user.Email,
                 UserPhone = user.PhoneNumber,
-                StartRent = DateTime.Today, // Сегодняшняя дата для начала аренды
-                EndRent = DateTime.Today.AddDays(1), // Завтрашняя дата для окончания аренды по умолчанию
-                Category = place.Category, // Добавляем категорию
-                IsOnlineRentAvailable = isOnlineRentAvailable // Добавляем доступность онлайн аренды
+                StartRent = DateTime.Today,
+                EndRent = DateTime.Today.AddDays(1),
+                Category = place.Category,
+                IsOnlineRentAvailable = isOnlineRentAvailable,
+                UserBalance = user.Balance,
+                PlacePrice = place.Price
             };
 
             return View(viewModel);
         }
 
-            //Подтверждение аренды
-            [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost]
         public async Task<IActionResult> ConfirmRent(RentViewModel model)
         {
             if (ModelState.IsValid)
@@ -288,11 +286,26 @@ namespace ApplicationRent.Controllers
                 var user = await _userManager.GetUserAsync(User);
                 if (user == null)
                 {
-                    // Не удалось получить пользователя(добавить обработку ошибок)
-                    return Unauthorized();
+                    return Json(new { success = false, message = "Unauthorized" });
                 }
 
-                // Создаем новую аренду с Email пользователя
+                var place = await _context.Places.FirstOrDefaultAsync(p => p.Id == model.PlaceId);
+                if (place == null)
+                {
+                    return Json(new { success = false, message = "Place not found" });
+                }
+
+                var days = (model.EndRent - model.StartRent).TotalDays + 1;
+                var dailyRate = place.Price / 28;
+                var totalCost = dailyRate * (decimal)days;
+
+                if (user.Balance < totalCost)
+                {
+                    return Json(new { success = false, message = "Недостаточно средств для аренды." });
+                }
+
+                user.Balance -= totalCost;
+
                 var rental = new Rental
                 {
                     UserId = user.Id,
@@ -304,33 +317,24 @@ namespace ApplicationRent.Controllers
 
                 _context.Add(rental);
 
-                // Находим место, которое арендуется, и обновляем его данные
-                var place = await _context.Places.FirstOrDefaultAsync(p => p.Id == model.PlaceId);
-                if (place != null)
-                {
-                    place.StartRent = model.StartRent;
-                    place.EndRent = model.EndRent;
-                    place.InRent = true; // Обновляем статус места как занято
-                    _context.Update(place);
-                }
+                place.StartRent = model.StartRent;
+                place.EndRent = model.EndRent;
+                place.InRent = true;
+                _context.Update(place);
+                _context.Update(user);
 
                 await _context.SaveChangesAsync();
 
-                // Обновление в Firebase для места
                 await _firebaseService.AddOrUpdatePlace(place);
-
-                // Сохранение информации об аренде в Firebase
                 await _firebaseService.AddOrUpdateRental(rental);
 
-                return RedirectToAction(nameof(Index));
+                return Json(new { success = true });
             }
 
-            // В случае ошибки возвращаем пользователя на страницу аренды для повторного ввода данных
-            return View("Rent", model);
+            return Json(new { success = false, message = "Invalid data" });
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> RequestRent(RequestsRentViewModel model, int RentDuration)
         {
             if (ModelState.IsValid)
@@ -338,10 +342,19 @@ namespace ApplicationRent.Controllers
                 var user = await _userManager.GetUserAsync(User);
                 if (user == null)
                 {
-                    return Unauthorized();
+                    return Json(new { success = false, message = "Unauthorized" });
                 }
 
-                // Вычисляем конечную дату аренды, используя выбранный срок аренды
+                var place = await _context.Places.FirstOrDefaultAsync(p => p.Id == model.PlaceId);
+                if (place == null)
+                {
+                    return Json(new { success = false, message = "Place not found" });
+                }
+
+                // Используем категорию и имя места для валидации или другой логики
+                var category = place.Category;
+                var placeName = place.Name;
+
                 var endRent = model.StartRent.AddMonths(RentDuration);
 
                 var requestRent = new RequestsRent
@@ -358,11 +371,11 @@ namespace ApplicationRent.Controllers
                 _context.Add(requestRent);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction(nameof(Index));
+                return Json(new { success = true });
             }
 
-            // В случае ошибки валидации, вернуть пользователя на форму
-            return View("Rent", model);
+            var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+            return Json(new { success = false, message = "Invalid data", errors });
         }
     }
     public class RequestsRentViewModel
@@ -376,6 +389,8 @@ namespace ApplicationRent.Controllers
         public string UserPhone { get; set; }
         public string Category { get; set; }
         public bool IsOnlineRentAvailable { get; set; }
+        public decimal UserBalance { get; set; }
+        public decimal PlacePrice { get; set; }
     }
     public class RentViewModel
     {

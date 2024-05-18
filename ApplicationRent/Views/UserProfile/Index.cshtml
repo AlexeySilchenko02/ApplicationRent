@@ -188,6 +188,47 @@
 </main>
 
 <script>
+    function updateUserProfile(event) {
+        // Предотвращаем действие по умолчанию (отправку формы)
+        event.preventDefault();
+        var form = document.getElementById('updateUserProfileForm');
+        var formData = new FormData(form);
+
+        // Отправляем AJAX-запрос
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+            }
+        })
+            .then(response => {
+                if (response.ok) {
+                    // Если ответ успешен, перезагружаем страницу
+                    window.location.reload();
+                } else if (response.status === 400) {
+                    // Если ответ содержит ошибку 400 (неверные данные), обрабатываем ошибку
+                    response.json().then(data => {
+                        if (data.errors) {
+                            // Скрываем все старые ошибки
+                            document.querySelectorAll('.text-danger').forEach(element => {
+                                element.style.display = 'none';
+                            });
+
+                            // Если есть ошибки, отображаем их
+                            for (var key in data.errors) {
+                                var errorElement = document.getElementById(key + 'Error');
+                                if (errorElement) {
+                                    errorElement.innerText = data.errors[key];
+                                    errorElement.style.display = 'block';
+                                }
+                            }
+                        }
+                    });
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
     function toggleForm(rentalId) {
         var form = document.getElementById('form-' + rentalId);
         if (form.style.display === 'none') {

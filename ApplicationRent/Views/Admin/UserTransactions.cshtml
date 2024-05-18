@@ -1,0 +1,67 @@
+﻿@model IEnumerable<ApplicationRent.Data.Identity.TransactionHistory>
+
+<main class="main">
+    <h2>Транзакции пользователя</h2>
+    <a href="@Url.Action("Users", "Admin")" class="btn btn-primary">Вернуться к пользователям</a>
+    @if (Model.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Сумма</th>
+                    <th>Дата транзакции</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody id="transactions-table">
+                @foreach (var transaction in Model)
+                {
+                    <tr id="transaction-@transaction.Id">
+                        <td>@transaction.Amount</td>
+                        <td>@transaction.TransactionDate</td>
+                        <td>
+                            <button class="btn btn-danger delete-transaction" data-id="@transaction.Id">Удалить</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Нет транзакций</p>
+    }
+</main>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.delete-transaction').click(function () {
+                var transactionId = $(this).data('id');
+                var row = $('#transaction-' + transactionId);
+
+                if (confirm('Вы уверены, что хотите удалить транзакцию?')) {
+                    $.ajax({
+                        url: '@Url.Action("DeleteTransactionAjax", "Admin")',
+                        type: 'POST',
+                        data: { id: transactionId },
+                        success: function (response) {
+                            if (response.success) {
+                                row.remove();
+                                if ($('#transactions-table tr').length === 0) {
+                                    $('#transactions-table').closest('main').append('<p>Нет транзакций</p>');
+                                }
+                            } else {
+                                alert('Ошибка при удалении транзакции: ' + response.error);
+                            }
+                        },
+                        error: function () {
+                            alert('Ошибка при выполнении запроса.');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}

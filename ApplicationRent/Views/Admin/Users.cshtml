@@ -32,6 +32,7 @@
                         <a href="@Url.Action("EditUser", "Admin", new { id = user.Id })" class="btn btn-secondary">
                             Изменить
                         </a>
+                        <a href="@Url.Action("UserTransactions", "Admin", new { userId = user.Id })" class="btn btn-info">Просмотр транзакций</a>
                     </td>
                 </tr>
             }

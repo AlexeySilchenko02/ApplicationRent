@@ -21,23 +21,29 @@
     </div>
 
     <div id="card-view" style="display:none;">
-        <form asp-action="ConfirmRent" method="post">
+        <p>Текущий баланс: <span id="userBalance">@Model.UserBalance</span> руб.</p>
+        <form id="confirmRentForm">
             <input type="hidden" asp-for="PlaceId" />
             <div class="form-group">
                 <label asp-for="StartRent">Дата начала</label>
-                <input asp-for="StartRent" class="form-control" type="date" />
+                <input asp-for="StartRent" class="form-control" type="date" id="startRent" />
             </div>
             <div class="form-group">
                 <label asp-for="EndRent">Дата окончания</label>
-                <input asp-for="EndRent" class="form-control" type="date" />
+                <input asp-for="EndRent" class="form-control" type="date" id="endRent" />
             </div>
-            <button type="submit" class="btn btn-primary">Подтвердить аренду</button>
+            <p>Стоимость аренды: <span id="rentCost">0</span> руб.</p>
+            <p id="insufficientFunds" style="color:red; display:none;">Недостаточно средств</p>
+            <button type="button" class="btn btn-primary" id="confirmRentButton">Подтвердить аренду</button>
+            <div id="confirmRentErrors" style="color:red;"></div>
         </form>
     </div>
     <div id="list-view" style="display:none;">
         <p>Долгосрочная аренда</p>
-        <form asp-action="RequestRent" method="post">
+        <form id="requestRentForm">
             <input type="hidden" asp-for="PlaceId" />
+            <input type="hidden" name="Category" value="@Model.Category" />
+            <input type="hidden" name="PlaceName" value="@Model.PlaceName" />
             <div class="form-group">
                 <label asp-for="UserName">Имя</label>
                 <input asp-for="UserName" class="form-control" />
@@ -62,8 +68,9 @@
                     <option value="3">3 месяца</option>
                     <option value="4">4 месяца</option>
                 </select>
-                <button type="submit" class="btn btn-primary">Отправить заявку</button>
+                <button type="button" class="btn btn-primary" id="requestRentButton">Отправить заявку</button>
             </div>
+            <div id="requestRentErrors" style="color:red;"></div>
         </form>
     </div>
     <button type="button" class="btn btn-secondary" onclick="window.location.href='@Url.Action("Index", "Place")';">Отмена</button>
@@ -74,6 +81,40 @@
             const showList = document.getElementById("show-list");
             const cardView = document.getElementById("card-view");
             const listView = document.getElementById("list-view");
+            const startRentInput = document.getElementById("startRent");
+            const endRentInput = document.getElementById("endRent");
+            const rentCost = document.getElementById("rentCost");
+            const userBalance = parseFloat(document.getElementById("userBalance").textContent);
+            const confirmRentButton = document.getElementById("confirmRentButton");
+            const insufficientFunds = document.getElementById("insufficientFunds");
+            const placePrice = parseFloat(@Model.PlacePrice);
+            const confirmRentErrors = document.getElementById("confirmRentErrors");
+            const requestRentErrors = document.getElementById("requestRentErrors");
+
+            function calculateRentCost() {
+                const startRent = new Date(startRentInput.value);
+                const endRent = new Date(endRentInput.value);
+                const timeDiff = endRent - startRent;
+                const days = timeDiff / (1000 * 3600 * 24) + 1; // Добавляем 1 день, чтобы включить последний день аренды
+                const dailyRate = placePrice / 28;
+                const totalCost = dailyRate * days;
+                return totalCost.toFixed(2);
+            }
+
+            function updateRentCost() {
+                const cost = calculateRentCost();
+                rentCost.textContent = cost;
+                if (parseFloat(cost) > userBalance) {
+                    insufficientFunds.style.display = "block";
+                    confirmRentButton.disabled = true;
+                } else {
+                    insufficientFunds.style.display = "none";
+                    confirmRentButton.disabled = false;
+                }
+            }
+
+            startRentInput.addEventListener("change", updateRentCost);
+            endRentInput.addEventListener("change", updateRentCost);
 
             // Показать карточки по умолчанию, если доступно
             if (showCards) {
@@ -95,6 +136,80 @@
                 cardView.style.display = "none";
                 listView.style.display = "block";
             });
+
+            // Рассчитываем и обновляем стоимость аренды при загрузке страницы
+            updateRentCost();
+
+            // Обработка формы онлайн аренды
+            confirmRentButton.addEventListener("click", function () {
+                const formData = new FormData(document.getElementById("confirmRentForm"));
+                fetch('@Url.Action("ConfirmRent", "Place")', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert("Аренда подтверждена");
+                            window.location.href = '@Url.Action("Index", "Place")';
+                        } else {
+                            confirmRentErrors.textContent = data.errors.join(', ');
+                            alert(data.message);
+                        }
+                    });
+            });
+
+            // Обработка формы заявки на аренду
+            document.getElementById("requestRentButton").addEventListener("click", function () {
+                const formData = new FormData(document.getElementById("requestRentForm"));
+                fetch('@Url.Action("RequestRent", "Place")', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert("Заявка на аренду отправлена");
+                            window.location.href = '@Url.Action("Index", "Place")';
+                        } else {
+                            document.getElementById("requestRentErrors").textContent = data.errors.join(', ');
+                            alert(data.message);
+                        }
+                    });
+            });
+
+            // Заполнить данные формы при загрузке страницы
+            function preloadFormData() {
+                const formData = new FormData(document.getElementById("requestRentForm"));
+                fetch('@Url.Action("RequestRent", "Place")', {
+                    method: 'GET',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            document.getElementById("UserName").value = data.userName;
+                            document.getElementById("UserEmail").value = data.userEmail;
+                            document.getElementById("UserPhone").value = data.userPhone;
+                            document.getElementById("StartRent").value = data.startRent;
+                            document.getElementById("rentDuration").value = data.rentDuration;
+                        } else {
+                            requestRentErrors.textContent = data.errors.join(', ');
+                            alert(data.message);
+                        }
+                    });
+            }
+
+            preloadFormData();
         });
     </script>
 </main>
