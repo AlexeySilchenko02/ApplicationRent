@@ -25,6 +25,14 @@ namespace ApplicationRent.App_data
                 });
         }
 
+        public async Task AddOrUpdateUser(ApplicationIdentityUser user)
+        {
+            await _firebase
+                .Child("Users")
+                .Child(user.Id)
+                .PutAsync(user);
+        }
+
         public async Task AddOrUpdatePlace(Place place)
         {
             // Добавление или обновление данных о месте в Firebase
@@ -50,6 +58,22 @@ namespace ApplicationRent.App_data
                 .Child("Rentals")
                 .Child(rental.Id.ToString())
                 .PutAsync(rental);
+        }
+        public async Task UpdateUserBalance(string userId, decimal newBalance)
+        {
+            await _firebase
+                .Child("Users")
+                .Child(userId)
+                .Child("Balance")
+                .PutAsync(newBalance);
+        }
+
+        public async Task AddTransactionHistory(TransactionHistory transaction)
+        {
+            await _firebase
+                .Child("TransactionHistories")
+                .Child(transaction.Id.ToString())
+                .PutAsync(transaction);
         }
     }
 }

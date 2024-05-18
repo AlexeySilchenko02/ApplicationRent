@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ApplicationRent.Data.Identity.RequestsRent>
+﻿@* @model IEnumerable<ApplicationRent.Data.Identity.RequestsRent>
 
 @{
     ViewData["Title"] = "Заявки на аренду";
@@ -46,6 +46,146 @@
                     var readRequestRows = document.querySelectorAll(".request-read");
                     readRequestRows.forEach(function (row) {
                         row.style.display = row.style.display === 'none' ? '' : 'none';
+                    });
+                });
+
+                document.querySelectorAll('.change-status').forEach(function (button) {
+                    button.addEventListener('click', function () {
+                        var requestId = this.getAttribute('data-request-id');
+                        changeStatus(requestId);
+                    });
+                });
+
+                document.querySelectorAll('.delete-request').forEach(function (button) {
+                    button.addEventListener('click', function () {
+                        var requestId = this.getAttribute('data-request-id');
+                        deleteRequest(requestId);
+                    });
+                });
+
+                function changeStatus(requestId) {
+                    fetch(`@Url.Action("ChangeRequestStatus", "Admin")/${requestId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '@(ViewData["__RequestVerificationToken"] ?? "")'
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                var row = document.querySelector(`tr[data-request-id='${requestId}']`);
+                                var statusText = row.querySelector('.status-text');
+                                var isRead = row.classList.toggle('request-read');
+                                statusText.textContent = isRead ? "Просмотрено" : "Не просмотрено";
+                            }
+                        });
+                }
+
+                function deleteRequest(requestId) {
+                    fetch(`@Url.Action("DeleteRequest", "Admin")/${requestId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '@(ViewData["__RequestVerificationToken"] ?? "")'
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                var row = document.querySelector(`tr[data-request-id='${requestId}']`);
+                                row.remove();
+                            }
+                        });
+                }
+            });
+        </script>
+    }
+</main> *@
+
+@model IEnumerable<RequestRentViewModel>
+
+@{
+    ViewData["Title"] = "Заявки на аренду";
+}
+
+<main class="main">
+    <h2>@ViewData["Title"]</h2>
+    <a href="@Url.Action("Index", "Admin")" class="btn btn-primary">Вернуться в админ панель</a>
+    <button id="toggleReadRequests" class="btn btn-info">Скрыть/Показать просмотренные</button>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Пользователь</th>
+                <th>Место</th>
+                <th>Начало аренды</th>
+                <th>Конец аренды</th>
+                <th>Статус</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var request in Model)
+            {
+                <tr class="@(request.Status ? "request-read" : "")" data-request-id="@request.Id">
+                    <td>@request.Id</td>
+                    <td>@request.UserName</td>
+                    <td>
+                        <button class="btn btn-secondary toggle-details" type="button" data-request-id="@request.Id">
+                            @request.Place.Name
+                        </button>
+                        <div class="place-details" id="details-@request.Id" style="display: none;">
+                            <p>Цена: @request.Place.Price</p>
+                            <p>Размер: @request.Place.SizePlace</p>
+                            <p>Описание: @request.Place.Description</p>
+                            <p>Категория: @request.Place.Category</p>
+                            <p>
+                                Статус:
+                                @{
+                                    if (request.Place.InRent)
+                                    {
+                                        <text>Занято до: @request.Place.EndRent.ToShortDateString()</text>
+                                    }
+                                    else
+                                    {
+                                        <text>Свободно</text>
+                                    }
+                                }
+                            </p>
+                        </div>
+                    </td>
+                    <td>@request.StartRent.ToShortDateString()</td>
+                    <td>@request.EndRent.ToShortDateString()</td>
+                    <td class="status-text">@(request.Status ? "Просмотрено" : "Не просмотрено")</td>
+                    <td>
+                        <button class="btn btn-primary change-status" data-request-id="@request.Id">Изменить статус</button>
+                        <button class="btn btn-danger delete-request" data-request-id="@request.Id" onclick="return confirm('Вы уверены, что хотите удалить эту заявку?');">Удалить</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @section Scripts {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                document.getElementById("toggleReadRequests").addEventListener("click", function () {
+                    var readRequestRows = document.querySelectorAll(".request-read");
+                    readRequestRows.forEach(function (row) {
+                        row.style.display = row.style.display === 'none' ? '' : 'none';
+                    });
+                });
+
+                document.querySelectorAll('.toggle-details').forEach(function (button) {
+                    button.addEventListener('click', function () {
+                        var requestId = this.getAttribute('data-request-id');
+                        var details = document.getElementById('details-' + requestId);
+                        if (details.style.display === 'none') {
+                            details.style.display = 'block';
+                        } else {
+                            details.style.display = 'none';
+                        }
                     });
                 });
 

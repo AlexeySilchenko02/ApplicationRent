@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using ApplicationRent.App_data;
 
 namespace ApplicationRent.Areas.Identity.Pages.Account
 {
@@ -30,13 +31,15 @@ namespace ApplicationRent.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<ApplicationIdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly FirebaseService _firebaseService;
 
         public RegisterModel(
             UserManager<ApplicationIdentityUser> userManager,
             IUserStore<ApplicationIdentityUser> userStore,
             SignInManager<ApplicationIdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            FirebaseService firebaseService)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -44,6 +47,7 @@ namespace ApplicationRent.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _firebaseService = firebaseService;
         }
 
         /// <summary>
@@ -138,6 +142,15 @@ namespace ApplicationRent.Areas.Identity.Pages.Account
                     // Генерация и автоматическое подтверждение токена почты
                     var confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     await _userManager.ConfirmEmailAsync(user, confirmationToken);
+
+                    //Сохранение пользователя в Firebase
+                    await _firebaseService.AddOrUpdateUser(new ApplicationIdentityUser
+                    {
+                        Id = userId,
+                        Email = Input.Email,
+                        FullNameUser = Input.Name,
+                        PhoneNumber = Input.PhoneNumber
+                    });
 
                     // Авторизация пользователя
                     await _signInManager.SignInAsync(user, isPersistent: false);

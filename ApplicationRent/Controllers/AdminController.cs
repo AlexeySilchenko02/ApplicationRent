@@ -263,10 +263,47 @@ namespace ApplicationRent.Controllers
         }
 
         // Возвращает представление со списком заявок на аренду
-        public async Task<IActionResult> RentRequestsList()
+        /*public async Task<IActionResult> RentRequestsList()
         {
             var rentRequests = await _context.RequestsRents.ToListAsync();
             return View(rentRequests);
+        }*/
+
+        /*public async Task<IActionResult> RentRequestsList()
+        {
+            var rentRequests = await _context.RequestsRents
+                .Include(r => r.Place)
+                .ToListAsync();
+
+            var model = rentRequests.Select(r => new RequestRentViewModel
+            {
+                Id = r.Id,
+                UserName = r.UserName,
+                PlaceName = r.Place.Name, // Используем название места
+                StartRent = r.StartRent,
+                EndRent = r.EndRent,
+                Status = r.Status
+            }).ToList();
+
+            return View(model);
+        }*/
+        public async Task<IActionResult> RentRequestsList()
+        {
+            var rentRequests = await _context.RequestsRents
+                .Include(r => r.Place)
+                .ToListAsync();
+
+            var model = rentRequests.Select(r => new RequestRentViewModel
+            {
+                Id = r.Id,
+                UserName = r.UserName,
+                Place = r.Place,
+                StartRent = r.StartRent,
+                EndRent = r.EndRent,
+                Status = r.Status
+            }).ToList();
+
+            return View(model);
         }
 
         // Изменение статуса представление заявоки на аренду

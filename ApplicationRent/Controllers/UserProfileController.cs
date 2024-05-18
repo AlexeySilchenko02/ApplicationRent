@@ -12,11 +12,13 @@ namespace ApplicationRent.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationIdentityUser> _userManager;
+        private readonly FirebaseService _firebaseService;
 
-        public UserProfileController(ApplicationDbContext context, UserManager<ApplicationIdentityUser> userManager)
+        public UserProfileController(ApplicationDbContext context, UserManager<ApplicationIdentityUser> userManager, FirebaseService firebaseService)
         {
             _context = context;
             _userManager = userManager;
+            _firebaseService = firebaseService;
         }
 
         public async Task<IActionResult> Index()
@@ -163,6 +165,10 @@ namespace ApplicationRent.Controllers
 
                 _context.TransactionHistories.Add(transaction);
                 await _context.SaveChangesAsync();
+                // Update balance in Firebase
+                await _firebaseService.UpdateUserBalance(user.Id, user.Balance);
+                // Add transaction history to Firebase
+                await _firebaseService.AddTransactionHistory(transaction);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -242,6 +248,7 @@ namespace ApplicationRent.Controllers
 
             // Сохраняем изменения в локальной базе данных
             await _context.SaveChangesAsync();
+            await firebaseService.UpdateUserBalance(user.Id, user.Balance);
 
             // Если были изменения, обновляем данные в Firebase
             if (updateFirebase)

@@ -327,6 +327,7 @@ namespace ApplicationRent.Controllers
 
                 await _firebaseService.AddOrUpdatePlace(place);
                 await _firebaseService.AddOrUpdateRental(rental);
+                await _firebaseService.UpdateUserBalance(user.Id, user.Balance);
 
                 return Json(new { success = true });
             }
