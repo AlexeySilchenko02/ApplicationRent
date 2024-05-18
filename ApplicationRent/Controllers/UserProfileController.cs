@@ -245,10 +245,20 @@ namespace ApplicationRent.Controllers
             {
                 return Json(new { success = false, error = "Ошибка при обновлении баланса пользователя" });
             }
+            // Добавляем запись о списании в историю транзакций
+            var transaction = new TransactionHistory
+            {
+                UserId = user.Id,
+                Amount = -request.Cost,
+                TransactionDate = DateTime.UtcNow.AddHours(3)
+            };
+
+            _context.TransactionHistories.Add(transaction);
 
             // Сохраняем изменения в локальной базе данных
             await _context.SaveChangesAsync();
             await firebaseService.UpdateUserBalance(user.Id, user.Balance);
+            await firebaseService.AddTransactionHistory(transaction);
 
             // Если были изменения, обновляем данные в Firebase
             if (updateFirebase)

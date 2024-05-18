@@ -323,11 +323,21 @@ namespace ApplicationRent.Controllers
                 _context.Update(place);
                 _context.Update(user);
 
+                // Создаем и добавляем запись о транзакции
+                var transaction = new TransactionHistory
+                {
+                    UserId = user.Id,
+                    Amount = -totalCost,
+                    TransactionDate = DateTime.UtcNow.AddHours(3)
+                };
+                _context.TransactionHistories.Add(transaction);
+
                 await _context.SaveChangesAsync();
 
                 await _firebaseService.AddOrUpdatePlace(place);
                 await _firebaseService.AddOrUpdateRental(rental);
                 await _firebaseService.UpdateUserBalance(user.Id, user.Balance);
+                await _firebaseService.AddTransactionHistory(transaction);
 
                 return Json(new { success = true });
             }
