@@ -1,7 +1,12 @@
 ﻿@model IEnumerable<ApplicationRent.Data.Identity.TransactionHistory>
-<main class="main">
-    <h2>История транзакций</h2>
-    <table class="table">
+<main class="main lk">
+    <section class="lk-title-section">
+        <div class="lk-title-container">
+            <h1 class="lk-title-h1">История транзакций</h1>
+        </div>
+    </section>
+
+    <table class="lk-table">
         <thead>
             <tr>
                 <th>Дата транзакции</th>
@@ -18,5 +23,7 @@
             }
         </tbody>
     </table>
-    <a href="@Url.Action("Index", "UserProfile")" class="btn btn-secondary">Назад</a>
+    <div class="back-btn">
+        <button type="button" class="lg-small-btn" onclick="window.location.href='@Url.Action("Index", "UserProfile")'">Назад</button>
+    </div>
 </main>

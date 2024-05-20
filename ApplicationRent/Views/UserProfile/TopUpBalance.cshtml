@@ -1,12 +1,25 @@
 ﻿@model TopUpBalanceViewModel
 
-<main class="main">
-    <h2>Пополнение баланса</h2>
-    <form asp-action="TopUpBalance" method="post">
-        <div class="form-group">
-            <label for="Amount">Сумма пополнения</label>
-            <input type="number" class="form-control" id="Amount" name="Amount" required>
+<main class="main lk-center">
+    <section class="lk-title-section">
+        <div class="lk-title-container">
+            <h1 class="lk-title-h1">Пополнение баланса</h1>
         </div>
-        <button type="submit" class="btn btn-primary">Пополнить</button>
+    </section>
+
+    <form asp-action="TopUpBalance" method="post">
+        <div class="lk-form-group-last balance-btn-container">
+            <div class="lk-form-label-container">
+                <label class="lk-form-label" for="Amount">Сумма пополнения</label>
+            </div>
+            <input type="number" class="lk-form-input" id="Amount" name="Amount" required>
+        </div>
+        <div class="balance-btn-container">
+            <button type="submit" class="dg-small-btn">Пополнить</button>
+        </div>
+        
     </form>
+    <div class="back-btn balance-btn-container">
+        <button type="button" class="lg-small-btn" onclick="window.location.href='@Url.Action("Index", "UserProfile")'">Назад</button>
+    </div>
 </main>

@@ -3,32 +3,61 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
-<main class="main">
-    <h2>Личный кабинет пользователя: @Model.User.FullNameUser</h2>
-    @* <p>Баланс: <span id="user-balance">@Model.User.Balance.ToString("C")</span></p> *@
-    <p>Баланс: <span id="user-balance">@Model.User.Balance.ToString("C", new CultureInfo("ru-RU"))</span></p>
-    <a href="@Url.Action("TopUpBalance", "UserProfile")" class="btn btn-secondary">Пополнить баланс</a>
-    <a href="@Url.Action("TransactionHistory", "UserProfile")" class="btn btn-secondary">История транзакций</a>
-    <form id="updateUserProfileForm" asp-action="UpdateUserProfile" method="post" onsubmit="updateUserProfile(event)">
-        <div class="form-group">
-            <label for="FullNameUser">Полное имя</label>
-            <input type="text" class="form-control" id="FullNameUser" name="FullNameUser" value="@Model.User.FullNameUser" required>
+<main class="main lk">
+    <section class="lk-title-section">
+        <div class="lk-title-container">
+            <h1 class="lk-title-h1">Личный кабинет пользователя @Model.User.FullNameUser</h1>
         </div>
-        <div class="form-group">
-            <label for="Email">Email</label>
-            <input type="email" class="form-control" id="Email" name="Email" value="@Model.User.Email" required>
-            <div id="emailError" class="text-danger" style="display:none;"></div>
+    </section>
+
+    <div class="lk-balance-container">
+        <p class="lk-balance">Баланс: <span class="lk-balance-number" id="user-balance">@Model.User.Balance.ToString("C", new CultureInfo("ru-RU"))</span></p>
+    </div>
+
+    <div class="lk-balance-actions-container">
+        <div class="lk-balance-actions-grid">
+            <div>
+                <button type="button" class="dg-large-btn" onclick="window.location.href='@Url.Action("TopUpBalance", "UserProfile")'" >Пополнить баланс</button>
+            </div>
+            <div>
+                <button type="button" class="lg-large-btn" onclick="window.location.href='@Url.Action("TransactionHistory", "UserProfile")'">История транзакций</button>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="PhoneNumber">Телефонный номер</label>
-            <input type="tel" class="form-control" id="PhoneNumber" name="PhoneNumber" value="@Model.User.PhoneNumber" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Обновить</button>
-    </form>
-    <a href="@Url.Action("ChangePassword", "UserProfile")" class="btn btn-secondary">Изменить пароль</a>
+    </div>
+    <div div class="lk-form-container">
+        <form id="updateUserProfileForm" asp-action="UpdateUserProfile" method="post" onsubmit="updateUserProfile(event)">
+            <div class="lk-form-group">
+                <div class="lk-form-label-container">
+                    <label class="lk-form-label" for="FullNameUser">Полное имя</label>
+                </div>
+                <input type="text" class="lk-form-input" id="FullNameUser" name="FullNameUser" value="@Model.User.FullNameUser" required>
+            </div>
+            <div class="lk-form-group">
+                <div class="lk-form-label-container">
+                    <label class="lk-form-label" for="Email">Email</label>
+                </div>                
+                <input type="email" class="lk-form-input" id="Email" name="Email" value="@Model.User.Email" required>
+                <div id="emailError" class="text-danger" style="display:none;"></div>
+            </div>
+            <div class="lk-form-group-last">
+                <div class="lk-form-label-container">
+                    <label class="lk-form-label" for="PhoneNumber">Номер телефона</label>
+                </div>
+                <input type="tel" class="lk-form-input" id="PhoneNumber" name="PhoneNumber" value="@Model.User.PhoneNumber" required>
+            </div>
+            <button type="submit" class="lg-small-btn">Обновить</button>
+        </form>
+        
+    </div>
+    <button type="button" class="dg-large-btn" onclick="window.location.href='@Url.Action("ChangePassword", "UserProfile")'">Изменить пароль</button>
+    
+    <div class="lk-subtitle-container">
+        <h1 class="lk-subtitle-h2">Моя аренда</h1>
+    </div>
+
     @if (Model.Rentals.Any())
     {
-        <table class="table">
+        <table class="lk-table">
             <thead>
                 <tr>
                     <th>Место</th>
@@ -45,12 +74,12 @@
                         <td>@rental.StartRent.ToString("dd.MM.yyyy")</td>
                         <td>@rental.EndRent.ToString("dd.MM.yyyy")</td>
                         <td>
-                            <button type="button" onclick="toggleForm('@rental.Id')">Продлить аренду</button>
+                            <button type="button" class="calendar-text" onclick="toggleForm('@rental.Id')">Продлить аренду</button>
                             <form id="form-@rental.Id" style="display:none;" data-endrent="@rental.EndRent.ToString("yyyy-MM-dd")">
                                 <input type="hidden" name="rentalId" value="@rental.Id" />
-                                <input type="date" name="newEndDate" onchange="calculateCost(@rental.Id, @rental.Place.Price)" />
-                                <p id="cost-text-@rental.Id" style="display:none;">Стоимость: <span id="cost-@rental.Id">0</span></p>
-                                <button type="button" onclick="extendRent(@rental.Id, @rental.Place.Price)">Обновить</button>
+                                <input type="date" class="calendar-input" name="newEndDate" onchange="calculateCost(@rental.Id, @rental.Place.Price)" />
+                                <p id="cost-text-@rental.Id" class="calendar-cost" style="display:none;">Стоимость: <span id="cost-@rental.Id">0</span></p>
+                                <button type="button" class="calendar-text" onclick="extendRent(@rental.Id, @rental.Place.Price)">Обновить</button>
                                 <div id="error-@rental.Id" class="text-danger" style="display:none;"></div>
                             </form>
                         </td>
@@ -61,8 +90,9 @@
     }
     else
     {
-        <p>У вас нет актуальных мест аренды.</p>
+        <p class="calendar-text">Нет актуальных мест аренды</p>
     }
+
 </main>
 
 <script>
