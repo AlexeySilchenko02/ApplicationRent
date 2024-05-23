@@ -4,38 +4,54 @@
     DateTime today = DateTime.Now;
 }
 
-<main class="main">
-    <h2>@ViewData["Title"]</h2>
-    <a href="@Url.Action("Index", "Admin")" class="btn btn-primary">Вернуться в админ панель</a>
-    <button onclick="toggleRentals()" class="btn btn-secondary">Скрыть неактуальные заявки</button>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Имя пользователя</th>
-                <th>Название места</th>
-                <th>Начало аренды</th>
-                <th>Конец аренды</th>
-                <th>Действия</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var rental in Model)
-            {
-                var isOutdated = rental.EndRent < today;
-                <tr class="@(isOutdated ? "outdated" : "")" data-rental-id="@rental.Id">
-                    <td>@rental.Id</td>
-                    <td>@rental.User.FullNameUser</td>
-                    <td>@rental.Place.Name</td>
-                    <td>@rental.StartRent.ToShortDateString()</td>
-                    <td>@rental.EndRent.ToShortDateString()</td>
-                    <td>
-                        <button onclick="confirmDeletion('@rental.Id')" class="btn btn-danger">Удалить</button>
-                    </td>
+<main class="main lk">
+    <section class="lk-title-section">
+        <div class="lk-title-container">
+            <h1 class="lk-title-h1">Заявки онлайн аренды</h1>
+        </div>
+    </section>
+
+    <div class="back-btn-mb">
+        <button type="button" class="lg-small-btn" onclick="window.location.href='@Url.Action("Index", "Admin")'">Назад</button>
+    </div>
+
+    <div class="back-btn-mb">
+        <button onclick="toggleRentals()" class="dg-large-btn">Скрыть неактуальные заявки</button>
+    </div>
+
+    @* <a href="@Url.Action("Index", "Admin")" class="btn btn-primary">Вернуться в админ панель</a>
+    <button onclick="toggleRentals()" class="btn btn-secondary">Скрыть неактуальные заявки</button> *@
+    <div style="overflow-x: auto;">
+        <table class="lk-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Имя пользователя</th>
+                    <th>Название места</th>
+                    <th>Начало аренды</th>
+                    <th>Конец аренды</th>
+                    <th>Действия</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var rental in Model)
+                {
+                    var isOutdated = rental.EndRent < today;
+                    <tr class="@(isOutdated ? "outdated" : "")" data-rental-id="@rental.Id">
+                        <td>@rental.Id</td>
+                        <td>@rental.User.FullNameUser</td>
+                        <td>@rental.Place.Name</td>
+                        <td>@rental.StartRent.ToShortDateString()</td>
+                        <td>@rental.EndRent.ToShortDateString()</td>
+                        <td>
+                            <button onclick="confirmDeletion('@rental.Id')" class="btn btn-danger">Удалить</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    
 
     <script>
         function confirmDeletion(id) {

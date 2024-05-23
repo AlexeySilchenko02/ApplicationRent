@@ -1,31 +1,43 @@
 ﻿@model IEnumerable<ApplicationRent.Data.Identity.TransactionHistory>
 
-<main class="main">
-    <h2>Транзакции пользователя</h2>
-    <a href="@Url.Action("Users", "Admin")" class="btn btn-primary">Вернуться к пользователям</a>
+<main class="main lk">
+    <section class="lk-title-section">
+        <div class="lk-title-container">
+            <h1 class="lk-title-h1">Транзакции пользователя</h1>
+        </div>
+    </section>
+
+    <div class="back-btn-mb">
+        <button type="button" class="lg-small-btn" onclick="window.location.href='@Url.Action("Users", "Admin")'">Назад</button>
+    </div>
+
+
     @if (Model.Any())
     {
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Сумма</th>
-                    <th>Дата транзакции</th>
-                    <th>Действия</th>
-                </tr>
-            </thead>
-            <tbody id="transactions-table">
-                @foreach (var transaction in Model)
-                {
-                    <tr id="transaction-@transaction.Id">
-                        <td>@transaction.Amount</td>
-                        <td>@transaction.TransactionDate</td>
-                        <td>
-                            <button class="btn btn-danger delete-transaction" data-id="@transaction.Id">Удалить</button>
-                        </td>
+        <div style="overflow-x: auto;">
+            <table class="lk-table">
+                <thead>
+                    <tr>
+                        <th>Сумма</th>
+                        <th>Дата транзакции</th>
+                        <th>Действия</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody id="transactions-table">
+                    @foreach (var transaction in Model)
+                    {
+                        <tr id="transaction-@transaction.Id">
+                            <td>@transaction.Amount</td>
+                            <td>@transaction.TransactionDate</td>
+                            <td>
+                                <button class="btn btn-danger delete-transaction" data-id="@transaction.Id">Удалить</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        
     }
     else
     {

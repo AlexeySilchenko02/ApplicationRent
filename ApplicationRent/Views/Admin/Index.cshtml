@@ -8,10 +8,83 @@
 @model IEnumerable<ApplicationRent.Data.Identity.Place>
 
 
-<main class="main">
-    <h2>Админ панель</h2>
-    <p>Добро пожаловать в административную панель.</p>
-    <a href="@Url.Action("Users", "Admin")" class="btn btn-primary">Просмотр пользователей</a>
+<main class="main lk">
+    <section class="lk-title-section">
+        <div class="lk-title-container">
+            <h1 class="lk-title-h1">Панель администратора</h1>
+        </div>
+    </section>
+    <div class="admin-user-btn-grid">
+        <button type="button" class="lg-large-btn" onclick="window.location.href='@Url.Action("Users", "Admin")'">Просмотр пользователей</button>
+        <button type="button" class="lg-large-btn" onclick="window.location.href='@Url.Action("FeedbackList", "Admin")'">Просмотр обратной связи</button>        
+        <button type="button" class="lg-large-btn" onclick="window.location.href='@Url.Action("ViewReviews", "Admin")'">Просмотр отзывов</button>
+    </div>
+
+    <div class="admin-rent-btn-grid">
+        <button type="button" class="lg-large-btn" onclick="window.location.href='@Url.Action("RentRequestsList", "Admin")'">Просмотр заявок на аренду</button>
+        <button type="button" class="lg-large-btn" onclick="window.location.href='@Url.Action("Rentals", "Admin")'">Просмотр онлайн аренд</button>
+    </div>
+
+    <div class="lk-subtitle-container">
+        <h1 class="lk-subtitle-h2">Редактирование мест аренды</h1>
+    </div>
+
+    <div class="admin-place-btn-grid">
+        <button type="button" asp-action="Create" class="lg-large-btn" onclick="location.href='@Url.Action("Create")'">Создание нового места</button>
+        <button type="button" class="lg-large-btn" onclick="window.location.href='@Url.Action("ManagePhotos", "Admin")'">Управление фотографиями</button>
+    </div>
+
+    <div style="overflow-x: auto;">
+        <table class="lk-table">
+            <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Цена</th>
+                    <th>Категория</th>
+                    <th>Статус</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Price)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Category)
+                        </td>
+                        <td>
+                            @if (!item.InRent)
+                            {
+                                @:Свободно
+                            }
+                            else
+                            {
+                                @:Занято до: @item.EndRent.ToString("dd.MM.yyyy")
+                            }
+                        </td>
+                        <td>
+                            @if (ViewBag.IsAdmin)
+                            {
+                                <a asp-action="Edit" asp-route-id="@item.Id">Изменить</a>
+                                <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                            }
+                            <a asp-action="Details" asp-route-id="@item.Id">Подробнее</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    
+
+
+   @*  <a href="@Url.Action("Users", "Admin")" class="btn btn-primary">Просмотр пользователей</a>
     <a href="@Url.Action("FeedbackList", "Admin")" class="btn btn-primary">Посмотреть Feedback</a>
     <a href="@Url.Action("RentRequestsList", "Admin")" class="btn btn-primary">Посмотреть заявки на аренду</a>
     <a class="btn btn-primary" href="@Url.Action("Rentals", "Admin")">Показать список аренд онлайн</a>
@@ -65,5 +138,5 @@
                 </tr>
             }
         </tbody>
-    </table>
+    </table> *@
 </main>

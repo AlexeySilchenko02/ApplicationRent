@@ -1,40 +1,51 @@
 ﻿@model ApplicationRent.Data.Identity.Place
 
-<main class="main">
-    <h2>Отзывы для @Model.Name</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Имя</th>
-                <th>Оценка</th>
-                <th>Отзыв</th>
-                <th>Действия</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model.Reviews != null && Model.Reviews.Any())
-            {
-                @foreach (var review in Model.Reviews)
+<main class="main lk">
+    <section class="lk-title-section">
+        <div class="lk-title-container">
+            <h1 class="lk-title-h1">Отзывы "@Model.Name"</h1>
+        </div>
+    </section>
+
+    <div class="back-btn-mb">
+        <button type="button" class="lg-small-btn" onclick="window.location.href='@Url.Action("ViewReviews", "Admin")'">Назад</button>
+    </div>
+
+    <div style="overflow-x: auto;">
+        <table class="lk-table">
+            <thead>
+                <tr>
+                    <th>Имя</th>
+                    <th>Оценка</th>
+                    <th>Отзыв</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Reviews != null && Model.Reviews.Any())
                 {
-                    <tr id="review-@review.Id">
-                        <td>@review.Name</td>
-                        <td>@review.Rating / 10</td>
-                        <td>@review.Comment</td>
-                        <td>
-                            <button data-review-id="@review.Id" class="btn btn-danger delete-review-btn">Удалить</button>
-                        </td>
+                    @foreach (var review in Model.Reviews)
+                    {
+                        <tr id="review-@review.Id">
+                            <td>@review.Name</td>
+                            <td>@review.Rating / 10</td>
+                            <td>@review.Comment</td>
+                            <td>
+                                <button data-review-id="@review.Id" class="btn btn-danger delete-review-btn">Удалить</button>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4">Нет отзывов</td>
                     </tr>
                 }
-            }
-            else
-            {
-                <tr>
-                    <td colspan="4">Нет отзывов</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-    <a href="@Url.Action("ViewReviews", "Admin")" class="btn btn-primary">Назад к выбору места</a>
+            </tbody>
+        </table>
+    </div>
+    
 </main>
 
 @section Scripts {

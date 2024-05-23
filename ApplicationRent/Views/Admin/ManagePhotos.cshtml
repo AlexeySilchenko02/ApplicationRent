@@ -4,8 +4,17 @@
     ViewData["Title"] = "Управление фотографиями";
 }
 
-<main class="main">
-    <h2>Управление фотографиями</h2>
+<main class="main lk">
+    <section class="lk-title-section">
+        <div class="lk-title-container">
+            <h1 class="lk-title-h1">Управление фотографиями</h1>
+        </div>
+    </section>
+
+    <div class="back-btn-mb">
+        <button type="button" class="lg-small-btn" onclick="window.location.href='@Url.Action("Index", "Admin")'">Назад</button>
+    </div>
+
 
     @if (Model.Count == 0)
     {
@@ -13,8 +22,8 @@
     }
     else
     {
-        <div>
-            <table class="table">
+        <div style="overflow-x: auto;">
+            <table class="lk-table">
                 <thead>
                     <tr>
                         <th>Фото</th>
@@ -43,7 +52,6 @@
         </div>
     }
 
-    <a href="@Url.Action("Index", "Admin")" class="btn btn-primary">Вернуться в админ панель</a>
 
     @section Scripts {
         <script>

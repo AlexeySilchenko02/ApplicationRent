@@ -3,7 +3,7 @@
 }
 @model ApplicationRent.Data.Identity.Place
 
-<main class="main">
+<main class="main lk-center">
     <style>
         .upload-form {
             display: none;
@@ -17,9 +17,97 @@
         }
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <h2>Create</h2>
 
-    <form asp-action="Create">
+    <section class="lk-title-section">
+        <div class="lk-title-container">
+            <h1 class="lk-title-h1-center">Создание нового места</h1>
+        </div>
+    </section>
+
+    <div class="balance-btn-container">
+        <form asp-action="Create">
+            <div class="lk-form-group">
+                <div class="lk-form-label-container">
+                    <label asp-for="Name" class="lk-form-label">Название</label>
+                </div>
+                <input asp-for="Name" class="lk-form-input" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="lk-form-group">
+                <div class="lk-form-label-container">
+                    <label asp-for="Price" class="lk-form-label">Цена</label>
+                </div>
+                <input asp-for="Price" class="lk-form-input" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="lk-form-group">
+                <div class="lk-form-label-container">
+                    <label asp-for="SizePlace" class="lk-form-label">Размер помещения</label>
+                </div>
+                <input asp-for="SizePlace" class="lk-form-input" />
+                <span asp-validation-for="SizePlace" class="text-danger"></span>
+            </div>
+            <div class="lk-form-group">
+                <div class="lk-form-label-container">
+                    <label asp-for="Category" class="lk-form-label">Категория</label>
+                </div>
+                <select asp-for="Category" class="lk-form-input" asp-items="@(new SelectList(ViewBag.Categories))"></select>
+                <span asp-validation-for="Category" class="text-danger"></span>
+            </div>
+            <div class="lk-form-group">
+                <div class="lk-form-label-container">
+                    <label asp-for="Description" class="lk-form-label">Описание</label>
+                </div>
+                <textarea asp-for="Description" class="lk-form-input"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="lk-form-group">
+                <div class="lk-form-label-container">
+                    <label asp-for="ImageFileName1" class="lk-form-label">Фото 1</label>
+                </div>
+                <input asp-for="ImageFileName1" class="lk-form-input-img" type="file" id="imageInput1" />
+                <span asp-validation-for="ImageFileName1" class="text-danger"></span>
+                <div>
+                    <img id="thumbnail1" class="thumbnail" src="" alt="Image preview" />
+                </div>
+            </div>
+            <div class="lk-form-group">
+                <div class="lk-form-label-container">
+                    <label asp-for="ImageFileName2" class="lk-form-label">Фото 2</label>
+                </div>
+                <input asp-for="ImageFileName2" class="lk-form-input-img" type="file" id="imageInput2" />
+                <span asp-validation-for="ImageFileName2" class="text-danger"></span>
+                <div>
+                    <img id="thumbnail2" class="thumbnail" src="" alt="Image preview" />
+                </div>
+            </div>
+            <div class="lk-form-group-last">
+                <div class="lk-form-label-container">
+                    <label asp-for="ImageFileName3" class="lk-form-label">Фото 3</label>
+                </div>
+                <input asp-for="ImageFileName3" class="lk-form-input-img" type="file" id="imageInput3" />
+                <span asp-validation-for="ImageFileName3" class="text-danger"></span>
+                <div>
+                    <img id="thumbnail3" class="thumbnail" src="" alt="Image preview" />
+                </div>
+            </div>
+            <div class="back-btn-mb">
+                <button type="submit" class="dg-small-btn">Создать</button>
+            </div>
+
+        </form>
+
+        <div class="back-btn-mb">
+            <button type="button" class="lg-small-btn" onclick="window.location.href='@Url.Action("Index", "Admin")'">Назад</button>
+        </div>
+    </div>
+
+    
+
+    
+
+
+  @*   <form asp-action="Create">
         <div class="form-group">
             <label asp-for="Name" class="control-label">Название</label>
             <input asp-for="Name" class="form-control" />
@@ -65,7 +153,7 @@
         </div>
         <input type="submit" value="Создание" class="btn btn-primary" />
     </form>
-    <button type="button" class="btn btn-secondary" onclick="window.location.href='@Url.Action("Index", "Admin")';">Отмена</button>
+    <button type="button" class="btn btn-secondary" onclick="window.location.href='@Url.Action("Index", "Admin")';">Отмена</button> *@
     <section class="upload-form">
         <div class="upload-form-container">
             <h1 class="upload-form-title">Загрузка фото</h1>

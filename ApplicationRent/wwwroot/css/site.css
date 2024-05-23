@@ -1615,6 +1615,7 @@ h1 {
 .lk {
     margin-left: 226px;
     margin-right: 226px;
+    padding-bottom: 25px;
 }
 
 .lk-center {
@@ -1637,6 +1638,15 @@ h1 {
 }*/
 
 .lk-title-h1 {
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 35px;
+    letter-spacing: 0.05em;
+    color: #2c3531;
+}
+
+.lk-title-h1-center {
+    text-align: center;
     font-family: var(--font-family);
     font-weight: 600;
     font-size: 35px;
@@ -1686,8 +1696,11 @@ h1 {
     margin-bottom: 24px;
 }
 
-.lk-form-label-container {
+.lk-form-group-prelast {
+    margin-bottom: 15px;
+}
 
+.lk-form-label-container {
 }
 
 .lk-form-label {
@@ -1705,6 +1718,16 @@ h1 {
     width: 316px;
     height: 49px;
     background: white;
+}
+
+.lk-form-input-img {
+    font-family: var(--font-family);
+    border: 3px solid #116466;
+    border-radius: 10px;
+    width: 316px;
+    height: 49px;
+    background: white;
+
 }
 
 .balance-btn-container {
@@ -1805,6 +1828,99 @@ h1 {
     border: none;
 }
 
+.admin-user-btn-grid {
+    display: grid;
+    grid-template-columns: 252px 252px auto;
+    grid-column-gap: 15px;
+    justify-items: left;
+}
+
+.admin-rent-btn-grid {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: 252px 252px auto;
+    grid-column-gap: 15px;
+    justify-items: left;
+}
+
+.admin-place-btn-grid {
+    display: grid;
+    grid-template-columns: 252px auto;
+    grid-column-gap: 15px;
+    justify-items: left;
+    margin-bottom: 20px;
+}
+
+.center-title-h1 {
+    text-align: center;
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 35px;
+    letter-spacing: 0.05em;
+    color: #2c3531;
+}
+
+.admin-checkbox-input {
+
+}
+
+.admin-checkbox {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.admin-checkbox-input {
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+}
+
+.admin-checkbox-input + label {
+    user-select: none;
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    color: #2c3531;
+}
+
+.admin-checkbox-input + label::before {
+    content: '';
+    display: inline-block;
+    flex-shrink: 0;
+    flex-grow: 0;
+    border: 1px solid #2c3531;
+    border-radius: 4px;
+    top: 0;
+    left: 0;
+    width: 24px;
+    height: 24px;
+    background: #fff;
+    margin-right: 0.5em;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+/*стиль при активном чекбоксе*/
+.admin-checkbox-input:checked + label::before {
+    border-color: #116466;
+    background-color: #d1e8e2;
+    background-image: url(../img/Entrance/check.svg);
+}
+
+/*стиль при наведении курсора на чекбокс*/
+.admin-checkbox-input:not(:disabled):not(:checked) + label:hover::before {
+    border-color: #116466;
+    background-color: #d1e8e2;
+}
+
+.file-upload-button {
+    align-content: center;
+}
+
+
 .dg-large-btn {
     border: 3px solid #2c3531;
     width: 252px;
@@ -1829,6 +1945,20 @@ h1 {
     letter-spacing: 0.05em;
     text-align: center;
     color: #2c3531;
+}
+
+.lg-large-btn-a {
+    border: 3px solid #116466;
+    width: 252px;
+    height: 49px;
+    background: #D1E8E2;
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.05em;
+    text-align: center;
+    color: #2c3531;
+    text-decoration: none;
 }
 
 .lg-small-btn {
@@ -1879,6 +2009,22 @@ h1 {
 
 .back-btn {
     margin-top: 20px;
+}
+
+.back-btn-mb {
+    margin-bottom: 20px;
+}
+
+.lg-bg {
+    background-color: #D1E8E2;
+    color: #2c3531;
+    border: none;
+}
+
+.dg-bg {
+    background-color: #116466;
+    color: white;
+    border: none;
 }
 
 
@@ -1997,6 +2143,11 @@ h1 {
         padding-bottom: 10px;
     }
 
+    .lk {
+        margin-left: 150px;
+        margin-right: 150px;
+    }
+
     .rent-container {
         margin-left: 150px;
         margin-right: 150px;
@@ -2039,6 +2190,17 @@ h1 {
         margin-right: 100px;
     }
 
+    .lk {
+        margin-left: 100px;
+        margin-right: 100px;
+    }
+
+    .admin-user-btn-grid {
+        grid-template-columns: 252px auto;
+        grid-template-rows: repeat(2, 1fr);
+        grid-row-gap: 15px;
+    }
+
     .footer-rent-container {
         margin-left: 75px;
         margin-right: 75px;
@@ -2067,6 +2229,10 @@ h1 {
         margin-left: 30px;
         margin-right: 30px;
     }
+    .lk {
+        margin-left: 50px;
+        margin-right: 50px;
+    }
 }
 
 @media screen and (max-width: 625px) {
@@ -2083,5 +2249,37 @@ h1 {
         margin-left: 150px;
     }
 
+    .lk {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
     
+}
+
+@media screen and (max-width: 580px) {
+    .lk {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .admin-user-btn-grid {
+        grid-template-columns: auto;
+        grid-template-rows: repeat(3, 1fr);
+        grid-row-gap: 15px;
+    }
+
+    .admin-rent-btn-grid {
+        grid-template-columns: auto;
+        grid-template-rows: repeat(2, 1fr);
+        grid-row-gap: 15px;
+    }
+
+    .admin-place-btn-grid {
+        grid-template-columns: auto;
+        grid-template-rows: repeat(2, 1fr);
+        grid-row-gap: 15px;
+    }
 }

@@ -1,37 +1,55 @@
 ﻿@model EditUserViewModel
 
-<main class="main">
-    <h2>Изменить данные пользователя</h2>
+<main class="main lk-center">
+    <section class="lk-title-section">
+        <div class="lk-title-container">
+            <h1 class="center-title-h1">Пользователь</h1>
+        </div>
+    </section>
 
-    <form asp-action="EditUser" method="post">
-        <div class="form-group">
-            <label asp-for="FullNameUser"></label>
-            <input asp-for="FullNameUser" class="form-control" />
-            <span asp-validation-for="FullNameUser" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Email"></label>
-            <input asp-for="Email" class="form-control" />
-            <span asp-validation-for="Email" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="PhoneNumber"></label>
-            <input asp-for="PhoneNumber" class="form-control" />
-            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Admin"></label>
-            <input asp-for="Admin" type="checkbox" />
-            <span asp-validation-for="Admin" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Balance"></label>
-            <input asp-for="Balance" class="form-control" />
-            <span asp-validation-for="Balance" class="text-danger"></span>
-        </div>
-        <input type="hidden" asp-for="Id" />
-        <button type="submit" class="btn btn-primary">Сохранить изменения</button>
-        <a href="@Url.Action("Users", "Admin")" class="btn btn-secondary">Отмена</a>
-    </form>
+    <div class="balance-btn-container">
+        <form asp-action="EditUser" method="post">
+            <div class="lk-form-group">
+                <div class="lk-form-label-container">
+                    <label asp-for="FullNameUser" class="lk-form-label">Полное имя</label>
+                </div>
+                <input asp-for="FullNameUser" class="lk-form-input" />
+                <span asp-validation-for="FullNameUser" class="text-danger"></span>
+            </div>
+            <div class="lk-form-group">
+                <div class="lk-form-label-container">
+                    <label asp-for="Email" class="lk-form-label">Email</label>
+                </div>
+                <input asp-for="Email" class="lk-form-input" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="lk-form-group-prelast">
+                <div class="lk-form-label-container">
+                    <label asp-for="PhoneNumber" class="lk-form-label">Номер телефона</label>
+                </div>
+                <input asp-for="PhoneNumber" class="lk-form-input" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="lk-form-group">
+                <input asp-for="Admin" type="checkbox" class="admin-checkbox-input" />
+                <label asp-for="Admin" class="lk-form-label">Администратор?</label>
+                <span asp-validation-for="Admin" class="text-danger"></span>
+            </div>
+            <div class="lk-form-group-last">
+                <div class="lk-form-label-container">
+                    <label asp-for="Balance" class="lk-form-label">Баланс пользователя</label>
+                </div>
+                <input asp-for="Balance" class="lk-form-input" />
+                <span asp-validation-for="Balance" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="dg-large-btn">Сохранить изменения</button>
+
+            <div class="back-btn">
+                <button type="button" class="lg-small-btn" onclick="window.location.href='@Url.Action("Users", "Admin")'">Назад</button>
+            </div>
+        </form>
+    </div>
+    
 </main>
 

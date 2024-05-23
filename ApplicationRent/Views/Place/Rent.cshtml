@@ -4,13 +4,13 @@
 
 @model ApplicationRent.Controllers.RequestsRentViewModel
 
-<main class="main">
-    <section class="rent-title-section">
-        <div class="rent-title-container">
-            <h1 class="rent-title-h1">Аренда помещения: @Model.PlaceName</h1>
+<main class="main lk">
+    <section class="lk-title-section">
+        <div class="lk-title-container">
+            <h1 class="lk-title-h1">Аренда помещения: @Model.PlaceName</h1>
         </div>
     </section>
-    <h2>Аренда</h2>
+
 
     <div>
         @if (Model.IsOnlineRentAvailable)
