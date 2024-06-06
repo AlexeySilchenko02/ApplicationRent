@@ -538,19 +538,19 @@ h1 {
 
 /* Benefits styles end*/
 
-.carousel {
+/*.carousel {
     position: relative;
     max-width: 1098px;
-    min-height: 669px;
+    min-height: 669px;*/
     /*padding: 10px 40px;*/
-    padding-top: 86px;
+    /*padding-top: 86px;
     padding-bottom: 86px;
     padding-left: 45px;
     padding-right: 45px;
     margin-top: 600px;
     margin-left: auto;
     margin-right: auto;
-}
+}*/
 
 .slider_card {
     background-color: #D9B08C;
@@ -1884,6 +1884,11 @@ h1 {
     margin-top: 10px;
 }
 
+/*Начало стилей слайдера подробнее*/
+
+/*Конец стилей слайдера подробнее*/
+
+
 .lk {
     margin-left: 226px;
     margin-right: 226px;
@@ -2213,10 +2218,10 @@ h1 {
     margin: 0 auto;
 }
 
-#slides article {
+/*#slides article {
     width: 20%;
     float: left;
-}
+}*/
 
 #slider .image {
     width: 50%;
@@ -2263,10 +2268,61 @@ label, a {
 }
 
 
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-column-gap: 20px;
+    justify-items: left;
+    padding-top: 48px;
+}
 
+.details-desc {
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 20px;
+    letter-spacing: 0.05em;
+    color: #292d32;
+}
 
+.reviews {
 
+}
 
+.reviews-title {
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 25px;
+    letter-spacing: 0.05em;
+    color: #2c3531;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.reviews-none {
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 16px;
+    letter-spacing: 0.05em;
+    color: #292d32;
+}
+
+.reviews-name {
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 20px;
+    letter-spacing: 0.05em;
+    color: #116466;
+    margin-bottom: 10px;
+}
+
+.reviews-det {
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 16px;
+    letter-spacing: 0.05em;
+    color: #2c3531;
+    margin-bottom: 10px;
+}
 
 .dg-large-btn {
     border: 3px solid #2c3531;
@@ -2439,7 +2495,6 @@ label, a {
     white-space: nowrap;
     line-height: 60px;
 }
-
 
 
 
@@ -2619,6 +2674,13 @@ label, a {
     .lk {
         margin-left: 50px;
         margin-right: 50px;
+    }
+
+    .details-grid {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        grid-template-rows: auto auto;
+        grid-row-gap: 20px;
     }
 }
 

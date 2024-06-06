@@ -9,6 +9,7 @@
 
         .full-stars .rating-group {
             display: inline-flex;
+            flex-wrap: wrap;
             flex-direction: row-reverse;
             justify-content: flex-start;
         }
@@ -33,7 +34,7 @@
 
         .full-stars input:checked ~ label svg,
         .full-stars input:checked ~ label ~ label svg {
-            fill: #337AB7;
+            fill: #FFCB9A;
         }
 
         .full-stars .rating-group:hover label svg {
@@ -42,137 +43,143 @@
 
         .full-stars .rating-group input:hover ~ label svg,
         .full-stars .rating-group input:hover ~ label ~ label svg {
-            fill: #337AB7;
+            fill: #FFCB9A;
         }
 
 
 </style>
 
 <main class="main lk">
-    <div class="all">        
-        <article id="slider">
-            <input checked type="radio" name="slider" id="desktop" />
-            <input type="radio" name="slider" id="switch2" />
-            <input type="radio" name="slider" id="switch3" />
 
-            <div id="slides">
-                <div id="overflow">
-                    <div class="image">
-                    <article><img src="@Url.Content("~/place/" + Model.Place.ImageFileName1)" alt="Image 1" /></article>
-                    <article><img src="@Url.Content("~/place/" + Model.Place.ImageFileName2)" alt="Image 2" /></article>
-                    <article><img src="@Url.Content("~/place/" + Model.Place.ImageFileName3)" alt="Image 3" /></article>
-                    </div>
+    <section>
+        <div class="details-grid">
+            <div>
+                <div class="lk-title-container">
+                    <h1 class="lk-title-h1">@Html.DisplayFor(model => model.Place.Name)</h1>
+                </div>
+                <div style="overflow-x: auto; margin-top: 20px;">
+                    <table class="lk-table">
+                        <thead></thead>
+                        <tbody>
+                            <tr>
+                                <td>Цена</td>
+                                <td>@Html.DisplayFor(model => model.Place.Price) ₽</td>
+                                <td>Категория</td>
+                                <td>@Html.DisplayFor(model => model.Place.Category)</td>
+                            </tr>
+                            <tr>
+                                <td>Размер</td>
+                                <td>@Html.DisplayFor(model => model.Place.SizePlace) м²</td>
+                                <td>Рейтинг</td>
+                                <td id="averageRating">@Model.AverageRating.ToString("0.0") / 10</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div>
+                    <p class="details-desc">@Html.DisplayFor(model => model.Place.Description)</p>
                 </div>
             </div>
-            <div id="controls">
-                <label for="switch1"></label>
-                <label for="switch2"></label>
-                <label for="switch3"></label>
+            <div>
+                <div id="carouselExampleIndicators" class="carousel slide">
+                    <div class="carousel-indicators">
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                    </div>
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img src="@Url.Content("~/place/" + Model.Place.ImageFileName1)" class="d-block w-100" alt="Image 1">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="@Url.Content("~/place/" + Model.Place.ImageFileName2)" class="d-block w-100" alt="Image 2">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="@Url.Content("~/place/" + Model.Place.ImageFileName3)" class="d-block w-100" alt="Image 3">
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Предыдущий</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Следующий</span>
+                    </button>
+                </div>
             </div>
-            <div id="active">
-                <label for="switch1"></label>
-                <label for="switch2"></label>
-                <label for="switch3"></label>
-            </div>
-        </article>
-    </div>
-
-    @* <div uk-slideshow="animation: push; min-height: 300; max-height: 600">
-
-        <div class="uk-position-relative uk-visible-toggle uk-light">
-
-            <ul class="uk-slideshow-items">
-                <li>
-                    <img src="@Url.Content("~/place/" + Model.Place.ImageFileName1)" alt="Image 1" uk-cover />
-                </li>
-                <li>
-                    <img src="@Url.Content("~/place/" + Model.Place.ImageFileName2)" alt="Image 2" uk-cover />
-                </li>
-                <li>
-                    <img src="@Url.Content("~/place/" + Model.Place.ImageFileName3)" alt="Image 3" uk-cover />
-                </li>
-            </ul>
-
-            <a class="uk-position-center-left uk-position-small uk-hidden-hover" href="#" uk-slidenav-previous uk-slideshow-item="previous"></a>
-            <a class="uk-position-center-right uk-position-small uk-hidden-hover" href="#" uk-slidenav-next uk-slideshow-item="next"></a>
-
         </div>
-
-        <ul class="uk-slideshow-nav uk-dotnav uk-flex-center uk-margin"></ul>
-
-    </div> *@
-
-    
-
-    <section class="lk-title-section">
-        <div class="lk-title-container">
-            <h1 class="lk-title-h1">@Html.DisplayFor(model => model.Place.Name)</h1>
-        </div>
+        
     </section>
-
-    <div class="bg-grey">
-        <div style="overflow-x: auto;">
-            <table class="lk-table">
-                <thead></thead>
-                <tbody>                    
-                        <tr>
-                            <td>Цена</td>
-                            <td>@Html.DisplayFor(model => model.Place.Price) ₽</td>
-                            <td>Категория</td>
-                            <td>@Html.DisplayFor(model => model.Place.Category)</td>
-                        </tr>
-                        <tr>
-                            <td>Размер</td>
-                            <td>@Html.DisplayFor(model => model.Place.SizePlace) м²</td>
-                            <td>Рейтинг</td>
-                            <td id="averageRating">@Model.AverageRating.ToString("0.0") / 10</td>
-                        </tr>
-                </tbody>
-            </table>
+    
+    
+    <section class="reviews">
+        <h3 class="reviews-title">Отзывы</h3>
+        <div id="reviews">
+            @if (Model.Reviews != null && Model.Reviews.Any())
+            {
+                @foreach (var review in Model.Reviews)
+                {
+                    <div>
+                        <h4>@Html.DisplayFor(modelItem => review.Name)</h4>
+                        <p>Оценка: @Html.DisplayFor(modelItem => review.Rating) / 10</p>
+                        <p>@Html.DisplayFor(modelItem => review.Comment)</p>
+                    </div>
+                    <hr />
+                }
+            }
+            else
+            {
+                <p class="reviews-none">У этого места еще нет отзывов</p>
+            }
         </div>
-    </div>
-
-@*     <div>
-        <hr />
-        <dl class="row">
-            <dt class="col-sm-2">Название</dt>
-            <dd class="col-sm-10">@Html.DisplayFor(model => model.Place.Name)</dd>
-            <dt class="col-sm-2">Цена</dt>
-            <dd class="col-sm-10">@Html.DisplayFor(model => model.Place.Price)</dd>
-            <dt class="col-sm-2">Размер места</dt>
-            <dd class="col-sm-10">@Html.DisplayFor(model => model.Place.SizePlace) м²</dd>
-            <dt class="col-sm-2">Описание</dt>
-            <dd class="col-sm-10">@Html.DisplayFor(model => model.Place.Description)</dd>
-            <dt class="col-sm-2">Категория</dt>
-            <dd class="col-sm-10">@Html.DisplayFor(model => model.Place.Category)</dd>
-            <dt class="col-sm-2">Средняя оценка</dt>
-            <dd class="col-sm-10" id="averageRating">@Model.AverageRating.ToString("0.0") / 10</dd>
-            @if (!string.IsNullOrEmpty(Model.Place.ImageFileName1))
-            {
-                <dt class="col-sm-2">Image 1</dt>
-                <dd class="col-sm-10">
-                    <img src="@Url.Content("~/place/" + Model.Place.ImageFileName1)" alt="Image 1" style="max-width: 200px; max-height: 200px;" />
-                </dd>
-            }
-            @if (!string.IsNullOrEmpty(Model.Place.ImageFileName2))
-            {
-                <dt class="col-sm-2">Image 2</dt>
-                <dd class="col-sm-10">
-                    <img src="@Url.Content("~/place/" + Model.Place.ImageFileName2)" alt="Image 2" style="max-width: 200px; max-height: 200px;" />
-                </dd>
-            }
-            @if (!string.IsNullOrEmpty(Model.Place.ImageFileName3))
-            {
-                <dt class="col-sm-2">Image 3</dt>
-                <dd class="col-sm-10">
-                    <img src="@Url.Content("~/place/" + Model.Place.ImageFileName3)" alt="Image 3" style="max-width: 200px; max-height: 200px;" />
-                </dd>
-            }
-        </dl>
-    </div> *@
-
-
-    <h3>Отзывы</h3>
+        <h3 class="reviews-title">Добавить отзыв</h3>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <form id="reviewForm">
+                <div class="form-group">
+                    <label asp-for="NewReview.Name" class="tabs-label">Имя</label>
+                    <input asp-for="NewReview.Name" class="form-control" style="border: 3px solid #D1E8E2; border-radius: 10px;" id="Name" value="@Model.NewReview.Name" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="NewReview.Comment" class="tabs-label"> Отзыв</label>
+                    <textarea asp-for="NewReview.Comment" class="form-control" style="border: 3px solid #D1E8E2; border-radius: 10px;" id="Comment"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="tabs-label">Рейтинг</label>
+                    <div class="full-stars">
+                        <div class="rating-group">
+                            @* <input name="rating" value="0" type="radio" disabled checked /> *@
+                            <input name="rating" value="0" type="radio" />
+                            @for (int i = 10; i >= 1; i--)
+                            {
+                                <input name="rating" id="rating-@i" value="@i" type="radio" />
+                                <label for="rating-@i">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                                        <path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z" />
+                                    </svg>
+                                </label>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" id="PlaceId" value="@Model.Place.Id" />
+                <button type="button" class="dg-large-btn" style="border: 1px solid #ccc; margin-top: 20px;" onclick="submitReview()">Добавить отзыв</button>
+            </form>
+        }
+        else
+        {
+            <p class="reviews-none">Для того чтобы оставить отзыв, пожалуйста зарегистрируйтесь.</p>
+        }
+        <div class="back-btn">
+            <button type="button" class="lg-small-btn" onclick="window.location.href='@Url.Action("Index", "Place")'">Назад</button>
+        </div>
+        @* <div>
+            <a asp-action="Index">Back to List</a>
+        </div> *@
+    </section>
+    
     @* <div id="reviews">
         @foreach (var review in Model.Reviews)
         {
@@ -185,65 +192,7 @@
         }
 
     </div> *@
-    <div id="reviews">
-        @if (Model.Reviews != null && Model.Reviews.Any())
-        {
-            @foreach (var review in Model.Reviews)
-            {
-                <div>
-                    <h4>@Html.DisplayFor(modelItem => review.Name)</h4>
-                    <p>Оценка: @Html.DisplayFor(modelItem => review.Rating) / 10</p>
-                    <p>@Html.DisplayFor(modelItem => review.Comment)</p>
-                </div>
-                <hr />
-            }
-        }
-        else
-        {
-            <p>У этого места еще нет отзывов</p>
-        }
-    </div>
-    <h3>Добавить отзыв</h3>
-    @if (User.Identity.IsAuthenticated)
-    {
-        <form id="reviewForm">
-            <div class="form-group">
-                <label asp-for="NewReview.Name"></label>
-                <input asp-for="NewReview.Name" class="form-control" id="Name" value="@Model.NewReview.Name" />
-            </div>
-            <div class="form-group">
-                <label asp-for="NewReview.Comment"></label>
-                <textarea asp-for="NewReview.Comment" class="form-control" id="Comment"></textarea>
-            </div>
-            <div class="form-group">
-                <label>Рейтинг</label>
-                <div class="full-stars">
-                    <div class="rating-group">
-                        @* <input name="rating" value="0" type="radio" disabled checked /> *@
-                        <input name="rating" value="0" type="radio" />
-                        @for (int i = 10; i >= 1; i--)
-                        {
-                            <input name="rating" id="rating-@i" value="@i" type="radio" />
-                            <label for="rating-@i">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-                                    <path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z" />
-                                </svg>
-                            </label>
-                        }
-                    </div>
-                </div>
-            </div>
-            <input type="hidden" id="PlaceId" value="@Model.Place.Id" />
-            <button type="button" class="btn btn-primary" onclick="submitReview()">Добавить отзыв</button>
-        </form>
-    }
-    else
-    {
-        <p>Для того чтобы оставить отзыв, пожалуйста зарегистрируйтесь.</p>
-    }
-    <div>
-        <a asp-action="Index">Back to List</a>
-    </div>
+    
 </main>
 
 @section Scripts {
@@ -267,7 +216,7 @@
                     if (response.success) {
                         var name = review.Name ? review.Name : "";
                         var comment = review.Comment ? review.Comment : "";
-                        $("#reviews").append('<div><h4>' + name + '</h4><p>Оценка: ' + review.Rating + ' / 10</p><p>' + comment + '</p></div><hr />');
+                        $("#reviews").append('<div><h4 class="reviews-name">' + name + '</h4><p class="reviews-det">Оценка: ' + review.Rating + ' / 10</p><p class="reviews-det">' + comment + '</p></div><hr />');
                         $("#Name").val('');
                         $("#Comment").val('');
                         $('input[name="rating"]:checked').prop('checked', false);
