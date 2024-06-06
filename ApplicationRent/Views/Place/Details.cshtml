@@ -1,5 +1,7 @@
 ﻿@model PlaceDetailsViewModel
-
+<link rel="stylesheet" href="css/uikit.min.css">
+<script src="js/uikit.min.js"></script>
+<script src="js/uikit-icons.min.js"></script>
 <style>
     .full-stars {
         text-align: center;
@@ -42,16 +44,95 @@
         .full-stars .rating-group input:hover ~ label ~ label svg {
             fill: #337AB7;
         }
+
+
 </style>
 
 <main class="main lk">
+    <div class="all">        
+        <article id="slider">
+            <input checked type="radio" name="slider" id="desktop" />
+            <input type="radio" name="slider" id="switch2" />
+            <input type="radio" name="slider" id="switch3" />
+
+            <div id="slides">
+                <div id="overflow">
+                    <div class="image">
+                    <article><img src="@Url.Content("~/place/" + Model.Place.ImageFileName1)" alt="Image 1" /></article>
+                    <article><img src="@Url.Content("~/place/" + Model.Place.ImageFileName2)" alt="Image 2" /></article>
+                    <article><img src="@Url.Content("~/place/" + Model.Place.ImageFileName3)" alt="Image 3" /></article>
+                    </div>
+                </div>
+            </div>
+            <div id="controls">
+                <label for="switch1"></label>
+                <label for="switch2"></label>
+                <label for="switch3"></label>
+            </div>
+            <div id="active">
+                <label for="switch1"></label>
+                <label for="switch2"></label>
+                <label for="switch3"></label>
+            </div>
+        </article>
+    </div>
+
+    @* <div uk-slideshow="animation: push; min-height: 300; max-height: 600">
+
+        <div class="uk-position-relative uk-visible-toggle uk-light">
+
+            <ul class="uk-slideshow-items">
+                <li>
+                    <img src="@Url.Content("~/place/" + Model.Place.ImageFileName1)" alt="Image 1" uk-cover />
+                </li>
+                <li>
+                    <img src="@Url.Content("~/place/" + Model.Place.ImageFileName2)" alt="Image 2" uk-cover />
+                </li>
+                <li>
+                    <img src="@Url.Content("~/place/" + Model.Place.ImageFileName3)" alt="Image 3" uk-cover />
+                </li>
+            </ul>
+
+            <a class="uk-position-center-left uk-position-small uk-hidden-hover" href="#" uk-slidenav-previous uk-slideshow-item="previous"></a>
+            <a class="uk-position-center-right uk-position-small uk-hidden-hover" href="#" uk-slidenav-next uk-slideshow-item="next"></a>
+
+        </div>
+
+        <ul class="uk-slideshow-nav uk-dotnav uk-flex-center uk-margin"></ul>
+
+    </div> *@
+
+    
+
     <section class="lk-title-section">
         <div class="lk-title-container">
-            <h1 class="lk-title-h1">Подробная информация</h1>
+            <h1 class="lk-title-h1">@Html.DisplayFor(model => model.Place.Name)</h1>
         </div>
     </section>
 
-    <div>
+    <div class="bg-grey">
+        <div style="overflow-x: auto;">
+            <table class="lk-table">
+                <thead></thead>
+                <tbody>                    
+                        <tr>
+                            <td>Цена</td>
+                            <td>@Html.DisplayFor(model => model.Place.Price) ₽</td>
+                            <td>Категория</td>
+                            <td>@Html.DisplayFor(model => model.Place.Category)</td>
+                        </tr>
+                        <tr>
+                            <td>Размер</td>
+                            <td>@Html.DisplayFor(model => model.Place.SizePlace) м²</td>
+                            <td>Рейтинг</td>
+                            <td id="averageRating">@Model.AverageRating.ToString("0.0") / 10</td>
+                        </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+@*     <div>
         <hr />
         <dl class="row">
             <dt class="col-sm-2">Название</dt>
@@ -88,7 +169,7 @@
                 </dd>
             }
         </dl>
-    </div>
+    </div> *@
 
 
     <h3>Отзывы</h3>

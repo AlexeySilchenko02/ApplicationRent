@@ -4,55 +4,65 @@
     ViewData["Title"] = "Регистрация";
 }
 
-<main class="main">
+<main class="main lk-center">
     <section class="register-title-section">
         <div class="register-title-container">
             <h1 class="register-title-h1">Регистрация</h1>
         </div>
     </section>
     <section class="register-form">
+        <div>
+            <p class="register-text">При регистрации указывайте номер телефона, который привязан к телеграмм, если хотите получить доступ к чат-боту.</p>
+        </div>
         <div class="register-form-container">
             @* <div class="register-form-grid"> *@
                 @* <div class="register-form-grid-block"> *@
+                    
                     <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="reg-form"> 
-                        <div>
-                            <p class="register-text">При регистрации указывайте номер телефона, который привязан к телеграмм, если хотите получить доступ к чат-боту.</p>
-                        </div>
+                        
                         
                         <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
                         <div class="register-form-group">
                             <div class="register-form-label-container">
                                 <label asp-for="Input.Name" class="register-form-label">Введите имя</label>
                             </div>
-                            <input asp-for="Input.Name" class="register-form-input" autocomplete="name" aria-required="true" placeholder="Имя" />
+                            <input asp-for="Input.Name" class="lk-form-input" autocomplete="name" aria-required="true" placeholder="Имя" />
                             <span asp-validation-for="Input.Name" class="text-danger"></span>
                         </div>
                         <div class="register-form-group">
                             <div class="register-form-label-container">
                                 <label asp-for="Input.PhoneNumber" class="register-form-label">Введите номер телефона</label>
                             </div>
-                            <input asp-for="Input.PhoneNumber" class="register-form-input" autocomplete="phone" aria-required="true" placeholder="+7 (000) 000 00 00" />
+                            <input asp-for="Input.PhoneNumber" class="lk-form-input" autocomplete="phone" aria-required="true" placeholder="+7 (000) 000 00 00" />
                             <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
                         </div>
                         <div class="register-form-group">
                             <div class="register-form-label-container">
                                 <label asp-for="Input.Email" class="register-form-label">Введите Email</label>
                             </div>
-                            <input asp-for="Input.Email" class="register-form-input" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                            <input asp-for="Input.Email" class="lk-form-input" autocomplete="username" aria-required="true" placeholder="name@example.com" />
                             <span asp-validation-for="Input.Email" class="text-danger"></span>
                         </div>
                         <div class="register-form-group">
                             <div class="register-form-label-container">
                                 <label asp-for="Input.Password" class="register-form-label">Введите пароль</label>
                             </div>
-                            <input asp-for="Input.Password" class="register-form-input" autocomplete="new-password" aria-required="true" placeholder="Пароль" />
+                            <div class="input-box">
+                                <input asp-for="Input.Password" class="cp-form-input" autocomplete="new-password" aria-required="true" placeholder="Пароль" id="InputPassword" />
+                                <button class="eye-btn" type="button" onclick="togglePasswordVisibility('InputPassword')"></button>
+                            </div>
+                            
                             <span asp-validation-for="Input.Password" class="text-danger"></span>
                         </div>
                         <div class="register-form-group">
                             <div class="register-form-label-container">
                                 <label asp-for="Input.ConfirmPassword" class="register-form-label">Повторите пароль</label>
                             </div>
-                            <input asp-for="Input.ConfirmPassword" class="register-form-input" autocomplete="new-password" aria-required="true" placeholder="Повтор пароля" />
+                            <div class="input-box">
+                                <input asp-for="Input.ConfirmPassword" class="cp-form-input" autocomplete="new-password" aria-required="true" placeholder="Повтор пароля" id="InputConfirmPassword" />
+                                <button class="eye-btn" type="button" onclick="togglePasswordVisibility('InputConfirmPassword')"></button>
+                            </div>
+                            
                             <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                         </div>
                         <div class="register-form-btn-container">
@@ -68,6 +78,19 @@
             @* </div> *@
         </div>
     </section>
+
+    <script>
+        function togglePasswordVisibility(fieldId) {
+            var input = document.getElementById(fieldId);
+            if (input.type === "password") {
+                input.type = "text";
+                document.querySelector(`button[onclick="togglePasswordVisibility('${fieldId}')"]`).className = "eye-secondary-btn";
+            } else {
+                input.type = "password";
+                document.querySelector(`button[onclick="togglePasswordVisibility('${fieldId}')"]`).className = "eye-btn";
+            }
+        }
+    </script>
 </main>
 
 

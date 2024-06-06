@@ -4,8 +4,20 @@
     <div class="rent-list-grid">
         @foreach (var item in Model)
         {
-            <div class="rent-list-grid-block1">
-                <img class="rent-list-pic" src="@Url.Content("~/place/" + item.ImageFileName1)" alt="Image 1" />
+            <div uk-slideshow=" min-width: 232; animation: pull"  class="uk-position-relative uk-visible-toggle uk-light rent-list-grid-block1">
+                <ul class="uk-slideshow-items">
+                    <li>
+                        <img class="rent-list-pic" src="@Url.Content("~/place/" + item.ImageFileName1)" alt="Image 1" uk-cover/>
+                    </li>
+                    <li>
+                        <img class="rent-list-pic" src="@Url.Content("~/place/" + item.ImageFileName2)" alt="Image 2" uk-cover />
+                    </li>
+                    <li>
+                        <img class="rent-list-pic" src="@Url.Content("~/place/" + item.ImageFileName3)" alt="Image 3" uk-cover />
+                    </li>
+                </ul>
+                <a class="uk-position-center-left uk-position-small uk-hidden-hover" href="#" uk-slidenav-previous uk-slideshow-item="previous"></a>
+                <a class="uk-position-center-right uk-position-small uk-hidden-hover" href="#" uk-slidenav-next uk-slideshow-item="next"></a>
             </div>
             <div class="rent-list-grid-block2">
                 <h2 class="rent-list-h2">@Html.DisplayFor(modelItem => item.Name)</h2>
@@ -52,7 +64,23 @@
             <div class="rent-place-card-title">
                 <h2 class="rent-place-card-h2">@Html.DisplayFor(modelItem => item.Name)</h2>
             </div>
-            <img class="rent-place-card-pic" src="@Url.Content("~/place/" + item.ImageFileName1)" alt="Image 1 " />
+            <div uk-slideshow="min-height: 232; animation: pull" class="uk-position-relative uk-visible-toggle uk-light rent-list-grid-block1">
+                <ul class="uk-slideshow-items">
+                    <li>
+                        <img class="rent-place-card-pic" src="@Url.Content("~/place/" + item.ImageFileName1)" alt="Image 1" uk-cover />
+                    </li>
+                    <li>
+                        <img class="rent-place-card-pic" src="@Url.Content("~/place/" + item.ImageFileName2)" alt="Image 2" uk-cover />
+                    </li>
+                    <li>
+                        <img class="rent-place-card-pic" src="@Url.Content("~/place/" + item.ImageFileName3)" alt="Image 3" uk-cover />
+                    </li>
+                </ul>
+                <a class="uk-position-center-left uk-position-small uk-hidden-hover" href="#" uk-slidenav-previous uk-slideshow-item="previous"></a>
+                <a class="uk-position-center-right uk-position-small uk-hidden-hover" href="#" uk-slidenav-next uk-slideshow-item="next"></a>
+            </div>
+
+            @* <img class="rent-place-card-pic" src="@Url.Content("~/place/" + item.ImageFileName1)" alt="Image 1 " /> *@
             <div class="rent-place-card-status-container @(item.InRent ? "rented" : "not-rented")">
                 @if (!item.InRent)
                 {

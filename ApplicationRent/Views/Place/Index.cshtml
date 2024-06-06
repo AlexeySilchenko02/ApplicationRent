@@ -64,62 +64,73 @@
             flex-wrap: wrap;
             justify-content: start;
         }
-
-        .filter-container {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-            .filter-container label {
-                margin-right: 5px;
-            }
-
-            .filter-container select,
-            .filter-container button {
-                padding: 5px;
-                border-radius: 5px;
-                border: 1px solid #ccc;
-            }
     </style>
 
-    <form id="filter-form" method="get" asp-controller="Place" asp-action="Filter">
-        <div class="filter-container">
-            <label for="Category">Категория:</label>
-            <select id="Category" name="Category">
-                <option value="">Все</option>
-                <option value="Фотостудия">Фотостудия</option>
-                <option value="Склад">Склад</option>
-                <option value="Офис">Офис</option>
-                <option value="Базовое место">Базовое место</option>
-            </select>
-
-            <label for="PriceSort">Сортировать по цене:</label>
-            <select id="PriceSort" name="PriceSort">
-                <option value="">Выберите</option>
-                <option value="PriceAsc">По возрастанию</option>
-                <option value="PriceDesc">По убыванию</option>
-            </select>
-
-            <label for="SizeSort">Сортировать по размеру:</label>
-            <select id="SizeSort" name="SizeSort">
-                <option value="">Выберите</option>
-                <option value="SizeAsc">По возрастанию</option>
-                <option value="SizeDesc">По убыванию</option>
-            </select>
-
-            <label for="InRent">Статус:</label>
-            <select id="InRent" name="InRent">
-                <option value="">Все</option>
-                <option value="true">Занято</option>
-                <option value="false">Свободно</option>
-            </select>
-
-            <button type="submit">Применить фильтры</button>
+    <section class="rent-filters">
+        <div class="rent-filters-container">
+            <form id="filter-form" method="get" asp-controller="Place" asp-action="Filter">
+                <div class="filter-container">
+                    <div uk-form-custom="target: > * > span:first-child">
+                        <label for="Category" class="rent-filter-label">Категория</label>
+                        <select id="Category" name="Category">
+                            <option value="">Все</option>
+                            <option value="Фотостудия">Фотостудия</option>
+                            <option value="Склад">Склад</option>
+                            <option value="Офис">Офис</option>
+                            <option value="Базовое место">Базовое место</option>
+                        </select>
+                        <button class="uk-button uk-button-default" type="button" tabindex="-1">
+                            <span style="text-transform: none;"></span>
+                            <span uk-icon="icon: chevron-down"></span>
+                        </button>
+                    </div>
+                    
+                    <div uk-form-custom="target: > * > span:first-child">
+                        <label for="PriceSort" class="rent-filter-label">Сортировать по цене:</label>
+                        <select id="PriceSort" name="PriceSort">
+                            <option value="">Выберите</option>
+                            <option value="PriceAsc">По возрастанию</option>
+                            <option value="PriceDesc">По убыванию</option>
+                        </select>
+                        <button class="uk-button uk-button-default" type="button" tabindex="-1">
+                            <span style="text-transform: none;"></span>
+                            <span uk-icon="icon: chevron-down"></span>
+                        </button>
+                    </div>
+                    
+                    <div uk-form-custom="target: > * > span:first-child">
+                        <label for="SizeSort" class="rent-filter-label">Сортировать по размеру:</label>
+                        <select id="SizeSort" name="SizeSort">
+                            <option value="">Выберите</option>
+                            <option value="SizeAsc">По возрастанию</option>
+                            <option value="SizeDesc">По убыванию</option>
+                        </select>
+                        <button class="uk-button uk-button-default" type="button" tabindex="-1">
+                            <span style="text-transform: none;"></span>
+                            <span uk-icon="icon: chevron-down"></span>
+                        </button>
+                    </div>
+                    
+                    <div uk-form-custom="target: > * > span:first-child">
+                        <label for="InRent" class="rent-filter-label">Статус:</label>
+                        <select id="InRent" name="InRent">
+                            <option value="">Все</option>
+                            <option value="true">Занято</option>
+                            <option value="false">Свободно</option>
+                        </select>
+                        <button class="uk-button uk-button-default" type="button" tabindex="-1">
+                            <span style="text-transform: none;"></span>
+                            <span uk-icon="icon: chevron-down"></span>
+                        </button>
+                    </div>
+                    
+                    <button type="submit" class="lg-small-btn">Применить</button>
+                </div>
+            </form>
+            <button onclick="location.href='@Url.Action("Calculator", "Place")'" class="dg-large-btn">Калькулятор аренды</button>
         </div>
-    </form>
-
-    <a href="@Url.Action("Calculator", "Place")" class="action-btn">Калькулятор</a>
+    </section>
+    
 
     <section class="rent">
         <div class="rent-container">

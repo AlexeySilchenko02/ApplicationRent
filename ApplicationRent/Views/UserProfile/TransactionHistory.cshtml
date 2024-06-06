@@ -6,23 +6,26 @@
         </div>
     </section>
 
-    <table class="lk-table">
-        <thead>
-            <tr>
-                <th>Дата транзакции</th>
-                <th>Сумма</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var transaction in Model)
-            {
+    <div style="overflow-x: auto;">
+        <table class="lk-table">
+            <thead>
                 <tr>
-                    <td>@transaction.TransactionDate.ToString("dd.MM.yyyy HH:mm:ss")</td>
-                    <td>@transaction.Amount</td>
+                    <th>Дата транзакции</th>
+                    <th>Сумма</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var transaction in Model)
+                {
+                    <tr>
+                        <td>@transaction.TransactionDate.ToString("dd.MM.yyyy HH:mm:ss")</td>
+                        <td>@transaction.Amount</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    
     <div class="back-btn">
         <button type="button" class="lg-small-btn" onclick="window.location.href='@Url.Action("Index", "UserProfile")'">Назад</button>
     </div>

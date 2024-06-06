@@ -5,7 +5,7 @@
     ViewData["Title"] = "Вход";
 }
 
-<main class="main">
+<main class="main lk-center">
     <section class="entrance-title-section">
         <div class="entrance-title-container">
             <h1 class="entrance-title-h1">Вход</h1>
@@ -21,16 +21,25 @@
                             <div class="register-form-label-container">
                                 <label asp-for="Input.Email" class="register-form-label">Введите имя</label>
                             </div>
-                            <input asp-for="Input.Email" class="entrance-form-input" autocomplete="username" aria-required="true" placeholder="Введите email" />
-                            <span asp-validation-for="Input.Email" class="text-danger"></span>
+                            <input asp-for="Input.Email" class="lk-form-input" autocomplete="username" aria-required="true" placeholder="Введите email" />
+                            <div>
+                                <span asp-validation-for="Input.Email" class="text-danger"></span>
+                            </div>
+                            
                         </div>
 
                         <div class="entrance-form-group2">
                             <div class="register-form-label-container">
                                 <label asp-for="Input.Password" class="register-form-label">Введите пароль</label>
                             </div>
-                            <input asp-for="Input.Password" class="entrance-form-input" autocomplete="current-password" aria-required="true" placeholder="password" />
-                            <span asp-validation-for="Input.Password" class="text-danger"></span>
+                            <div class="input-box">
+                                <input asp-for="Input.Password" class="cp-form-input" autocomplete="current-password" aria-required="true" placeholder="password" id="CurrentPassword" />
+                                <button class="eye-btn" type="button" onclick="togglePasswordVisibility('CurrentPassword')"></button>
+                            </div>  
+                            <div>
+                                <span asp-validation-for="Input.Password" class="text-danger"></span>
+                            </div>
+                            
                         </div>
 
                         <div class="entrance-checkbox">
@@ -43,7 +52,7 @@
                         </div>
 
                         <div class="forgot-password-container">
-                            <a id="forgot-password" class="entrance-forgot-password" asp-page="./ForgotPassword">Забыли пароль?</a>
+                            <a id="forgot-password" class="entrance-forgot-password" >Забыли пароль?</a>
                         </div>
                         <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="entrance-form-text">Нет аккаунта? Зарегистрируйтесь</a>
                     </form>
@@ -55,6 +64,19 @@
             @* </div> *@
         </div>
     </section>
+
+    <script>
+        function togglePasswordVisibility(fieldId) {
+            var input = document.getElementById(fieldId);
+            if (input.type === "password") {
+                input.type = "text";
+                document.querySelector(`button[onclick="togglePasswordVisibility('${fieldId}')"]`).className = "eye-secondary-btn";
+            } else {
+                input.type = "password";
+                document.querySelector(`button[onclick="togglePasswordVisibility('${fieldId}')"]`).className = "eye-btn";
+            }
+        }
+    </script>
 </main>
 
 @* <h1>@ViewData["Title"]</h1>

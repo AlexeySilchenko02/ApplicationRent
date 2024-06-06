@@ -7,7 +7,11 @@
         <div class="contacts-container">
             <h1 class="contacts-title">Контактная информация</h1>
             <h4 class="contacts-address">Россия, 123456, г.Москва, Ул. Большая Семеновская 38</h4>
-            <div style="position:relative;overflow:hidden;"><a href="https://yandex.ru/maps/213/moscow/?utm_medium=mapframe&utm_source=maps" style="color:#eee;font-size:12px;position:absolute;top:0px;">Москва</a><a href="https://yandex.ru/maps/213/moscow/house/bolshaya_semyonovskaya_ulitsa_38/Z04YcQZhTEQPQFtvfXt5cH5qZQ==/?ll=37.708226%2C55.782341&utm_medium=mapframe&utm_source=maps&z=16.05" style="color:#eee;font-size:12px;position:absolute;top:14px;">Большая Семёновская улица, 38 — Яндекс Карты</a><iframe src="https://yandex.ru/map-widget/v1/?ll=37.708226%2C55.782341&mode=search&ol=geo&ouri=ymapsbm1%3A%2F%2Fgeo%3Fdata%3DCgg1NjczNzkxORJQ0KDQvtGB0YHQuNGPLCDQnNC-0YHQutCy0LAsINCR0L7Qu9GM0YjQsNGPINCh0LXQvNGR0L3QvtCy0YHQutCw0Y8g0YPQu9C40YbQsCwgMzgiCg2Y2BZCFQsgX0I%2C&z=16.05" width="560" height="400" frameborder="1" allowfullscreen="true" style="position:relative;"></iframe></div>
+            <div style="position:relative;overflow:hidden;">
+                <a href="https://yandex.ru/maps/213/moscow/?utm_medium=mapframe&utm_source=maps" style="color:#eee;font-size:12px;position:absolute;top:0px;">Москва</a>
+                <a href="https://yandex.ru/maps/213/moscow/house/bolshaya_semyonovskaya_ulitsa_38/Z04YcQZhTEQPQFtvfXt5cH5qZQ==/?ll=37.708226%2C55.782341&utm_medium=mapframe&utm_source=maps&z=16.05" style="color:#eee;font-size:12px;position:absolute;top:14px;">Большая Семёновская улица, 38 — Яндекс Карты</a>
+                <iframe src="https://yandex.ru/map-widget/v1/?ll=37.708226%2C55.782341&mode=search&ol=geo&ouri=ymapsbm1%3A%2F%2Fgeo%3Fdata%3DCgg1NjczNzkxORJQ0KDQvtGB0YHQuNGPLCDQnNC-0YHQutCy0LAsINCR0L7Qu9GM0YjQsNGPINCh0LXQvNGR0L3QvtCy0YHQutCw0Y8g0YPQu9C40YbQsCwgMzgiCg2Y2BZCFQsgX0I%2C&z=16.05" class="contacts-map-size" frameborder="1" allowfullscreen="true" style="position:relative;"></iframe>
+            </div>
             <p class="contacts-subtitle">Телефон в Москве</p>
             <p class="contacts-info-tel">+7 (999) 777 66 55</p>
             <p class="contacts-subtitle">Email</p>
@@ -91,42 +95,3 @@
         });
     });
 </script>
-
-@* <h1>@ViewData["Title"]</h1> *@
-
-@* <p>
-    Обратная связь
-</p> *@
-
-@* @if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success">
-        @TempData["SuccessMessage"]
-    </div>
-}
-
-<form asp-action="SubmitFeedback" method="post">
-    <div asp-validation-summary="ModelOnly"></div>
-
-    <div class="form-group">
-        <label for="name">Имя</label>
-        <input type="text" id="name" name="Name" required class="form-control" />
-    </div>
-
-    <div class="form-group">
-        <label for="email">Почта</label>
-        <input type="email" id="email" name="Email" required class="form-control" />
-    </div>
-
-    <div class="form-group">
-        <label for="subject">Тема</label>
-        <input type="text" id="subject" name="Subject" required class="form-control" />
-    </div>
-
-    <div class="form-group">
-        <label for="message">Сообщение</label>
-        <textarea id="message" name="Message" required class="form-control"></textarea>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Отправить</button>
-</form> *@

@@ -3,36 +3,48 @@
     ViewBag.Title = "Калькулятор аренды";
     var prices = ViewBag.Prices as Dictionary<int, decimal>;
 }
-<main class="main">
-    <h2>Калькулятор аренды</h2>
+<main class="main lk-center">
+    <section class="lk-title-section">
+        <div class="lk-title-container">
+            <h1 class="lk-title-h1-center">Калькулятор аренды</h1>
+        </div>
+    </section>
 
     <form id="rentForm">
-        <div>
-            <label for="PlaceId">Место:</label>
-            <select id="PlaceId" asp-for="PlaceId" asp-items="ViewBag.Places" onchange="updatePrice()"></select>
+        <div class="calc-select">
+            <div class="calc-form-div">
+                <label for="PlaceId" class="rent-filter-label">Место:</label>
+                <select id="PlaceId" asp-for="PlaceId" asp-items="ViewBag.Places" onchange="updatePrice()" class="calc-select"></select>
+            </div>
+            <div class="calc-form-div">
+                <span class="rent-filter-label">Цена аренды за месяц: </span><span id="monthlyPrice"></span>
+            </div>
+            <div class="calc-form-div">
+                <label for="StartDate" class="rent-filter-label">Дата начала:</label>
+                <input type="date" id="StartDate" asp-for="StartDate" value="@Model.StartDate.ToString("yyyy-MM-dd")" />
+            </div>
+            <div class="calc-form-div">
+                <label for="EndDate" class="rent-filter-label">Дата окончания:</label>
+                <input type="date" id="EndDate" asp-for="EndDate" value="@Model.EndDate.ToString("yyyy-MM-dd")" />
+            </div>
+            <button type="submit" class="dg-small-btn">Рассчитать</button>
         </div>
-        <div>
-            <span>Цена аренды за месяц: </span><span id="monthlyPrice"></span>
-        </div>
-        <div>
-            <label for="StartDate">Дата начала:</label>
-            <input type="date" id="StartDate" asp-for="StartDate" value="@Model.StartDate.ToString("yyyy-MM-dd")" />
-        </div>
-        <div>
-            <label for="EndDate">Дата окончания:</label>
-            <input type="date" id="EndDate" asp-for="EndDate" value="@Model.EndDate.ToString("yyyy-MM-dd")" />
-        </div>
-        <button type="submit">Рассчитать</button>
+        
     </form>
-
-    <div id="result">
-        @if (Model.TotalCost > 0)
-        {
-            <h3>Стоимость аренды: @Model.TotalCost.ToString("F2") ₽</h3>
-        }
+    
+    <div class="calc-result-div">
+        <div id="result">
+            @if (Model.TotalCost > 0)
+            {
+                <h3 class="calc-result">Стоимость аренды: @Model.TotalCost.ToString("F2") ₽</h3>
+            }
+        </div>
     </div>
+    
 
-    <button type="button" class="btn btn-secondary" onclick="window.location.href='@Url.Action("Index", "Place")';">Вернуться назад</button>
+    <div class="back-btn balance-btn-container">
+        <button type="button" class="lg-small-btn" onclick="window.location.href='@Url.Action("Index", "Place")'">Назад</button>
+    </div>
 </main>
 
 @section Scripts {
@@ -57,7 +69,7 @@
                     url: '@Url.Action("Calculate")',
                     data: $(this).serialize(),
                     success: function (response) {
-                        $('#result').html('<h3>Стоимость аренды: ' + response.totalCost + ' ₽</h3>');
+                        $('#result').html('<h3 class="calc-result">Стоимость аренды: ' + response.totalCost + ' ₽</h3>');
                     }
                 });
             });

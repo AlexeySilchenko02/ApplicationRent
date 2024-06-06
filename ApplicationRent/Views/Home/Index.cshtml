@@ -8,7 +8,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <main class="main">
 
-    <div class="intro">
+    <div class="intro" uk-scrollspy="target: > div; cls:uk-animation-fade; delay: 500">
         <div class="container-a">
             <h1 class="intro_title">
                 RENT - Ваш помощник для бизнеса и творчества
@@ -19,7 +19,7 @@
         </div>
     </div>
 
-    <section class="benefits">
+    @* <section class="benefits">
          <div class="benefits_container">
             <h2 class="benefits_title">
                 Наши преимущества
@@ -27,7 +27,7 @@
             <div class="benefits_cards">
                 <div class="benefits_card">
                     <div class="benefits_card-pic">
-                        <img src="img/Home/buildings.svg" alt="Большой выбор помещений" class="benefits_card-thumb">
+                        <img src="img/Home/buildings.svg" alt="Большой выбор помещений" class="benefits_card-thumb" href="#modal-group-1" uk-toggle>
                     </div>
                     <h3 class="benefits_card-title">
                         Большой выбор помещений
@@ -73,9 +73,162 @@
                         Широкий выбор типов помещений
                     </h3>
                 </div>
+            </div>
+
+            <div id="modal-group-1" uk-modal>
+                <div class="uk-modal-dialog">
+                    <button class="uk-modal-close-default" type="button" uk-close></button>
+                    <div class="uk-modal-header">
+                        <h2 class="uk-modal-title">Заголовок 1</h2>
+                    </div>
+                    <div class="uk-modal-body">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                    </div>
+                    <div class="uk-modal-footer uk-text-right">
+                        <button class="uk-button uk-button-default uk-modal-close" type="button">Закрыть</button>
+                        <a href="#modal-group-2" class="uk-button uk-button-primary" uk-toggle>Далее</a>
+                    </div>
+                </div>
+            </div>
+
+            <div id="modal-group-2" uk-modal>
+                <div class="uk-modal-dialog">
+                    <button class="uk-modal-close-default" type="button" uk-close></button>
+                    <div class="uk-modal-header">
+                        <h2 class="uk-modal-title">Заголовок 2</h2>
+                    </div>
+                    <div class="uk-modal-body">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                    </div>
+                    <div class="uk-modal-footer uk-text-right">
+                        <button class="uk-button uk-button-default uk-modal-close" type="button">Закрыть</button>
+                        <a href="#modal-group-1" class="uk-button uk-button-primary" uk-toggle>Далее</a>
+                    </div>
+                </div>
+            </div>
+
+         </div>
+    </section> *@
+
+    <section class="benefits-new">
+        <div class="benefits-new-container" uk-scrollspy="target: > div; cls:uk-animation-fade; delay: 500">
+            <h2 class="benefits-new-title">
+                Наши преимущества
+            </h2>
+            <div class="benefits-new-cards">
+                <div class="benefits-new-card">
+                    <div class="benefits-new-card-pic uk-inline-clip uk-transition-toggle" tabindex="0">
+                        <img src="img/Home/location.svg" alt="Удобная локация" class="benefits-new-card-thumb uk-transition-scale-up uk-transition-opaque" uk-toggle="target: #modal-group-1">
+                    </div>
+                    <h3 class="benefits-new-card-title">
+                        Удобная локация
+                    </h3>
+                </div>
+
+                <div class="benefits-new-card">
+                    <div class="benefits-new-card-pic uk-inline-clip uk-transition-toggle" tabindex="0">
+                        <img src="img/Home/buildings.svg" alt="Большой выбор помещений" class="benefits-new-card-thumb uk-transition-scale-up uk-transition-opaque" uk-toggle="target: #modal-group-2">
+                    </div>
+                    <h3 class="benefits-new-card-title">
+                        Большой выбор помещений
+                    </h3>
+                </div>
+
+                
+                <div class="benefits-new-card-last">
+                    <div class="benefits-new-card-pic uk-inline-clip uk-transition-toggle" tabindex="0">
+                        <img src="img/Home/lamp-on.svg" alt="Дополнительные услуги" class="benefits-new-card-thumb uk-transition-scale-up uk-transition-opaque" uk-toggle="target: #modal-group-3">
+                    </div>
+                    <h3 class="benefits-new-card-title">
+                        Дополнительные услуги
+                    </h3>
+                </div>
+            </div>
         </div>
     </section>
-    <section class="carousel">
+
+    <div id="modal-group-1" uk-modal>
+        <div class="uk-modal-dialog  uk-margin-auto-vertical">
+            <button class="uk-modal-close-default" type="button" uk-close></button>
+            <div class="uk-modal-header">
+                <h2 class="uk-modal-title benefits-new-modal-title">Удобная локация</h2>
+            </div>
+            <div class="uk-modal-body">
+                <p class="benefits-new-modal-txt">Наши объекты расположены в лучших районах города, что обеспечивает простой доступ и экономию времени при перемещении. Благодаря стратегически выгодным точкам, расположенным рядом с основными транспортными артериями, коммуникационными узлами и деловыми центрами, арендаторы получают не только комфорт, но и значительное преимущество для ведения своего бизнеса. Независимо от того, планируете ли вы личные встречи или нуждаетесь в лёгкой доступности для клиентов и партнёров, наши локации предоставят вам именно то, что нужно.</p>
+            </div>
+            <div class="uk-modal-footer uk-text-right">
+                <a href="#modal-group-3" class="uk-button uk-button-primary" style="background-color: #116466; border: 1px solid #ccc; font-family: var(--font-family); font-weight: 400; font-size: 14px; letter-spacing: 0.05em; color: white; text-transform: none;" uk-toggle>Назад</a>
+                <a href="#modal-group-2" class="uk-button uk-button-primary" style="background-color: #D1E8E2; border: 1px solid #ccc; font-family: var(--font-family); font-weight: 400; font-size: 14px; letter-spacing: 0.05em; color: #2c3531; text-transform: none;" uk-toggle>Далее</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-group-2" uk-modal>
+        <div class="uk-modal-dialog  uk-margin-auto-vertical">
+            <button class="uk-modal-close-default" type="button" uk-close></button>
+            <div class="uk-modal-header">
+                <h2 class="uk-modal-title benefits-new-modal-title">Большой выбор помещений</h2>
+            </div>
+            <div class="uk-modal-body">
+                <p class="benefits-new-modal-txt">На нашем сайте представлен широкий ассортимент помещений, который удовлетворит любые предпочтения и бизнес-потребности. От уютных фотостудий, предлагающих идеальные условия для фотосессий, до просторных офисов с современным дизайном. Также доступны различные складские помещения для хранения товаров и пустые пространства, которые можно адаптировать под любой проект. Наше многообразие вариантов позволяет клиентам выбрать оптимальное решение, будь то стартап или крупная корпорация. Вы найдете помещение, идеально подходящее под ваши специфические требования, будь то логистическая удобность, техническое оснащение или атмосфера творчества.</p>
+            </div>
+            <div class="uk-modal-footer uk-text-right">
+                <a href="#modal-group-1" class="uk-button uk-button-primary" style="background-color: #116466; border: 1px solid #ccc; font-family: var(--font-family); font-weight: 400; font-size: 14px; letter-spacing: 0.05em; color: white; text-transform: none;" uk-toggle>Назад</a>
+                <a href="#modal-group-3" class="uk-button uk-button-primary" style="background-color: #D1E8E2; border: 1px solid #ccc; font-family: var(--font-family); font-weight: 400; font-size: 14px; letter-spacing: 0.05em; color: #2c3531; text-transform: none;" uk-toggle>Далее</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-group-3" uk-modal>
+        <div class="uk-modal-dialog  uk-margin-auto-vertical">
+            <button class="uk-modal-close-default" type="button" uk-close></button>
+            <div class="uk-modal-header">
+                <h2 class="uk-modal-title benefits-new-modal-title">Дополнительные услуги</h2>
+            </div>
+            <div class="uk-modal-body">
+                <p class="benefits-new-modal-txt">Помимо широкого ассортимента помещений, мы предлагаем комплексные решения для аренды оборудования и мебели, что позволяет вам легко адаптировать выбранное пространство под любые задачи и проекты. Будь то необходимость в специальном оборудовании для проведения мероприятий, профессиональной аппаратуре для фото и видеосъемок, или качественной офисной мебели для создания оптимального рабочего места, у нас есть всё, что может понадобиться для вашего комфорта и эффективности. Наши услуги ориентированы на то, чтобы обеспечить вам полную гибкость и удобство в организации вашего пространства, минимизируя вашу заботу о деталях и позволяя сосредоточиться на главном — вашем бизнесе или творчестве.</p>
+            </div>
+            <div class="uk-modal-footer uk-text-right">
+                <a href="#modal-group-2" class="uk-button uk-button-primary" style="background-color: #116466; border: 1px solid #ccc; font-family: var(--font-family); font-weight: 400; font-size: 14px; letter-spacing: 0.05em; color: white; text-transform: none;" uk-toggle>Назад</a>
+                <a href="#modal-group-1" class="uk-button uk-button-primary" style="background-color: #D1E8E2; border: 1px solid #ccc; font-family: var(--font-family); font-weight: 400; font-size: 14px; letter-spacing: 0.05em; color: #2c3531; text-transform: none;" uk-toggle>Далее</a>
+            </div>
+        </div>
+    </div>
+
+    <section style="background-color: #E8E8E8; padding: 20px;">
+        <div class="uk-position-relative uk-visible-toggle uk-light" tabindex="-1" uk-slider="center: true">
+
+            <ul class="uk-slider-items uk-grid">
+                <li class="uk-width-3-4">
+                    <div class="uk-panel">
+                        <img src="~/img/Home/slider-1.jpg" alt="">
+                    </div>
+                </li>
+                <li class="uk-width-3-4">
+                    <div class="uk-panel">
+                        <img src="~/img/Home/slider-2.jpg" alt="">
+                    </div>
+                </li>
+                <li class="uk-width-3-4">
+                    <div class="uk-panel">
+                        <img src="~/img/Home/slider-3.jpg" alt="">
+                    </div>
+                </li>
+                <li class="uk-width-3-4">
+                    <div class="uk-panel">
+                        <img src="~/img/Home/slider-4.jpg" alt="">
+                    </div>
+                </li>
+            </ul>
+
+            <a class="uk-position-center-left uk-position-small uk-hidden-hover" href="#" uk-slidenav-previous uk-slider-item="previous"></a>
+            <a class="uk-position-center-right uk-position-small uk-hidden-hover" href="#" uk-slidenav-next uk-slider-item="next"></a>
+
+        </div>
+    </section>
+
+
+    @* <section class="carousel">
         <div class="uk-slider-container-offset" uk-slider="autoplay: true autoplay-interval: 1000 pause-on-hover: true">
             <div class="uk-position-relative uk-visible-toggle uk-light" tabindex="-1">
                 <ul class="uk-slider-items uk-child-width-1-3@s uk-grid">
@@ -129,6 +282,31 @@
             </div>
             <ul class="uk-slider-nav uk-dotnav uk-flex-center uk-margin"></ul>
         </div>
+    </section> *@
+
+    <section class="faq">
+        <div class="faq-container">
+            <ul uk-accordion>
+                <li class="uk-open">
+                    <a class="uk-accordion-title" href="#">Элемент 1</a>
+                    <div class="uk-accordion-content">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    </div>
+                </li>
+                <li>
+                    <a class="uk-accordion-title" href="#">Элемент 2</a>
+                    <div class="uk-accordion-content">
+                        <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor reprehenderit.</p>
+                    </div>
+                </li>
+                <li>
+                    <a class="uk-accordion-title" href="#">Элемент 3</a>
+                    <div class="uk-accordion-content">
+                        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat proident.</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
     </section>
     
    <section class="contacts-form">
@@ -178,6 +356,8 @@
             </div>
         </div>
     </section>
+
+    
 
 </main>
 

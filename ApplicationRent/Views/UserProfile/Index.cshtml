@@ -57,36 +57,39 @@
 
     @if (Model.Rentals.Any())
     {
-        <table class="lk-table">
-            <thead>
-                <tr>
-                    <th>Место</th>
-                    <th>Начало аренды</th>
-                    <th>Окончание аренды</th>
-                    <th>Продление аренды</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var rental in Model.Rentals)
-                {
+        <div style="overflow-x: auto;">
+            <table class="lk-table">
+                <thead>
                     <tr>
-                        <td>@rental.Place.Name</td>
-                        <td>@rental.StartRent.ToString("dd.MM.yyyy")</td>
-                        <td>@rental.EndRent.ToString("dd.MM.yyyy")</td>
-                        <td>
-                            <button type="button" class="calendar-text" onclick="toggleForm('@rental.Id')">Продлить аренду</button>
-                            <form id="form-@rental.Id" style="display:none;" data-endrent="@rental.EndRent.ToString("yyyy-MM-dd")">
-                                <input type="hidden" name="rentalId" value="@rental.Id" />
-                                <input type="date" class="calendar-input" name="newEndDate" onchange="calculateCost(@rental.Id, @rental.Place.Price)" />
-                                <p id="cost-text-@rental.Id" class="calendar-cost" style="display:none;">Стоимость: <span id="cost-@rental.Id">0</span></p>
-                                <button type="button" class="calendar-text" onclick="extendRent(@rental.Id, @rental.Place.Price)">Обновить</button>
-                                <div id="error-@rental.Id" class="text-danger" style="display:none;"></div>
-                            </form>
-                        </td>
+                        <th>Место</th>
+                        <th>Начало аренды</th>
+                        <th>Окончание аренды</th>
+                        <th>Продление аренды</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var rental in Model.Rentals)
+                    {
+                        <tr>
+                            <td>@rental.Place.Name</td>
+                            <td>@rental.StartRent.ToString("dd.MM.yyyy")</td>
+                            <td>@rental.EndRent.ToString("dd.MM.yyyy")</td>
+                            <td>
+                                <button type="button" class="calendar-text" onclick="toggleForm('@rental.Id')">Продлить аренду</button>
+                                <form id="form-@rental.Id" style="display:none;" data-endrent="@rental.EndRent.ToString("yyyy-MM-dd")">
+                                    <input type="hidden" name="rentalId" value="@rental.Id" />
+                                    <input type="date" class="calendar-input" name="newEndDate" onchange="calculateCost(@rental.Id, @rental.Place.Price)" />
+                                    <p id="cost-text-@rental.Id" class="calendar-cost" style="display:none;">Стоимость: <span id="cost-@rental.Id">0</span></p>
+                                    <button type="button" class="calendar-text" onclick="extendRent(@rental.Id, @rental.Place.Price)">Обновить</button>
+                                    <div id="error-@rental.Id" class="text-danger" style="display:none;"></div>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        
     }
     else
     {

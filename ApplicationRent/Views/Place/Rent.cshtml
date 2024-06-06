@@ -4,76 +4,94 @@
 
 @model ApplicationRent.Controllers.RequestsRentViewModel
 
-<main class="main lk">
+<main class="main lk-center">
     <section class="lk-title-section">
         <div class="lk-title-container">
-            <h1 class="lk-title-h1">Аренда помещения: @Model.PlaceName</h1>
+            <h1 class="lk-title-h1-center">Аренда помещения: @Model.PlaceName</h1>
         </div>
     </section>
 
+    <div class="tabs-container">
+        <div class="tab">
+            <div id="card-view" style="display:none;" class="tab-content">
+                <p class="tabs-label">Текущий баланс: <span id="userBalance">@Model.UserBalance</span> руб.</p>
+                <form id="confirmRentForm">
+                    <input type="hidden" asp-for="PlaceId" />
+                    <div class="form-group">
+                        <label asp-for="StartRent" class="tabs-label">Дата начала</label>
+                        <input asp-for="StartRent" class="form-control" style="border: 3px solid #D1E8E2; border-radius: 10px;" type="date" id="startRent" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="EndRent" class="tabs-label">Дата окончания</label>
+                        <input asp-for="EndRent" class="form-control" style="border: 3px solid #D1E8E2; border-radius: 10px;" type="date" id="endRent" />
+                    </div>
+                    <p class="tabs-label">Стоимость аренды: <span id="rentCost">0</span> руб.</p>
+                    <p id="insufficientFunds" style="color:red; display:none;" class="tabs-label">Недостаточно средств</p>
+                    <button type="button" class="dg-large-btn" style="border: 1px solid #ccc;" id="confirmRentButton">Подтвердить аренду</button>
+                    <div id="confirmRentErrors" style="color:red;" class="tabs-label"></div>
+                </form>
+            </div>
+            <div id="list-view" style="display:none;" class="tab-content">
+                @* <p>Долгосрочная аренда</p> *@
+                <form id="requestRentForm">
+                    <input type="hidden" asp-for="PlaceId" />
+                    <input type="hidden" name="Category" value="@Model.Category" />
+                    <input type="hidden" name="PlaceName" value="@Model.PlaceName" />
+                    <div class="form-group">
+                        <label asp-for="UserName" class="tabs-label">Имя</label>
+                        <input asp-for="UserName" class="form-control" style="border: 3px solid #D1E8E2; border-radius: 10px;" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="UserEmail" class="tabs-label">Email</label>
+                        <input asp-for="UserEmail" class="form-control" style="border: 3px solid #D1E8E2; border-radius: 10px;" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="UserPhone" class="tabs-label">Телефон</label>
+                        <input asp-for="UserPhone" class="form-control" style="border: 3px solid #D1E8E2; border-radius: 10px;" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="StartRent" class="tabs-label">Дата начала</label>
+                        <input asp-for="StartRent" type="date" class="form-control" style="border: 3px solid #D1E8E2; border-radius: 10px;" />
+                    </div>
+                    <div class="form-group">
+                        <label for="rentDuration" class="tabs-label">Срок аренды (в месяцах)</label>
+                        <select id="rentDuration" name="RentDuration" class="form-control" style="border: 3px solid #D1E8E2; border-radius: 10px;">
+                            <option value="1">1 месяц</option>
+                            <option value="2">2 месяца</option>
+                            <option value="3">3 месяца</option>
+                            <option value="4">4 месяца</option>
+                        </select>
+                        <button type="button" class="dg-large-btn" style="border: 1px solid #ccc; margin-top: 20px;" id="requestRentButton">Отправить заявку</button>
+                    </div>
+                    <div id="requestRentErrors" style="color:red;"></div>
+                </form>
+            </div>
 
-    <div>
+            <div class="tab-nav">
+                @if (Model.IsOnlineRentAvailable)
+                {
+                    <input checked id="show-cards" name="tab-btn" type="radio" value="">
+                    <label for="show-cards" class="tabs-label">Онлайн аренда</label>
+                }
+                <input id="show-list" name="tab-btn" type="radio" value="">
+                <label for="show-list" class="tabs-label">Заявка на долгосрочную аренду</label>
+                
+                
+            </div>
+        </div>
+    </div>
+@*     <div>
         @if (Model.IsOnlineRentAvailable)
         {
             <button id="show-cards">Онлайн аренда</button>
         }
         <button id="show-list">Заявка на аренду</button>
-    </div>
+    </div> *@
 
-    <div id="card-view" style="display:none;">
-        <p>Текущий баланс: <span id="userBalance">@Model.UserBalance</span> руб.</p>
-        <form id="confirmRentForm">
-            <input type="hidden" asp-for="PlaceId" />
-            <div class="form-group">
-                <label asp-for="StartRent">Дата начала</label>
-                <input asp-for="StartRent" class="form-control" type="date" id="startRent" />
-            </div>
-            <div class="form-group">
-                <label asp-for="EndRent">Дата окончания</label>
-                <input asp-for="EndRent" class="form-control" type="date" id="endRent" />
-            </div>
-            <p>Стоимость аренды: <span id="rentCost">0</span> руб.</p>
-            <p id="insufficientFunds" style="color:red; display:none;">Недостаточно средств</p>
-            <button type="button" class="btn btn-primary" id="confirmRentButton">Подтвердить аренду</button>
-            <div id="confirmRentErrors" style="color:red;"></div>
-        </form>
+    <div class="back-btn balance-btn-container">
+        <button type="button" class="lg-small-btn" onclick="window.location.href='@Url.Action("Index", "Place")'">Назад</button>
     </div>
-    <div id="list-view" style="display:none;">
-        <p>Долгосрочная аренда</p>
-        <form id="requestRentForm">
-            <input type="hidden" asp-for="PlaceId" />
-            <input type="hidden" name="Category" value="@Model.Category" />
-            <input type="hidden" name="PlaceName" value="@Model.PlaceName" />
-            <div class="form-group">
-                <label asp-for="UserName">Имя</label>
-                <input asp-for="UserName" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label asp-for="UserEmail">Email</label>
-                <input asp-for="UserEmail" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label asp-for="UserPhone">Телефон</label>
-                <input asp-for="UserPhone" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label asp-for="StartRent">Дата начала</label>
-                <input asp-for="StartRent" type="date" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label for="rentDuration">Срок аренды (в месяцах)</label>
-                <select id="rentDuration" name="RentDuration" class="form-control">
-                    <option value="1">1 месяц</option>
-                    <option value="2">2 месяца</option>
-                    <option value="3">3 месяца</option>
-                    <option value="4">4 месяца</option>
-                </select>
-                <button type="button" class="btn btn-primary" id="requestRentButton">Отправить заявку</button>
-            </div>
-            <div id="requestRentErrors" style="color:red;"></div>
-        </form>
-    </div>
-    <button type="button" class="btn btn-secondary" onclick="window.location.href='@Url.Action("Index", "Place")';">Отмена</button>
+    @* <button type="button" class="btn btn-secondary" onclick="window.location.href='@Url.Action("Index", "Place")';">Отмена</button> *@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
