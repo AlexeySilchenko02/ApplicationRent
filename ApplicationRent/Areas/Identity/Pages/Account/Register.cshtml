@@ -48,11 +48,17 @@
                                 <label asp-for="Input.Password" class="register-form-label">Введите пароль</label>
                             </div>
                             <div class="input-box">
-                                <input asp-for="Input.Password" class="cp-form-input" autocomplete="new-password" aria-required="true" placeholder="Пароль" id="InputPassword" />
+                                <input asp-for="Input.Password" class="cp-form-input" autocomplete="new-password" aria-required="true" placeholder="Пароль" id="InputPassword" oninput="updatePasswordRequirements()" />
                                 <button class="eye-btn" type="button" onclick="togglePasswordVisibility('InputPassword')"></button>
                             </div>
-                            
                             <span asp-validation-for="Input.Password" class="text-danger"></span>
+                            <ul id="passwordRequirements" class="text-danger">
+                                <li id="minLength">Пароль должен быть не менее 6 символов.</li>
+                                <li id="upperCase">Пароль должен содержать хотя бы одну заглавную букву (A-Z).</li>
+                                <li id="lowerCase">Пароль должен содержать хотя бы одну строчную букву (a-z).</li>
+                                <li id="digit">Пароль должен содержать хотя бы одну цифру (0-9).</li>
+                                <li id="nonAlphanumeric">Пароль должен содержать хотя бы один неалфавитно-цифровой символ (!, $, #, % и т.д.).</li>
+                            </ul>
                         </div>
                         <div class="register-form-group">
                             <div class="register-form-label-container">
@@ -78,6 +84,26 @@
             @* </div> *@
         </div>
     </section>
+
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+        <script>
+            function updatePasswordRequirements() {
+                var password = document.getElementById('InputPassword').value;
+                var minLength = password.length >= 6;
+                var upperCase = /[A-Z]/.test(password);
+                var lowerCase = /[a-z]/.test(password);
+                var digit = /[0-9]/.test(password);
+                var nonAlphanumeric = /[\W_]/.test(password);
+
+                document.getElementById('minLength').style.display = minLength ? 'none' : 'block';
+                document.getElementById('upperCase').style.display = upperCase ? 'none' : 'block';
+                document.getElementById('lowerCase').style.display = lowerCase ? 'none' : 'block';
+                document.getElementById('digit').style.display = digit ? 'none' : 'block';
+                document.getElementById('nonAlphanumeric').style.display = nonAlphanumeric ? 'none' : 'block';
+            }
+        </script>
+    }
 
     <script>
         function togglePasswordVisibility(fieldId) {
@@ -136,6 +162,4 @@
     </div>
 </div> *@
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+

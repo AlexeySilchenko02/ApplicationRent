@@ -81,8 +81,8 @@ namespace ApplicationRent.Areas.Identity.Pages.Account
             public string Name { get; set; }
 
             [Required(ErrorMessage = "Введите номер")]
-            [RegularExpression(@"^\+[0-9\s\-\(\)]+$", ErrorMessage = "Номер телефона введен некоректно")]
-            [Phone(ErrorMessage = "Номер телефона введен некоректно")]
+            [RegularExpression(@"^\+[0-9\s\-\(\)]+$", ErrorMessage = "Номер телефона введен некорректно")]
+            [Phone(ErrorMessage = "Номер телефона введен некорректно")]
             public string PhoneNumber { get; set; }
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
